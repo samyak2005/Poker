@@ -1,22 +1,12 @@
-// const hand1 = [
-//   { rank: "A", suit: "spades" },
-//   { rank: "2", suit: "spades" },
-//   { rank: "3", suit: "spades" },
-//   { rank: "4", suit: "spades" },
-//   { rank: "5", suit: "spades" },
-// ];
-
 // NOTE A2345 comes in straight
-
 function arraysEqual(arr1, arr2) {
   return arr1.every((val, i) => val === arr2[i]);
 }
-
 function isStraightFlush(hand) {
-  const suits = hand.map((card) => card.suit); //new array formed
+  const suits = hand.map((card) => card.suit);
   const ranks = hand.map((card) => card.rank);
 
-  const allSameSuit = suits.every((suit) => suit === suits[0]); //check on every index
+  const allSameSuit = suits.every((suit) => suit === suits[0]);
   if (!allSameSuit) return false;
 
   const rankValues = {
@@ -34,8 +24,8 @@ function isStraightFlush(hand) {
     K: 13,
     A: 14,
   };
-
   const values = ranks.map((rank) => rankValues[rank]);
+
   values.sort((a, b) => a - b);
 
   let isStraight = values.every((val, i, arr) => {
@@ -48,5 +38,3 @@ function isStraightFlush(hand) {
 
   return isStraight || ace_case;
 }
-
-// console.log(isStraightFlush(hand1));

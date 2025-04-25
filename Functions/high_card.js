@@ -1,8 +1,8 @@
 // const hand1 = [
-//   { rank: "A", suit: "spades" },
-//   { rank: "K", suit: "spades" },
-//   { rank: "Q", suit: "spades" },
-//   { rank: "J", suit: "spades" },
+//   { rank: "A", suit: "spdades" },
+//   { rank: "2", suit: "damonds" },
+//   { rank: "2", suit: "spades" },
+//   { rank: "J", suit: "clubs" },
 //   { rank: "10", suit: "spades" },
 // ];
 
@@ -37,4 +37,4 @@ function highCard(hand) {
   return hand[index];
 }
 
-// highCard(hand1);
+// console.log(highCard(hand1));
