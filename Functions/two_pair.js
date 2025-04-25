@@ -1,10 +1,10 @@
-// const hand1 = [
-//     { rank: "A", suit: "spades" },
-//     { rank: "K", suit: "spades" },
-//     { rank: "Q", suit: "spades" },
-//     { rank: "Q", suit: "spades" },
-//     { rank: "J", suit: "spades" },
-// ];
+const hand1 = [
+    { rank: "A", suit: "spades" },
+    { rank: "K", suit: "spades" },
+    { rank: "Q", suit: "spades" },
+    { rank: "Q", suit: "spades" },
+    { rank: "J", suit: "spades" },
+];
 
 function onePair(hand){
     const ranks = hand.map((card) => card.rank); // creates an array of ranks
@@ -16,11 +16,13 @@ function onePair(hand){
          map.set(ranks[i] , 1);// adds rank with initial count 1 to the map
        }
     }
+    let count = 0;
     for(let i = 0;i<ranks.length;i++){
         if(map.get(ranks[i]) == 2){
-            return true;// returns the card which is repeated once in the hand
+            count++;
         }
     }
+
 }
 
-// onePair(hand1);
+onePair(hand1);
