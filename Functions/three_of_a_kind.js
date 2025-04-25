@@ -2,11 +2,11 @@
 //     { rank: "A", suit: "spades" },
 //     { rank: "K", suit: "spades" },
 //     { rank: "Q", suit: "spades" },
-//     { rank: "Q", suit: "spades" },
 //     { rank: "J", suit: "spades" },
+//     { rank: "10", suit: "spades" },
 // ];
 
-function onePair(hand){
+function threeOfaKind(hand){
     const ranks = hand.map((card) => card.rank); // creates an array of ranks
     let map = new Map(); //  creates a new hashmap
     for(let i =0;i<ranks.length;i++){ // loop to add ranks in map
@@ -17,11 +17,11 @@ function onePair(hand){
        }
     }
     for(let i = 0;i<ranks.length;i++){
-        if(map.get(ranks[i]) == 2){
-            return true;// returns the card which is repeated once in the hand
+        if(map.get(ranks[i]) == 3){
+            return true;// returns the card which is repeated twice in the hand
         }
     }
     return false;
 }
 
-// onePair(hand1);
+// threeOfaKind(hand1);
