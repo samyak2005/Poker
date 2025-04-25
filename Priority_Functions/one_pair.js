@@ -1,4 +1,4 @@
-function threeOfaKind(hand) {
+function isOnePair(hand) {
   const ranks = hand.map((card) => card.rank);
   let map = new Map();
   for (let i = 0; i < ranks.length; i++) {
@@ -9,9 +9,11 @@ function threeOfaKind(hand) {
     }
   }
   for (let i = 0; i < ranks.length; i++) {
-    if (map.get(ranks[i]) == 3) {
+    if (map.get(ranks[i]) == 2) {
       return true;
     }
   }
   return false;
 }
+
+module.exports = { isOnePair };

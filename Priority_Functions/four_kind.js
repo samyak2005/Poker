@@ -5,3 +5,5 @@ function isFourOfAKind(hand) {
   });
   return Array.from(rankCount.values()).includes(4);
 }
+
+module.exports = { isFourOfAKind };

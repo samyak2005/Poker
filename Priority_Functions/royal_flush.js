@@ -1,4 +1,4 @@
-function royal_flush(hand) {
+function isRoyalFlush(hand) {
   const requiredRanks = ["A", "K", "Q", "J", "10"];
   const rankSet = new Set(requiredRanks);
   const suits = hand.map((card) => card.suit);
@@ -8,3 +8,5 @@ function royal_flush(hand) {
   const rankCheck = requiredRanks.every((rank) => ranks.includes(rank));
   return rankCheck;
 }
+
+module.exports = { isRoyalFlush };

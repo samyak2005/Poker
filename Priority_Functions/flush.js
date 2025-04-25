@@ -4,3 +4,5 @@ function isFlush(hand) {
   if (!allSameSuit) return false;
   return true;
 }
+
+module.exports = { isFlush };

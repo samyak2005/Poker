@@ -6,3 +6,5 @@ function isFullHouse(hand) {
   const values = Array.from(rankCount.values());
   return values.includes(3) && values.includes(2);
 }
+
+module.exports = { isFullHouse };
