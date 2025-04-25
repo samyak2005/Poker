@@ -5,14 +5,12 @@
 //   { rank: "4", suit: "diamonds" },
 //   { rank: "5", suit: "spades" },
 // ];
-
 // NOTE A2345 comes in straight
-
 function arraysEqual(arr1, arr2) {
   return arr1.every((val, i) => val === arr2[i]);
 }
 
-function isStraightFlush(hand) {
+function isStraight(hand) {
   const ranks = hand.map((card) => card.rank);
 
   const rankValues = {
