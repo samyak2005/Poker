@@ -1,5 +1,5 @@
-const { findBestHand } = require("../best_hand");
-const { evaluateHand } = require("../evaluate_hand"); // Assuming evaluateHand is already available
+const { findBestHand } = require("../Main_working/best_hand");
+const { evaluateHand } = require("../Main_working/evaluate_hand"); // Assuming evaluateHand is already available
 
 // Example 1: Royal Flush possible
 const userCards = [

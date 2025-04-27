@@ -1,9 +1,9 @@
-const { OnePair } = require("./Tie_Breaker_Functions/one_pair.js");
-const { HighCard } = require("./Tie_Breaker_Functions/High_Card.js");
-const { TwoPair } = require("./Tie_Breaker_Functions/Two_pair.js");
-const { ThreeKind } = require("./Tie_Breaker_Functions/Three_kind.js");
-const { FourKind } = require("./Tie_Breaker_Functions/Four_Kind.js");
-const { FullHouse } = require("./Tie_Breaker_Functions/Full_House.js");
+const { OnePair } = require("../Tie_Breaker_Functions/one_pair.js");
+const { HighCard } = require("../Tie_Breaker_Functions/High_Card.js");
+const { TwoPair } = require("../Tie_Breaker_Functions/Two_pair.js");
+const { ThreeKind } = require("../Tie_Breaker_Functions/Three_kind.js");
+const { FourKind } = require("../Tie_Breaker_Functions/Four_Kind.js");
+const { FullHouse } = require("../Tie_Breaker_Functions/Full_House.js");
 /**
  * @param {Integer} priority - Integer value of priority
  * @param {Array} hand1 - Array of 5 card objects, each with rank and suit properties.
