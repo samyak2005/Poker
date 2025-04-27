@@ -82,6 +82,8 @@ function OnePair(hand1, hand2) {
       return hand2;
     }
   }
+
+  return hand1;
 }
 
 // console.log(OnePair(hand1, hand2));

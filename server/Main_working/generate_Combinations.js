@@ -10,8 +10,8 @@ function generateCombinations(cards) {
       combine(i + 1, combo);
       combo.pop();
     }
-    combine();
-    return result;
   }
+  combine();
+  return result;
 }
 module.exports = { generateCombinations };

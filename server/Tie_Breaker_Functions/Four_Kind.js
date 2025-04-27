@@ -1,4 +1,4 @@
-function FourKind() {
+function FourKind(hand1, hand2) {
   const ranks1 = hand1.map((card) => card.rank);
   const ranks2 = hand2.map((card) => card.rank);
 
@@ -77,6 +77,8 @@ function FourKind() {
   } else if (CompareCard2 > CompareCard1) {
     return hand2;
   }
+
+  return hand1;
 }
 
 module.exports = { FourKind };

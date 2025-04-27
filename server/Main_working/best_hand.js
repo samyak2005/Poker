@@ -1,5 +1,6 @@
 const { evaluateHand } = require("./evaluate_hand");
 const { generateCombinations } = require("./generate_Combinations");
+const { TieBreaker } = require("./Tie_Breaker");
 
 /**
  * @param {Array} userCards - Array of 2 card objects (player's cards)
@@ -10,6 +11,7 @@ const { generateCombinations } = require("./generate_Combinations");
 function findBestHand(userCards, flopCards) {
   const allCards = [...userCards, ...flopCards];
   const combinations = generateCombinations(allCards);
+  // console.log("combinations:", combinations);
   let bestPriority = 10;
   let bestHand = combinations[0];
   combinations.forEach((hand) => {
@@ -19,6 +21,9 @@ function findBestHand(userCards, flopCards) {
       bestHand = hand;
     }
     //   need that if the piority is the same, compare the cards
+    else if (priority === bestPriority) {
+      bestHand = TieBreaker(priority, bestHand, hand);
+    }
   });
 
   return {
