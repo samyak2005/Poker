@@ -37,8 +37,8 @@ function FullHouse(){
       A: 14,
     }
   
-     const value1 = ranks1.map((rank) => rankvalues[rank]);
-     const value2 = ranks2.map((rank) => rankvalues[rank]);
+    const value1 = ranks1.map((rank) => rankvalues[rank]);
+    const value2 = ranks2.map((rank) => rankvalues[rank]);
   
     for(let i = 0; i < 5; i++){
   
