@@ -86,3 +86,4 @@ function TwoPair(hand1,hand2){
 }
 
 // console.log(TwoPair(hand1 , hand2));
+module.exports = {TwoPair};

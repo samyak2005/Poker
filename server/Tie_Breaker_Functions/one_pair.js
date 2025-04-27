@@ -87,3 +87,4 @@ function OnePair(hand1 , hand2){
 }
 
 // console.log(OnePair(hand1,hand2));
+module.exports = {OnePair};

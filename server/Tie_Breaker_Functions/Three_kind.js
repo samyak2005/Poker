@@ -87,3 +87,4 @@ function ThreeKind(hand1 , hand2){
 }
 
 // console.log(ThreeKind(hand1,hand2));
+module.exports = {ThreeKind};

@@ -98,3 +98,4 @@ function FourKind(){
 }
 
 // console.log(FourKind(hand1,hand2));
+module.exports = {FourKind};

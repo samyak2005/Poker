@@ -94,3 +94,4 @@ function FullHouse(){
 }
 
 // console.log(FullHouse(hand1,hand2));
+module.exports = {FullHouse};

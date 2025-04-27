@@ -49,3 +49,4 @@ function HighCard(hand1, hand2) {
 }
 
 // console.log(HighCard(hand1 , hand2));
+module.exports = {HighCard};
