@@ -1,20 +1,4 @@
-// const hand1 = [
-//     {rank : "2" , suit : "spades"},
-//     {rank : "2" , suit : "spades"},
-//     {rank : "3" , suit : "spades"},
-//     {rank : "A" , suit : "spades"},
-//     {rank : "A" , suit : "spades"},
-// ]
-
-// const hand2 = [
-//     {rank : "K" , suit : "spades"},
-//     {rank : "K" , suit : "spades"},
-//     {rank : "2" , suit : "spades"},
-//     {rank : "2" , suit : "spades"},
-//     {rank : "2" , suit : "spades"},
-// ]
-
-function TwoPair(hand1,hand2){
+function TwoPair(hand1, hand2) {
   const ranks1 = hand1.map((card) => card.rank);
   const ranks2 = hand2.map((card) => card.rank);
 
@@ -35,13 +19,12 @@ function TwoPair(hand1,hand2){
     Q: 12,
     K: 13,
     A: 14,
-  }
+  };
 
-   const value1 = ranks1.map((rank) => rankvalues[rank]);
-   const value2 = ranks2.map((rank) => rankvalues[rank]);
+  const value1 = ranks1.map((rank) => rankvalues[rank]);
+  const value2 = ranks2.map((rank) => rankvalues[rank]);
 
-  for(let i = 0; i < 5; i++){
-
+  for (let i = 0; i < 5; i++) {
     if (map1.has(value1[i])) {
       map1.set(value1[i], map1.get(value1[i]) + 1);
     } else {
@@ -49,41 +32,39 @@ function TwoPair(hand1,hand2){
     }
 
     if (map2.has(value2[i])) {
-        map2.set(value2[i], map2.get(value2[i]) + 1);
+      map2.set(value2[i], map2.get(value2[i]) + 1);
     } else {
-        map2.set(value2[i], 1);
+      map2.set(value2[i], 1);
     }
-
   }
 
-  value1.sort((a,b) => {
+  value1.sort((a, b) => {
     ta = map1.get(a);
     tb = map1.get(b);
-    
-    if(tb == ta){
-        return b-a;
+
+    if (tb == ta) {
+      return b - a;
     }
-    return tb-ta;
-  })
-  
-  value2.sort((a,b) => {
+    return tb - ta;
+  });
+
+  value2.sort((a, b) => {
     ta = map2.get(a);
     tb = map2.get(b);
-    
-    if(tb == ta){
-        return b-a;
+
+    if (tb == ta) {
+      return b - a;
     }
-    return tb-ta;
-  })
-  
-  for(let i = 0;i<5;i++){
-    if(value1[i] > value2[i]){
-        return hand1;
-    }else if(value2[i] > value1[i]){
-        return hand2;
+    return tb - ta;
+  });
+
+  for (let i = 0; i < 5; i++) {
+    if (value1[i] > value2[i]) {
+      return hand1;
+    } else if (value2[i] > value1[i]) {
+      return hand2;
     }
   }
 }
 
-// console.log(TwoPair(hand1 , hand2));
-module.exports = {TwoPair};
+module.exports = { TwoPair };

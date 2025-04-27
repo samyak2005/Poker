@@ -5,15 +5,13 @@ function generateCombinations(cards) {
       result.push([...combo]);
       return;
     }
-
     for (let i = start; i < cards.length; i++) {
       combo.push(cards[i]);
       combine(i + 1, combo);
       combo.pop();
     }
+    combine();
+    return result;
   }
-  combine();
-  return result;
 }
-
 module.exports = { generateCombinations };

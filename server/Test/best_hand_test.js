@@ -8,11 +8,11 @@ const userCards = [
 ];
 
 const flopCards = [
-  { rank: "K", suit: "hearts" },
-  { rank: "Q", suit: "hearts" },
-  { rank: "K", suit: "spades" },
-  { rank: "A", suit: "clubs" },
-  { rank: "A", suit: "diamonds" },
+  { rank: "3", suit: "hearts" },
+  { rank: "4", suit: "hearts" },
+  { rank: "A", suit: "spades" },
+  { rank: "K", suit: "clubs" },
+  { rank: "8", suit: "diamonds" },
 ];
 
 const result = findBestHand(userCards, flopCards);
