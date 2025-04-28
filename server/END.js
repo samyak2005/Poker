@@ -1,4 +1,4 @@
-const { TieBreaker } = require("./Tie_Breaker");
+const { TieBreaker } = require("./Main_working/Tie_Breaker");
 
 /**
  * @param {number} priority1 - Priority of player 1's hand
@@ -17,3 +17,5 @@ function END_WINNING(priority1, hand1, priority2, hand2) {
     return hand1;
   }
 }
+
+module.exports = {END_WINNING};
