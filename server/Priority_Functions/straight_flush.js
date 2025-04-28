@@ -1,3 +1,5 @@
+const rankValues = require('../../rankValues');
+
 // NOTE A2345 comes in straight
 function arraysEqual(arr1, arr2) {
   return arr1.every((val, i) => val === arr2[i]);
@@ -10,21 +12,6 @@ function isStraightFlush(hand) {
   const allSameSuit = suits.every((suit) => suit === suits[0]);
   if (!allSameSuit) return false;
 
-  const rankValues = {
-    2: 2,
-    3: 3,
-    4: 4,
-    5: 5,
-    6: 6,
-    7: 7,
-    8: 8,
-    9: 9,
-    10: 10,
-    J: 11,
-    Q: 12,
-    K: 13,
-    A: 14,
-  };
   const values = ranks.map((rank) => rankValues[rank]);
 
   values.sort((a, b) => a - b);
