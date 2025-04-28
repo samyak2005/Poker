@@ -73,6 +73,8 @@ function FullHouse() {
   } else if (HighCard2 > HighCard1) {
     return hand2;
   }
+
+  return hand1;
 }
 
 module.exports = { FullHouse };

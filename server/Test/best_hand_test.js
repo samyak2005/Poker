@@ -3,16 +3,16 @@ const { evaluateHand } = require("../Main_working/evaluate_hand"); // Assuming e
 
 // Example 1: Royal Flush possible
 const userCards = [
-  { rank: "2", suit: "hearts" },
-  { rank: "2", suit: "clubs" },
+  { rank: "A", suit: "hearts" },
+  { rank: "A", suit: "diamonds" },
 ];
 
 const flopCards = [
-  { rank: "3", suit: "hearts" },
-  { rank: "4", suit: "hearts" },
-  { rank: "A", suit: "spades" },
+  { rank: "Q", suit: "clubs" },
+  { rank: "2", suit: "spades" },
+  { rank: "K", suit: "hearts" },
   { rank: "K", suit: "clubs" },
-  { rank: "8", suit: "diamonds" },
+  { rank: "Q", suit: "diamonds" },
 ];
 
 const result = findBestHand(userCards, flopCards);

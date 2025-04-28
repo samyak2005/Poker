@@ -65,6 +65,8 @@ function TwoPair(hand1, hand2) {
       return hand2;
     }
   }
+
+  return hand1;
 }
 
 module.exports = { TwoPair };
