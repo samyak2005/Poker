@@ -1,3 +1,5 @@
+const { TieBreaker } = require("./Tie_Breaker");
+
 /**
  * @param {number} priority1 - Priority of player 1's hand
  * @param {Array} hand1 - Player 1's hand
