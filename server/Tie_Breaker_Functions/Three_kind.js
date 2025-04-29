@@ -1,3 +1,5 @@
+const rankValues = require("../rankValues");
+
 function ThreeKind(hand1, hand2) {
   const ranks1 = hand1.map((card) => card.rank);
   const ranks2 = hand2.map((card) => card.rank);
@@ -5,24 +7,8 @@ function ThreeKind(hand1, hand2) {
   let map1 = new Map();
   let map2 = new Map();
 
-  const rankvalues = {
-    2: 2,
-    3: 3,
-    4: 4,
-    5: 5,
-    6: 6,
-    7: 7,
-    8: 8,
-    9: 9,
-    10: 10,
-    J: 11,
-    Q: 12,
-    K: 13,
-    A: 14,
-  };
-
-  const value1 = ranks1.map((rank) => rankvalues[rank]);
-  const value2 = ranks2.map((rank) => rankvalues[rank]);
+  const value1 = ranks1.map((rank) => rankValues[rank]);
+  const value2 = ranks2.map((rank) => rankValues[rank]);
 
   for (let i = 0; i < 5; i++) {
     if (map1.has(value1[i])) {
