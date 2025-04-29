@@ -1,8 +1,11 @@
 import ReactCardFlip from "react-card-flip";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoins, faCircleDollarToSlot, faWallet } from '@fortawesome/free-solid-svg-icons';
+import { faCoins, faCircleDollarToSlot, faWallet, faGear, faRightFromBracket, faQuestion, faClockRotateLeft } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect } from 'react';
 import '../App.css';
+import User from './User';
+import Help from './Help';
+import Popup from 'reactjs-popup';
 
 const GameRoom = () => {
     const [flip1, setFlip1] = useState(false);
@@ -16,7 +19,8 @@ const GameRoom = () => {
 
     const [userMoney, setUserMoney] = useState(250);
     const [bet, setBet] = useState(10);
-    const [timer, setTimer] = useState(59);
+    const [timer, setTimer] = useState(40);
+    const [help, setHelp] = useState(false);
 
     const [userObj, setUserObj] = useState([]);
     const [compObj, setCompObj] = useState([]);
@@ -29,6 +33,7 @@ const GameRoom = () => {
         "ace_of_clubs.png", "2_of_clubs.png", "3_of_clubs.png", "4_of_clubs.png", "5_of_clubs.png", "6_of_clubs.png", "7_of_clubs.png", "8_of_clubs.png", "9_of_clubs.png", "10_of_clubs.png", "queen_of_clubs.png", "jack_of_clubs.png", "king_of_clubs.png"
     ];
 
+    //shuffling cards
     const shuffleArray = (cards) => {
         const shuffled = [...cards];
         for (let i = 0; i < shuffled.length - 1; i++) {
@@ -37,7 +42,6 @@ const GameRoom = () => {
         }
         return shuffled;
     };
-    
     useEffect(() => {
         const shuffled = shuffleArray(cards);
         setUserCards(shuffled.splice(0,2));
@@ -53,6 +57,7 @@ const GameRoom = () => {
 
     // }
 
+    //getting rank of card
     const getRank = (card) => {
         if(card[0] == "a") return "A";
         if(card[0] == "j") return "J";
@@ -62,11 +67,12 @@ const GameRoom = () => {
         return card[0];
     }
 
+    //getting suit of card
     const getSuit = (card) => {
         return card.split('_')[2].split('.')[0];
     }
 
-    //getting rank and suit of usercards
+    //creating object for user cards
     useEffect(() => {
         const user = [
             {"rank": getRank(userCards[0]), "suit": getSuit(userCards[0])},
@@ -76,7 +82,7 @@ const GameRoom = () => {
         console.log(user);
     }, [userCards, flopCards]);
 
-    //getting rank and suit of compcards
+    //creating object for computer cards
     useEffect(() => {
         const comp = [
             {"rank": getRank(compCards[0]), "suit": getSuit(compCards[0])},
@@ -86,7 +92,7 @@ const GameRoom = () => {
         console.log(comp);
     }, [compCards, flopCards]);
 
-    //getting rank and suit of flopcards
+    //creating object for flop cards
     useEffect(() => {
         const flop = [
             {"rank": getRank(flopCards[0]), "suit": getSuit(flopCards[0])},
@@ -111,45 +117,53 @@ const GameRoom = () => {
         return () => clearInterval(intervalId);
     }, []);
 
+    //handling help popup
+    const closeHelp = () => {
+        setHelp(false);
+    }
+
     return (
+        <>
+        <Popup open={help} onClose={closeHelp} modal nested>
+            {(close) => <Help close={close} />}
+        </Popup>
+
+        {help && (
+            <div className="fixed inset-0 backdrop-blur z-10"></div>
+        )}
         <div className="gameroom-bg h-screen">
+            <div className="fixed top-0 p-2 px-5 h-13 w-full flex border-b border-gray-800 text-white">
+                <div className="w-[33.34%] flex justify-start items-center">name of app</div>
+                <div className="w-[33.34%] flex justify-center items-center">table name</div>
+                <div className="w-[33.34%] flex justify-end items-center">get coins, money, profile</div>
+            </div>
+            <div className="fixed top-15 left-5 flex gap-5 z-1">
+                <div className="text-gray-300 cursor-pointer hover:scale-120 hover:text-white transition-transform duration-300">
+                    <FontAwesomeIcon icon={faGear} />
+                </div>
+                <div className="text-gray-300 cursor-pointer hover:scale-120 hover:text-white transition-transform duration-300">
+                    <FontAwesomeIcon icon={faRightFromBracket} />
+                </div>
+            </div>
             <div className="relative">
-                <div className="fixed top-10 w-full flex gap-2 justify-center items-center">
+                <div className="fixed top-15 w-full flex gap-2 justify-center items-center">
                     <FontAwesomeIcon icon={faCoins} className="text-gray-300 text-xl" />
                     <p className="text-gray-300 text-lg">Pot</p>
                 </div>
-                <div className="fixed top-20 w-full flex justify-center">
+                <div className="fixed top-25 w-full flex justify-center">
                     <p className="text-white text-8xl text-bold">50</p>
                 </div>
             </div>
-            <div className="computer flex flex-col relative">
-                <div className="flex flex-col items-center gap-2 fixed top-55 left-55">
-                    <div className="bg-white rounded-full h-30 w-30"></div>
-                    <div>
-                        <p className="text-white text-3xl text-semibold mt-10">Tom</p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <FontAwesomeIcon icon={faCoins} className="text-gray-300 text-xl" />
-                        <p className="text-gray-300 text-lg">180</p>
-                    </div>
-                    <div className="flex items-center gap-2 bg-gray-600 rounded-full px-2 py-1">
-                        <FontAwesomeIcon icon={faCircleDollarToSlot} className="text-white text-xl" />
-                        <p className="text-white">{bet}</p>
-                    </div>
-                </div>
+            
+            {/* <User flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"16.5rem"} avatarLeft={"2.5rem"} cardsTop={"20.25rem"} cardsLeft={"6.75rem"} /> */}
+            <User flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"12.5rem"} avatarLeft={"15.5rem"} cardsTop={"16.25rem"} cardsLeft={"19.75rem"} />
+            {/* <User flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"8.5rem"} avatarLeft={"28.5rem"} cardsTop={"12.25rem"} cardsLeft={"32.75rem"} /> */}
 
-                <div className="flex fixed top-70 left-70">
-                    <ReactCardFlip isFlipped={flip4} flipDirection="horizontal">
-                        <img src="card-back.jpeg" className="rounded-lg card comp-card transform -rotate-12 translate-y-2" onClick={() => setFlip4(!flip4)}/>
-                        <img src={"card-fronts/" + compCards[0]} className="card comp-card card-front transform -rotate-12 translate-y-2"/>
-                    </ReactCardFlip>
-                    <ReactCardFlip isFlipped={flip4} flipDirection="horizontal">
-                        <img src="card-back.jpeg" className="rounded-lg card comp-card transform rotate-12 translate-y-2" onClick={() => setFlip4(!flip4)}/>
-                        <img src={"card-fronts/" + compCards[1]} className="card comp-card card-front transform rotate-12 translate-y-2"/>
-                    </ReactCardFlip>
-                </div>
-            </div>
-            <div className="flex justify-center mt-20 items-end gap-5 fixed top-60 left-[34%]">
+            {/* <User flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"8.5rem"} avatarLeft={"51.5rem"} cardsTop={"12.25rem"} cardsLeft={"55.75rem"} />
+            <User flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"12.5rem"} avatarLeft={"64.5rem"} cardsTop={"16.25rem"} cardsLeft={"68.75rem"} />
+            <User flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"16.5rem"} avatarLeft={"77.5rem"} cardsTop={"20.25rem"} cardsLeft={"81.75rem"} /> */}
+
+            <div className="flex justify-center mt-20 items-end gap-5 fixed top-75 w-full">
                 <ReactCardFlip isFlipped={flip1} flipDirection="horizontal">
                     <img src="card-back.jpeg" className="rounded-lg card flop-card" onClick={() => setFlip1(!flip1)}/>
                     <img src={"card-fronts/" + flopCards[0]} className="card flop-card card-front"/>
@@ -189,21 +203,32 @@ const GameRoom = () => {
                         <FontAwesomeIcon icon={faWallet} className="text-gray-600" />
                         <p className="text-gray-600">Your Bank</p>
                     </div>
-                    <p className="text-white text-5xl">180</p>
+                    <p className="text-white text-5xl text-semilbold">180</p>
                 </div>
             </div>
 
             <div className="flex justify-center items-center">
-                <div className="flex justify-center gap-15 fixed bottom-5">
-                    <button className="text-lg text-white cursor-pointer">Call</button>
-                    <button className="text-lg text-green-400 cursor-pointer">Raise</button>
-                    <button className="text-lg text-red-400 cursor-pointer">Fold</button>
+                <div className="flex justify-center gap-5 fixed bottom-5 left-5">
+                    <div className="gap-1 flex justify-center items-center hover:scale-105 transition-transform duration-300 cursor-pointer">
+                            <FontAwesomeIcon icon={faQuestion} className="text-white text-xs rounded-full w-3 border border-gray-400 p-1" />
+                            <button className="text-base text-white cursor-pointer" onClick={() => setHelp(true)}>Help</button>
+                    </div>
+                    <div className="gap-1 flex justify-center items-center hover:scale-105 transition-transform duration-300 cursor-pointer">
+                        <FontAwesomeIcon icon={faClockRotateLeft} className="text-white text-xs rounded-full w-3 h-5 border border-gray-400 p-1" />
+                        <button className="text-base text-white cursor-pointer">Log</button>
+                    </div>
+                </div>
+                <div className="flex justify-center gap-7 fixed bottom-5">
+                    <button className="text-lg text-white cursor-pointer rounded-full px-4 hover:bg-gray-700">Call</button>
+                    <button className="text-lg text-green-400 cursor-pointer rounded-full p-1 px-4 hover:bg-gray-700">Raise</button>
+                    <button className="text-lg text-red-400 cursor-pointer rounded-full p-1 px-4 hover:bg-gray-700">Fold</button>
                 </div>
                 <div className="fixed bottom-10 right-10">
-                    <button className="text-lg text-white cursor-pointer rounded-full border-3 border-gray-400 py-3 px-5">Your Turn! <span className="text-gray-400">0:{timer < 10 ? `0${timer}` : timer}</span></button>
+                    <button className="text-lg text-white rounded-full border-3 border-gray-400 py-3 px-5">Your Turn! <span className="text-gray-400">0:{timer < 10 ? `0${timer}` : timer}</span></button>
                 </div>
             </div>
         </div>
+        </>
     );
 }
 

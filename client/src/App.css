@@ -3,6 +3,8 @@ body {
     height: 100%;
     margin: 0;
     padding: 0;
+    font-family: 'Montserrat';
+    user-select: none;
 }
 
 .gameroom-bg {
@@ -22,14 +24,18 @@ body {
 }
 
 .user-card {
-    height: 11rem;
+    height: 10rem;
 }
 
 .flop-card {
-    height: 7rem;
+    height: 8rem;
 }
 
 .card-front {
     border-radius: 10px;
     border: 5px solid white;
+}
+
+.left-card {
+    opacity: 0.8;
 }
