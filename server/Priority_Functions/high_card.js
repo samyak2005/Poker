@@ -1,9 +1,9 @@
-const rankValues = require('../../rankValues');
+const rankValues = require("../rankValues");
 
 function highCard(hand) {
   const ranks = hand.map((card) => card.rank);
-  
   const values = ranks.map((rank) => rankValues[rank]);
+  let high =2;
   let index;
   for (let i = 0; i < values.length; i++) {
     if (high < values[i]) {

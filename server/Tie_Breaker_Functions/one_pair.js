@@ -1,4 +1,4 @@
-const rankValues = require('../../rankValues');
+const rankValues = require("../rankValues");
 
 // const hand1 = [
 //   { rank: "K", suit: "spades" },

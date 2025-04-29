@@ -1,4 +1,4 @@
-const rankValues = require('../../rankValues');
+const rankValues = require("../rankValues");
 
 // NOTE A2345 comes in straight
 function arraysEqual(arr1, arr2) {

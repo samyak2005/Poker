@@ -1,4 +1,4 @@
-const rankValues = require('../../rankValues');
+const rankValues = require("../rankValues");
 
 function HighCard(hand1, hand2) {
   const value1 = hand1.map((card) => card.rank);

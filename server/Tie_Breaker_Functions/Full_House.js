@@ -1,4 +1,4 @@
-const rankValues = require('../../rankValues');
+const rankValues = require("../rankValues");
 
 function FullHouse() {
   const ranks1 = hand1.map((card) => card.rank);
