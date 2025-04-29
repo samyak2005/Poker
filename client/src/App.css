@@ -28,10 +28,14 @@ body {
 }
 
 .flop-card {
-    height: 9rem;
+    height: 8rem;
 }
 
 .card-front {
     border-radius: 10px;
     border: 5px solid white;
+}
+
+.left-card {
+    opacity: 0.8;
 }
