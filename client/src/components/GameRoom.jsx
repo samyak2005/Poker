@@ -1,6 +1,6 @@
 import ReactCardFlip from "react-card-flip";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoins, faCircleDollarToSlot, faWallet, faGear, faRightFromBracket, faQuestion, faClockRotateLeft, faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { faCoins, faCircleDollarToSlot, faWallet, faGear, faRightFromBracket, faQuestion, faClockRotateLeft, faAngleDown, faClose } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect } from 'react';
 import '../App.css';
 import Popup from 'reactjs-popup';
@@ -29,13 +29,14 @@ const GameRoom = () => {
     const [userMoney, setUserMoney] = useState(250);
     const [bet, setBet] = useState(10);
     const [timer, setTimer] = useState(40);
-    const [help, setHelp] = useState(false);
 
     const [userObj, setUserObj] = useState([]);
     const [compObj, setCompObj] = useState([]);
     const [flopObj, setFlopObj] = useState([]);
 
+    const [help, setHelp] = useState(false);
     const [profile, setProfile] = useState(false);
+    const [log, setLog] = useState(false);
 
     //shuffling cards
     const shuffleArray = (cards) => {
@@ -120,16 +121,29 @@ const GameRoom = () => {
             {(close) => <Help close={close} />}
         </Popup>
 
-        {help && (
+        {(help || log) && (
             <div className="fixed inset-0 backdrop-blur z-10"></div>
         )}
 
         {profile && (
-            <div className="fixed top-14 right-3 mt-2 w-60 bg-white/20 text-white shadow-lg p-4 z-50">
+            <div className="fixed top-14 right-3 mt-2 w-60 bg-black/40 text-white shadow-lg p-4 z-50">
                 <p className="cursor-pointer hover:bg-white/10 p-2">...</p>
                 <p className="cursor-pointer hover:bg-white/10 p-2">...</p>
             </div>
         )}
+
+        {/* log */}
+        <div className={`fixed bottom-15 w-100 bg-black/20 text-gray-300 shadow-lg z-50 transform transition-transform duration-300 ${log ? "translate-x-5" : "-translate-x-full"}`}>
+            <div className="flex justify-between items-center p-4 border-b">
+                <h2 className="text-lg font-semibold">Log</h2>
+                <button onClick={() => setLog(false)} className="text-white/50 hover:text-white cursor-pointer">
+                    <FontAwesomeIcon icon={faClose} className="text-xl" />
+                </button>
+            </div>
+            <div className="p-4">
+                <p>no data found</p>
+            </div>
+        </div>
 
         <div className="gameroom-bg h-screen">
             <div className="fixed top-0 p-2 px-5 h-13 w-full flex border-b border-gray-800 text-white">
@@ -220,7 +234,7 @@ const GameRoom = () => {
                             <FontAwesomeIcon icon={faQuestion} className="text-white text-xs rounded-full w-3 border border-gray-400 p-1" />
                             <button className="text-base text-white cursor-pointer">Help</button>
                     </div>
-                    <div className="gap-1 flex justify-center items-center hover:scale-105 transition-transform duration-300 cursor-pointer">
+                    <div className="gap-1 flex justify-center items-center hover:scale-105 transition-transform duration-300 cursor-pointer" onClick={() => setLog(true)}>
                         <FontAwesomeIcon icon={faClockRotateLeft} className="text-white text-xs rounded-full w-3 h-5 border border-gray-400 p-1" />
                         <button className="text-base text-white cursor-pointer">Log</button>
                     </div>
