@@ -3,9 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoins, faCircleDollarToSlot, faWallet, faGear, faRightFromBracket, faQuestion, faClockRotateLeft } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect } from 'react';
 import '../App.css';
+import Popup from 'reactjs-popup';
+
 import User from './User';
 import Help from './Help';
-import Popup from 'reactjs-popup';
+import Timer from './Timer';
 
 const GameRoom = () => {
     const cards = [
@@ -104,18 +106,6 @@ const GameRoom = () => {
         setFlopObj(flop);
         console.log(flop);
     }, [flopCards])
-
-    //timer
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-            setTimer(prev => {
-                if (prev === 0) return 0;
-                return prev - 1;
-            });
-        }, 1000);
-    
-        return () => clearInterval(intervalId);
-    }, []);
 
     //handling help popup
     const closeHelp = () => {
@@ -223,9 +213,10 @@ const GameRoom = () => {
                     <button className="text-lg text-green-400 cursor-pointer rounded-full p-1 px-4 hover:bg-gray-700 hover:scale-110 transition-all duration-300">Raise</button>
                     <button className="text-lg text-red-400 cursor-pointer rounded-full p-1 px-4 hover:bg-gray-700 hover:scale-110 transition-all duration-300">Fold</button>
                 </div>
-                <div className="fixed bottom-10 right-10">
+                {/* <div className="fixed bottom-10 right-10">
                     <button className="text-lg text-white rounded-full border-3 border-gray-400 py-3 px-5">Your Turn! <span className="text-gray-400">0:{timer < 10 ? `0${timer}` : timer}</span></button>
-                </div>
+                </div> */}
+                <Timer />
             </div>
         </div>
         </>
