@@ -4,11 +4,11 @@ import { faClose } from '@fortawesome/free-solid-svg-icons';
 const Help = ({ close }) => {
     return (
        <div className="flex flex-col justify-center items-center gap-2 h-screen relative z-2">
-            <div className="h-8 w-8 rounded-full border-2 border-gray-700 p-1 text-center hover:bg-gray-300 cursor-pointer" onClick={close}>
-                <FontAwesomeIcon icon={faClose} className="text-lg" />
+            <div className="h-9 w-9 flex items-center justify-center rounded-full bg-[#1C023F] hover:bg-[#3a0ca3] cursor-pointer" onClick={close}>
+                <FontAwesomeIcon icon={faClose} className="text-lg text-white" />
             </div>
-            <div className="h-[70vh]">
-                <img src="help.jpeg" className="h-full"/>
+            <div className="h-[80vh]">
+                <img src="help.png" className="h-full" draggable="false"/>
             </div>
        </div>
     )

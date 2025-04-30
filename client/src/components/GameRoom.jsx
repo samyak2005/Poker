@@ -8,6 +8,13 @@ import Help from './Help';
 import Popup from 'reactjs-popup';
 
 const GameRoom = () => {
+    const cards = [
+        "ace_of_hearts.png", "2_of_hearts.png", "3_of_hearts.png", "4_of_hearts.png", "5_of_hearts.png", "6_of_hearts.png", "7_of_hearts.png", "8_of_hearts.png", "9_of_hearts.png", "10_of_hearts.png", "queen_of_hearts.png", "jack_of_hearts.png", "king_of_hearts.png",
+        "ace_of_spades.png", "2_of_spades.png", "3_of_spades.png", "4_of_spades.png", "5_of_spades.png", "6_of_spades.png", "7_of_spades.png", "8_of_spades.png", "9_of_spades.png", "10_of_spades.png", "queen_of_spades.png", "jack_of_spades.png", "king_of_spades.png",
+        "ace_of_diamonds.png", "2_of_diamonds.png", "3_of_diamonds.png", "4_of_diamonds.png", "5_of_diamonds.png", "6_of_diamonds.png", "7_of_diamonds.png", "8_of_diamonds.png", "9_of_diamonds.png", "10_of_diamonds.png", "queen_of_diamonds.png", "jack_of_diamonds.png", "king_of_diamonds.png",
+        "ace_of_clubs.png", "2_of_clubs.png", "3_of_clubs.png", "4_of_clubs.png", "5_of_clubs.png", "6_of_clubs.png", "7_of_clubs.png", "8_of_clubs.png", "9_of_clubs.png", "10_of_clubs.png", "queen_of_clubs.png", "jack_of_clubs.png", "king_of_clubs.png"
+    ];
+
     const [flip1, setFlip1] = useState(false);
     const [flip2, setFlip2] = useState(false);
     const [flip3, setFlip3] = useState(false);
@@ -25,13 +32,6 @@ const GameRoom = () => {
     const [userObj, setUserObj] = useState([]);
     const [compObj, setCompObj] = useState([]);
     const [flopObj, setFlopObj] = useState([]);
-
-    const cards = [
-        "ace_of_hearts.png", "2_of_hearts.png", "3_of_hearts.png", "4_of_hearts.png", "5_of_hearts.png", "6_of_hearts.png", "7_of_hearts.png", "8_of_hearts.png", "9_of_hearts.png", "10_of_hearts.png", "queen_of_hearts.png", "jack_of_hearts.png", "king_of_hearts.png",
-        "ace_of_spades.png", "2_of_spades.png", "3_of_spades.png", "4_of_spades.png", "5_of_spades.png", "6_of_spades.png", "7_of_spades.png", "8_of_spades.png", "9_of_spades.png", "10_of_spades.png", "queen_of_spades.png", "jack_of_spades.png", "king_of_spades.png",
-        "ace_of_diamonds.png", "2_of_diamonds.png", "3_of_diamonds.png", "4_of_diamonds.png", "5_of_diamonds.png", "6_of_diamonds.png", "7_of_diamonds.png", "8_of_diamonds.png", "9_of_diamonds.png", "10_of_diamonds.png", "queen_of_diamonds.png", "jack_of_diamonds.png", "king_of_diamonds.png",
-        "ace_of_clubs.png", "2_of_clubs.png", "3_of_clubs.png", "4_of_clubs.png", "5_of_clubs.png", "6_of_clubs.png", "7_of_clubs.png", "8_of_clubs.png", "9_of_clubs.png", "10_of_clubs.png", "queen_of_clubs.png", "jack_of_clubs.png", "king_of_clubs.png"
-    ];
 
     //shuffling cards
     const shuffleArray = (cards) => {
@@ -151,12 +151,12 @@ const GameRoom = () => {
                     <p className="text-gray-300 text-lg">Pot</p>
                 </div>
                 <div className="fixed top-25 w-full flex justify-center">
-                    <p className="text-white text-8xl text-bold">50</p>
+                    <p className="text-white text-7xl font-semibold">50</p>
                 </div>
             </div>
             
             {/* <User flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"16.5rem"} avatarLeft={"2.5rem"} cardsTop={"20.25rem"} cardsLeft={"6.75rem"} /> */}
-            <User flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"12.5rem"} avatarLeft={"15.5rem"} cardsTop={"16.25rem"} cardsLeft={"19.75rem"} />
+            <User flip3={flip3} flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"12.5rem"} avatarLeft={"15.5rem"} cardsTop={"16.25rem"} cardsLeft={"19.75rem"} />
             {/* <User flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"8.5rem"} avatarLeft={"28.5rem"} cardsTop={"12.25rem"} cardsLeft={"32.75rem"} /> */}
 
             {/* <User flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"8.5rem"} avatarLeft={"51.5rem"} cardsTop={"12.25rem"} cardsLeft={"55.75rem"} />
@@ -165,36 +165,36 @@ const GameRoom = () => {
 
             <div className="flex justify-center mt-20 items-end gap-5 fixed top-75 w-full">
                 <ReactCardFlip isFlipped={flip1} flipDirection="horizontal">
-                    <img src="card-back.jpeg" className="rounded-lg card flop-card" onClick={() => setFlip1(!flip1)}/>
-                    <img src={"card-fronts/" + flopCards[0]} className="card flop-card card-front"/>
+                    <img src="card-back.jpeg" className="rounded-lg card flop-card" onClick={() => setFlip1(!flip1)} draggable="false"/>
+                    <img src={"card-fronts/" + flopCards[0]} className="card flop-card card-front" draggable="false"/>
                 </ReactCardFlip>
                 <ReactCardFlip isFlipped={flip1} flipDirection="horizontal">
-                    <img src="card-back.jpeg" className="rounded-lg card flop-card" onClick={() => setFlip1(!flip1)}/>
-                    <img src={"card-fronts/" + flopCards[1]} className="card flop-card card-front"/>
+                    <img src="card-back.jpeg" className="rounded-lg card flop-card" onClick={() => setFlip1(!flip1)} draggable="false"/>
+                    <img src={"card-fronts/" + flopCards[1]} className="card flop-card card-front" draggable="false"/>
                 </ReactCardFlip>
                 <ReactCardFlip isFlipped={flip1} flipDirection="horizontal">
-                    <img src="card-back.jpeg" className="rounded-lg card flop-card" onClick={() => setFlip1(!flip1)}/>
-                    <img src={"card-fronts/" + flopCards[2]} className="card flop-card card-front"/>
+                    <img src="card-back.jpeg" className="rounded-lg card flop-card" onClick={() => setFlip1(!flip1)} draggable="false"/>
+                    <img src={"card-fronts/" + flopCards[2]} className="card flop-card card-front" draggable="false"/>
                 </ReactCardFlip>
                 <ReactCardFlip isFlipped={flip2} flipDirection="horizontal">
-                    <img src="card-back.jpeg" className="rounded-lg card flop-card" onClick={() => setFlip2(!flip2)}/>
-                    <img src={"card-fronts/" + flopCards[3]} className="card flop-card card-front"/>
+                    <img src="card-back.jpeg" className="rounded-lg card flop-card" onClick={() => {if(flip1) setFlip2(!flip2)}} draggable="false"/>
+                    <img src={"card-fronts/" + flopCards[3]} className="card flop-card card-front" draggable="false"/>
                 </ReactCardFlip>
                 <ReactCardFlip isFlipped={flip3} flipDirection="horizontal">
-                    <img src="card-back.jpeg" className="rounded-lg card flop-card" onClick={() => setFlip3(!flip3)}/>
-                    <img src={"card-fronts/" + flopCards[4]} className="card flop-card card-front"/>
+                    <img src="card-back.jpeg" className="rounded-lg card flop-card" onClick={() => {if(flip2) setFlip3(!flip3)}} draggable="false"/>
+                    <img src={"card-fronts/" + flopCards[4]} className="card flop-card card-front" draggable="false"/>
                 </ReactCardFlip>
             </div>
 
             <div className="flex justify-center items-center relative">
                 <div className="flex justify-center fixed bottom-20">
-                    <img src={"card-fronts/" + userCards[0]} className="card user-card card-front transform -rotate-12 translate-y-2"/>
-                    <img src={"card-fronts/" + userCards[1]} className="card user-card card-front transform rotate-12 translate-y-2 -ml-8"/>
+                    <img src={"card-fronts/" + userCards[0]} className="card user-card card-front transform -rotate-12 translate-y-2" draggable="false"/>
+                    <img src={"card-fronts/" + userCards[1]} className="card user-card card-front transform rotate-12 translate-y-2 -ml-8" draggable="false"/>
                 </div>
             </div>
 
             <div className="flex items-center fixed bottom-35 right-10 gap-5">
-                <div className="flex items-center gap-2 bg-gray-600 rounded-full px-2 py-1">
+                <div className="flex items-center gap-2 bg-gray-600 rounded-full px-2 py-1 hover:scale-105">
                     <FontAwesomeIcon icon={faCircleDollarToSlot} className="text-white text-xl" />
                     <p className="text-white">{bet}</p>
                 </div>
@@ -209,9 +209,9 @@ const GameRoom = () => {
 
             <div className="flex justify-center items-center">
                 <div className="flex justify-center gap-5 fixed bottom-5 left-5">
-                    <div className="gap-1 flex justify-center items-center hover:scale-105 transition-transform duration-300 cursor-pointer">
+                    <div className="gap-1 flex justify-center items-center hover:scale-105 transition-transform duration-300 cursor-pointer" onClick={() => setHelp(true)}>
                             <FontAwesomeIcon icon={faQuestion} className="text-white text-xs rounded-full w-3 border border-gray-400 p-1" />
-                            <button className="text-base text-white cursor-pointer" onClick={() => setHelp(true)}>Help</button>
+                            <button className="text-base text-white cursor-pointer">Help</button>
                     </div>
                     <div className="gap-1 flex justify-center items-center hover:scale-105 transition-transform duration-300 cursor-pointer">
                         <FontAwesomeIcon icon={faClockRotateLeft} className="text-white text-xs rounded-full w-3 h-5 border border-gray-400 p-1" />
@@ -219,9 +219,9 @@ const GameRoom = () => {
                     </div>
                 </div>
                 <div className="flex justify-center gap-7 fixed bottom-5">
-                    <button className="text-lg text-white cursor-pointer rounded-full px-4 hover:bg-gray-700">Call</button>
-                    <button className="text-lg text-green-400 cursor-pointer rounded-full p-1 px-4 hover:bg-gray-700">Raise</button>
-                    <button className="text-lg text-red-400 cursor-pointer rounded-full p-1 px-4 hover:bg-gray-700">Fold</button>
+                    <button className="text-lg text-white cursor-pointer rounded-full px-4 hover:bg-gray-700 hover:scale-110 transition-all duration-300">Call</button>
+                    <button className="text-lg text-green-400 cursor-pointer rounded-full p-1 px-4 hover:bg-gray-700 hover:scale-110 transition-all duration-300">Raise</button>
+                    <button className="text-lg text-red-400 cursor-pointer rounded-full p-1 px-4 hover:bg-gray-700 hover:scale-110 transition-all duration-300">Fold</button>
                 </div>
                 <div className="fixed bottom-10 right-10">
                     <button className="text-lg text-white rounded-full border-3 border-gray-400 py-3 px-5">Your Turn! <span className="text-gray-400">0:{timer < 10 ? `0${timer}` : timer}</span></button>

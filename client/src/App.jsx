@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import GameRoom from './components/GameRoom';
-import Help from './components/Help';
+import LandingPage from './components/LandingPage';
+import Lobby from './components/Lobby';
 
 function App() {
 
@@ -9,8 +10,9 @@ function App() {
           <div className="h-screen flex flex-col relative">
               <div className="relative z-10">
                 <Routes>
+                  <Route path="/" element={<LandingPage />} />
+                  <Route path="/lobby" element={<Lobby />} />
                   <Route path="/game-room" element={<GameRoom />} />
-                  <Route path="/help" element={<Help />} />
                 </Routes>
               </div>
           </div>
