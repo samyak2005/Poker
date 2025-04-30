@@ -208,10 +208,22 @@ const GameRoom = () => {
                         <button className="text-base text-white cursor-pointer">Log</button>
                     </div>
                 </div>
-                <div className="flex justify-center gap-7 fixed bottom-5">
-                    <button className="text-lg text-white cursor-pointer rounded-full px-4 hover:bg-gray-700 hover:scale-110 transition-all duration-300">Call</button>
-                    <button className="text-lg text-green-400 cursor-pointer rounded-full p-1 px-4 hover:bg-gray-700 hover:scale-110 transition-all duration-300">Raise</button>
-                    <button className="text-lg text-red-400 cursor-pointer rounded-full p-1 px-4 hover:bg-gray-700 hover:scale-110 transition-all duration-300">Fold</button>
+                <div className="flex justify-center gap-7 fixed bottom-4">
+                <button className="relative overflow-hidden group px-5 py-1 text-white text-lg rounded-full hover:scale-105 transition-transform duration-300 cursor-pointer">
+                    <span className="absolute inset-0 bg-gray-600/50 scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
+                    <span className="relative z-10">Call</span>
+                </button>
+                <button className="relative overflow-hidden group px-5 py-1 text-green-400 text-lg rounded-full hover:scale-105 transition-transform duration-300 cursor-pointer">
+                    <span className="absolute inset-0 bg-green-400/30 scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
+                    <span className="relative z-10">Raise</span>
+                </button>
+                <button className="relative overflow-hidden group px-5 py-1 text-red-400 text-lg rounded-full hover:scale-105 transition-transform duration-300 cursor-pointer">
+                    <span className="absolute inset-0 bg-red-400/30 scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
+                    <span className="relative z-10">Fold</span>
+                </button>
+                    {/* <button className="text-lg text-white cursor-pointer rounded-full px-4 hover:scale-110 transition-all duration-300 relative overflow-hidden before:content-[''] before:absolute before:inset-0 before:bg-gray-700 before:scale-x-0 before:origin-left before:transition-transform hover:before:scale-x-100">Call</button> */}
+                    {/* <button className="text-lg text-green-400 cursor-pointer rounded-full p-1 px-4 hover:scale-110 transition-all duration-300 hover:-translate-y-1 hover:rotate-1 hover:shadow-xl">Raise</button>
+                    <button className="text-lg text-red-400 cursor-pointer rounded-full p-1 px-4 hover:scale-110 transition-transform duration-300 ">Fold</button> */}
                 </div>
                 {/* <div className="fixed bottom-10 right-10">
                     <button className="text-lg text-white rounded-full border-3 border-gray-400 py-3 px-5">Your Turn! <span className="text-gray-400">0:{timer < 10 ? `0${timer}` : timer}</span></button>
