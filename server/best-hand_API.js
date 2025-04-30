@@ -26,7 +26,7 @@ pokerApi.post("/end-game", (req, res) => {
   }
 
   if (!Number.isInteger(priority1) || !Number.isInteger(priority2)) {
-    return res.status(400).json({ error: "Input should be numbers" });
+    return res.status(400).json({ error: "Input should be a number" });
   }
 
   const ans = END_WINNING(priority1, hand1, priority2, hand2);
