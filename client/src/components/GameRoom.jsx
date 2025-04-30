@@ -1,6 +1,6 @@
 import ReactCardFlip from "react-card-flip";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoins, faCircleDollarToSlot, faWallet, faGear, faRightFromBracket, faQuestion, faClockRotateLeft } from '@fortawesome/free-solid-svg-icons';
+import { faCoins, faCircleDollarToSlot, faWallet, faGear, faRightFromBracket, faQuestion, faClockRotateLeft, faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect } from 'react';
 import '../App.css';
 import Popup from 'reactjs-popup';
@@ -34,6 +34,8 @@ const GameRoom = () => {
     const [userObj, setUserObj] = useState([]);
     const [compObj, setCompObj] = useState([]);
     const [flopObj, setFlopObj] = useState([]);
+
+    const [profile, setProfile] = useState(false);
 
     //shuffling cards
     const shuffleArray = (cards) => {
@@ -121,11 +123,26 @@ const GameRoom = () => {
         {help && (
             <div className="fixed inset-0 backdrop-blur z-10"></div>
         )}
+
+        {profile && (
+            <div className="fixed top-14 right-3 mt-2 w-60 bg-white/20 text-white shadow-lg p-4 z-50">
+                <p className="cursor-pointer hover:bg-white/10 p-2">...</p>
+                <p className="cursor-pointer hover:bg-white/10 p-2">...</p>
+            </div>
+        )}
+
         <div className="gameroom-bg h-screen">
             <div className="fixed top-0 p-2 px-5 h-13 w-full flex border-b border-gray-800 text-white">
                 <div className="w-[33.34%] flex justify-start items-center">name of app</div>
                 <div className="w-[33.34%] flex justify-center items-center">table name</div>
-                <div className="w-[33.34%] flex justify-end items-center">get coins, money, profile</div>
+                <div className="w-[33.34%] flex justify-end items-center gap-5">
+                    <button className="border border-white/30 rounded-full px-4 py-1 hover:bg-white/20 hover:scale-105 cursor-pointer">Get $</button>
+                    {/* <div>money</div> */}
+                    <button className="flex justify-center items-center gap-2 cursor-pointer hover:scale-105" onClick={() => setProfile(prev => !prev)}>
+                        <img src="avatar.jpeg" className="w-9 h-9 rounded-full"/>
+                        <FontAwesomeIcon icon={faAngleDown} className="text-gray-300" />
+                    </button>
+                </div>
             </div>
             <div className="fixed top-15 left-5 flex gap-5 z-1">
                 <div className="text-gray-300 cursor-pointer hover:scale-120 hover:text-white transition-transform duration-300">
