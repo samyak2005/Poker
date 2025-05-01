@@ -2,6 +2,7 @@ import ReactCardFlip from "react-card-flip";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoins, faCircleDollarToSlot, faWallet, faGear, faRightFromBracket, faQuestion, faClockRotateLeft, faAngleDown, faClose } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../App.css';
 import Popup from 'reactjs-popup';
 
@@ -18,6 +19,8 @@ const GameRoom = () => {
         "ace_of_diamonds.png", "2_of_diamonds.png", "3_of_diamonds.png", "4_of_diamonds.png", "5_of_diamonds.png", "6_of_diamonds.png", "7_of_diamonds.png", "8_of_diamonds.png", "9_of_diamonds.png", "10_of_diamonds.png", "queen_of_diamonds.png", "jack_of_diamonds.png", "king_of_diamonds.png",
         "ace_of_clubs.png", "2_of_clubs.png", "3_of_clubs.png", "4_of_clubs.png", "5_of_clubs.png", "6_of_clubs.png", "7_of_clubs.png", "8_of_clubs.png", "9_of_clubs.png", "10_of_clubs.png", "queen_of_clubs.png", "jack_of_clubs.png", "king_of_clubs.png"
     ];
+
+    const navigate = useNavigate();
 
     const [flip1, setFlip1] = useState(false);
     const [flip2, setFlip2] = useState(false);
@@ -87,7 +90,6 @@ const GameRoom = () => {
             {"rank": getRank(userCards[1]), "suit": getSuit(userCards[1])}
         ];
         setUserObj(user);
-        console.log(user);
     }, [userCards, flopCards]);
 
     //creating object for computer cards
@@ -97,7 +99,6 @@ const GameRoom = () => {
             {"rank": getRank(compCards[1]), "suit": getSuit(compCards[1])}
         ];
         setCompObj(comp);
-        console.log(comp);
     }, [compCards, flopCards]);
 
     //creating object for flop cards
@@ -110,7 +111,6 @@ const GameRoom = () => {
             {"rank": getRank(flopCards[4]), "suit": getSuit(flopCards[4])}
         ];
         setFlopObj(flop);
-        console.log(flop);
     }, [flopCards])
 
     //handling help popup
@@ -167,7 +167,7 @@ const GameRoom = () => {
                 <div className="text-gray-300 cursor-pointer hover:scale-120 hover:text-white transition-transform duration-300" onClick={() => setSettings(true)}>
                     <FontAwesomeIcon icon={faGear} />
                 </div>
-                <div className="text-gray-300 cursor-pointer hover:scale-120 hover:text-white transition-transform duration-300">
+                <div className="text-gray-300 cursor-pointer hover:scale-120 hover:text-white transition-transform duration-300" onClick={() => navigate('/lobby')}>
                     <FontAwesomeIcon icon={faRightFromBracket} />
                 </div>
             </div>
@@ -185,7 +185,7 @@ const GameRoom = () => {
             {/* <User flip3={flip3} flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"16.5rem"} avatarLeft={"2.5rem"} cardsTop={"20.25rem"} cardsLeft={"6.75rem"} /> */}
 
             <AddUser avatarTop={"12rem"} avatarLeft={"15.5rem"} />
-            <User flip3={flip3} flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"12.5rem"} avatarLeft={"15.5rem"} cardsTop={"16.25rem"} cardsLeft={"19.75rem"} />
+            <User flip3={flip3} flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"12rem"} avatarLeft={"15.5rem"} cardsTop={"16.25rem"} cardsLeft={"19.75rem"} />
 
             <AddUser avatarTop={"9.5rem"} avatarLeft={"28.5rem"} />
             {/* <User flip3={flip3} flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"9.5rem"} avatarLeft={"28.5rem"} cardsTop={"13.25rem"} cardsLeft={"32.75rem"} /> */}
