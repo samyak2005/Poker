@@ -182,21 +182,21 @@ const GameRoom = () => {
             </div>
             
             <AddUser avatarTop={"16.5rem"} avatarLeft={"2.5rem"} />
-            {/* <User flip3={flip3} flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"16.5rem"} avatarLeft={"2.5rem"} cardsTop={"20.25rem"} cardsLeft={"6.75rem"} /> */}
+            <User flip3={flip3} flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"16.5rem"} avatarLeft={"2.5rem"} cardsTop={"20.25rem"} cardsLeft={"6.75rem"} avatar="avatar1.jpeg" name="Lily" />
 
             <AddUser avatarTop={"12rem"} avatarLeft={"15.5rem"} />
-            <User flip3={flip3} flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"12rem"} avatarLeft={"15.5rem"} cardsTop={"16.25rem"} cardsLeft={"19.75rem"} />
+            <User flip3={flip3} flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"12rem"} avatarLeft={"15.5rem"} cardsTop={"15.75rem"} cardsLeft={"19.75rem"} avatar="avatar2.jpeg" name="Tom" />
 
             <AddUser avatarTop={"9.5rem"} avatarLeft={"28.5rem"} />
-            {/* <User flip3={flip3} flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"9.5rem"} avatarLeft={"28.5rem"} cardsTop={"13.25rem"} cardsLeft={"32.75rem"} /> */}
+            <User flip3={flip3} flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"9.5rem"} avatarLeft={"28.5rem"} cardsTop={"13.25rem"} cardsLeft={"32.75rem"} avatar="avatar3.jpeg" name="Ava" />
             <AddUser avatarTop={"9.5rem"} avatarLeft={"51.5rem"} />
-            {/* <User flip3={flip3} flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"9.5rem"} avatarLeft={"51.5rem"} cardsTop={"13.25rem"} cardsLeft={"55.75rem"} /> */}
+            <User flip3={flip3} flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"9.5rem"} avatarLeft={"51.5rem"} cardsTop={"13.25rem"} cardsLeft={"55.75rem"} avatar="avatar4.jpeg" name="Joe" />
             <AddUser avatarTop={"11.5rem"} avatarLeft={"65rem"} />
-            {/* <User flip3={flip3} flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"11.5rem"} avatarLeft={"65rem"} cardsTop={"15.25rem"} cardsLeft={"69.75rem"} /> */}
+            <User flip3={flip3} flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"11.5rem"} avatarLeft={"65rem"} cardsTop={"15.25rem"} cardsLeft={"69.75rem"} avatar="avatar5.jpeg" name="Mia" />
             <AddUser avatarTop={"15.5rem"} avatarLeft={"77.5rem"} />
-            {/* <User flip3={flip3} flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"15.5rem"} avatarLeft={"77.5rem"} cardsTop={"19.25rem"} cardsLeft={"81.75rem"} /> */}
+            <User flip3={flip3} flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"15.5rem"} avatarLeft={"77.5rem"} cardsTop={"19.25rem"} cardsLeft={"81.75rem"} avatar="avatar6.jpeg" name="Noah" />
 
-            <div className="flex justify-center mt-20 items-end gap-5 fixed top-75 w-full">
+            <div className="flex justify-center mt-20 items-end gap-5 fixed top-78 w-full">
                 <ReactCardFlip isFlipped={flip1} flipDirection="horizontal">
                     <img src="card-back.jpeg" className="rounded-lg card flop-card" onClick={() => setFlip1(!flip1)} draggable="false"/>
                     <img src={"card-fronts/" + flopCards[0]} className="card flop-card card-front" draggable="false"/>
