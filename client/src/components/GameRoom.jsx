@@ -38,6 +38,8 @@ const GameRoom = () => {
     const [folded, setFolded] = useState(false);
     const [turn, setTurn] = useState(true);
     const [timer, setTimer] = useState(40);
+    const [disabling, setDisabling] = useState(false);
+    const [called, setCalled] = useState(false);
 
     const [userObj, setUserObj] = useState([]);
     const [compObj, setCompObj] = useState([]);
@@ -70,15 +72,45 @@ const GameRoom = () => {
     const handleCall = () => {
         setPot(prev => prev + bet);
         setBank(prev => prev - bet);
+
+        setTurn(false);
+        setCalled(true);
     }
+    useEffect(() => {
+        if(turn) return;
+
+        setTimeout(() => {
+            setTurn(true);
+            setCalled(false);
+            setPot(prev => prev + bet);
+
+            if(!flip1  && called) setFlip1(!flip1);
+            else if(!flip2 && called) setFlip2(!flip2);
+            else if(!flip3  && called) setFlip3(!flip3);
+            else if(!flip4  && called) setFlip4(!flip4);
+        }, 1000);
+
+        setTimeout(() => {
+            if(flip3 && called) {
+                alert('you either won or lost, idk i dont have data from backend :3');
+                window.location.reload();
+            }
+        }, 1500)
+    }, [called, turn]);
     const handleRaise = () => {
         setBank(prev => prev - bet*2);
         setPot(prev => prev + bet*2);
         setBet(prev => prev*2);
+
+        // setCalled(true);
+        setTurn(false);
     }
     const handleFold = () => {
         setFolded(true);
     }
+    useEffect(() => {
+        if(!turn || called) setTimer(40);
+    }, []);
 
     //getting rank of card
     const getRank = (card) => {
@@ -231,14 +263,14 @@ const GameRoom = () => {
                 </ReactCardFlip>
             </div>
 
-            <div className={`flex justify-center items-center relative ${folded || !turn ? "opacity-50" : ""}`}>
+            <div className={`flex justify-center items-center relative ${folded || !turn || disabling ? "opacity-50" : ""}`}>
                 <div className="flex justify-center fixed bottom-20">
                     <img src={"card-fronts/" + userCards[0]} className="card user-card card-front transform -rotate-12 translate-y-2" draggable="false"/>
                     <img src={"card-fronts/" + userCards[1]} className="card user-card card-front transform rotate-12 translate-y-2 -ml-8" draggable="false"/>
                 </div>
             </div>
 
-            <div className={`flex items-center fixed bottom-35 right-10 gap-5 ${folded || !turn ? "opacity-50" : ""}`}>
+            <div className={`flex items-center fixed bottom-35 right-10 gap-5 ${folded || !turn || disabling ? "opacity-50" : ""}`}>
                 <div className="flex items-center gap-2 bg-gray-600 rounded-full px-2 py-1 hover:scale-105">
                     <FontAwesomeIcon icon={faCircleDollarToSlot} className="text-white text-xl" />
                     <p className="text-white">{bet}</p>
@@ -263,7 +295,7 @@ const GameRoom = () => {
                         <button className="text-base text-white cursor-pointer">Log</button>
                     </div>
                 </div>
-                <div className={`flex justify-center gap-7 fixed bottom-4 ${folded || !turn ? "opacity-50 pointer-events-none" : ""}`}>
+                <div className={`flex justify-center gap-7 fixed bottom-4 ${folded || !turn || disabling ? "opacity-50 pointer-events-none" : ""}`}>
                     <button className="relative overflow-hidden group px-5 py-1 text-white text-lg rounded-full hover:scale-105 transition-transform duration-300 cursor-pointer" onClick={handleCall}>
                         <span className="absolute inset-0 bg-gray-600/50 scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
                         <span className="relative z-10">Call</span>

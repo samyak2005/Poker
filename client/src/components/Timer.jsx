@@ -1,13 +1,12 @@
 import React, { useEffect } from "react";
 
 const Timer = ({ timer, setTimer, folded, setFolded, turn, setTurn }) => {
-  const duration = timer;
+  const duration = 40;
 
   useEffect(() => {    
     const intervalId = setInterval(() => {
         setTimer(prev => {
             if (prev === 0) {
-              setTurn(false);
               setFolded(true);
               return 0;
             }
@@ -18,7 +17,8 @@ const Timer = ({ timer, setTimer, folded, setFolded, turn, setTurn }) => {
   }, []);
 
   useEffect(() => {
-    if(folded) setTimer(40);
+    if(folded || !turn) setTimer(40);
+    console.log(turn);
   });
 
   return (
