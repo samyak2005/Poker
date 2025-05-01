@@ -8,6 +8,7 @@ import Popup from 'reactjs-popup';
 import User from './User';
 import Help from './Help';
 import Timer from './Timer';
+import Settings from './Settings';
 
 const GameRoom = () => {
     const cards = [
@@ -37,6 +38,7 @@ const GameRoom = () => {
     const [help, setHelp] = useState(false);
     const [profile, setProfile] = useState(false);
     const [log, setLog] = useState(false);
+    const [settings, setSettings] = useState(false);
 
     //shuffling cards
     const shuffleArray = (cards) => {
@@ -121,7 +123,7 @@ const GameRoom = () => {
             {(close) => <Help close={close} />}
         </Popup>
 
-        {(help || log) && (
+        {(help || log || settings) && (
             <div className="fixed inset-0 backdrop-blur z-10"></div>
         )}
 
@@ -145,6 +147,8 @@ const GameRoom = () => {
             </div>
         </div>
 
+        {settings && <Settings setSettings={setSettings} />}
+
         <div className="gameroom-bg h-screen">
             <div className="fixed top-0 p-2 px-5 h-13 w-full flex border-b border-gray-800 text-white">
                 <div className="w-[33.34%] flex justify-start items-center">name of app</div>
@@ -159,7 +163,7 @@ const GameRoom = () => {
                 </div>
             </div>
             <div className="fixed top-15 left-5 flex gap-5 z-1">
-                <div className="text-gray-300 cursor-pointer hover:scale-120 hover:text-white transition-transform duration-300">
+                <div className="text-gray-300 cursor-pointer hover:scale-120 hover:text-white transition-transform duration-300" onClick={() => setSettings(true)}>
                     <FontAwesomeIcon icon={faGear} />
                 </div>
                 <div className="text-gray-300 cursor-pointer hover:scale-120 hover:text-white transition-transform duration-300">
