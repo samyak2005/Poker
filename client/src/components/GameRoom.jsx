@@ -44,6 +44,7 @@ const GameRoom = () => {
     const [log, setLog] = useState(false);
     const [settings, setSettings] = useState(false);
     const [avatar, setAvatar] = useState("avatar5.jpeg");
+    const [theme, setTheme] = useState("theme1.png");
 
     //shuffling cards
     const shuffleArray = (cards) => {
@@ -149,7 +150,7 @@ const GameRoom = () => {
             </div>
         </div>
 
-        {settings && <Settings setSettings={setSettings} setAvatar={setAvatar} />}
+        {settings && <Settings setSettings={setSettings} setAvatar={setAvatar} setTheme={setTheme} />}
 
         <div className="gameroom-bg h-screen">
             <div className="fixed top-0 p-2 px-5 h-13 w-full flex border-b border-gray-800 text-white">
