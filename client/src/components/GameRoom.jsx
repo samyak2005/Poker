@@ -33,6 +33,10 @@ const GameRoom = () => {
 
     const [userMoney, setUserMoney] = useState(250);
     const [bet, setBet] = useState(10);
+    const [pot, setPot] = useState(0);
+    const [bank, setBank] = useState(1000);
+    const [folded, setFolded] = useState(false);
+    const [turn, setTurn] = useState(true);
     const [timer, setTimer] = useState(40);
 
     const [userObj, setUserObj] = useState([]);
@@ -61,14 +65,20 @@ const GameRoom = () => {
         setFlopCards(shuffled.splice(2,7));
         setCompCards(shuffled.splice(7,9));
     }, []);
-
-    // const handleCall = () => {
-        
-    // }
-
-    // const handleRaise = () => {
-
-    // }
+    
+    //handling call, raise and fold
+    const handleCall = () => {
+        setPot(prev => prev + bet);
+        setBank(prev => prev - bet);
+    }
+    const handleRaise = () => {
+        setBank(prev => prev - bet*2);
+        setPot(prev => prev + bet*2);
+        setBet(prev => prev*2);
+    }
+    const handleFold = () => {
+        setFolded(true);
+    }
 
     //getting rank of card
     const getRank = (card) => {
@@ -179,7 +189,7 @@ const GameRoom = () => {
                     <p className="text-gray-300 text-lg">Pot</p>
                 </div>
                 <div className="fixed top-25 w-full flex justify-center">
-                    <p className="text-white text-7xl font-semibold">50</p>
+                    <p className="text-white text-7xl font-semibold">{pot}</p>
                 </div>
             </div>
             
@@ -221,14 +231,14 @@ const GameRoom = () => {
                 </ReactCardFlip>
             </div>
 
-            <div className="flex justify-center items-center relative">
+            <div className={`flex justify-center items-center relative ${folded || !turn ? "opacity-50" : ""}`}>
                 <div className="flex justify-center fixed bottom-20">
                     <img src={"card-fronts/" + userCards[0]} className="card user-card card-front transform -rotate-12 translate-y-2" draggable="false"/>
                     <img src={"card-fronts/" + userCards[1]} className="card user-card card-front transform rotate-12 translate-y-2 -ml-8" draggable="false"/>
                 </div>
             </div>
 
-            <div className="flex items-center fixed bottom-35 right-10 gap-5">
+            <div className={`flex items-center fixed bottom-35 right-10 gap-5 ${folded || !turn ? "opacity-50" : ""}`}>
                 <div className="flex items-center gap-2 bg-gray-600 rounded-full px-2 py-1 hover:scale-105">
                     <FontAwesomeIcon icon={faCircleDollarToSlot} className="text-white text-xl" />
                     <p className="text-white">{bet}</p>
@@ -238,7 +248,7 @@ const GameRoom = () => {
                         <FontAwesomeIcon icon={faWallet} className="text-gray-600" />
                         <p className="text-gray-600">Your Bank</p>
                     </div>
-                    <p className="text-white text-5xl text-semilbold">180</p>
+                    <p className="text-white text-5xl text-semilbold">{bank}</p>
                 </div>
             </div>
 
@@ -253,27 +263,21 @@ const GameRoom = () => {
                         <button className="text-base text-white cursor-pointer">Log</button>
                     </div>
                 </div>
-                <div className="flex justify-center gap-7 fixed bottom-4">
-                <button className="relative overflow-hidden group px-5 py-1 text-white text-lg rounded-full hover:scale-105 transition-transform duration-300 cursor-pointer">
-                    <span className="absolute inset-0 bg-gray-600/50 scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
-                    <span className="relative z-10">Call</span>
-                </button>
-                <button className="relative overflow-hidden group px-5 py-1 text-green-400 text-lg rounded-full hover:scale-105 transition-transform duration-300 cursor-pointer">
-                    <span className="absolute inset-0 bg-green-400/30 scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
-                    <span className="relative z-10">Raise</span>
-                </button>
-                <button className="relative overflow-hidden group px-5 py-1 text-red-400 text-lg rounded-full hover:scale-105 transition-transform duration-300 cursor-pointer">
-                    <span className="absolute inset-0 bg-red-400/30 scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
-                    <span className="relative z-10">Fold</span>
-                </button>
-                    {/* <button className="text-lg text-white cursor-pointer rounded-full px-4 hover:scale-110 transition-all duration-300 relative overflow-hidden before:content-[''] before:absolute before:inset-0 before:bg-gray-700 before:scale-x-0 before:origin-left before:transition-transform hover:before:scale-x-100">Call</button> */}
-                    {/* <button className="text-lg text-green-400 cursor-pointer rounded-full p-1 px-4 hover:scale-110 transition-all duration-300 hover:-translate-y-1 hover:rotate-1 hover:shadow-xl">Raise</button>
-                    <button className="text-lg text-red-400 cursor-pointer rounded-full p-1 px-4 hover:scale-110 transition-transform duration-300 ">Fold</button> */}
+                <div className={`flex justify-center gap-7 fixed bottom-4 ${folded || !turn ? "opacity-50 pointer-events-none" : ""}`}>
+                    <button className="relative overflow-hidden group px-5 py-1 text-white text-lg rounded-full hover:scale-105 transition-transform duration-300 cursor-pointer" onClick={handleCall}>
+                        <span className="absolute inset-0 bg-gray-600/50 scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
+                        <span className="relative z-10">Call</span>
+                    </button>
+                    <button className="relative overflow-hidden group px-5 py-1 text-green-400 text-lg rounded-full hover:scale-105 transition-transform duration-300 cursor-pointer" onClick={handleRaise}>
+                        <span className="absolute inset-0 bg-green-400/30 scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
+                        <span className="relative z-10">Raise</span>
+                    </button>
+                    <button className="relative overflow-hidden group px-5 py-1 text-red-400 text-lg rounded-full hover:scale-105 transition-transform duration-300 cursor-pointer" onClick={handleFold}>
+                        <span className="absolute inset-0 bg-red-400/30 scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
+                        <span className="relative z-10">Fold</span>
+                    </button>
                 </div>
-                {/* <div className="fixed bottom-10 right-10">
-                    <button className="text-lg text-white rounded-full border-3 border-gray-400 py-3 px-5">Your Turn! <span className="text-gray-400">0:{timer < 10 ? `0${timer}` : timer}</span></button>
-                </div> */}
-                <Timer />
+                <Timer timer={timer} setTimer={setTimer} folded={folded} setFolded={setFolded} turn={turn} setTurn={setTurn}/>
             </div>
         </div>
         </>

@@ -1,17 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 
-const Timer = () => {
-  const duration = 40;
-  const [timer, setTimer] = useState(duration);
-  useEffect(() => {
-      const intervalId = setInterval(() => {
-          setTimer(prev => {
-              if (prev === 0) return 0;
-              return prev - 1;
-          });
-      }, 1000);
-      return () => clearInterval(intervalId);
+const Timer = ({ timer, setTimer, folded, setFolded, turn, setTurn }) => {
+  const duration = timer;
+
+  useEffect(() => {    
+    const intervalId = setInterval(() => {
+        setTimer(prev => {
+            if (prev === 0) {
+              setTurn(false);
+              setFolded(true);
+              return 0;
+            }
+            return prev - 1;
+        });
+    }, 1000);
+    return () => clearInterval(intervalId);
   }, []);
+
+  useEffect(() => {
+    if(folded) setTimer(40);
+  });
 
   return (
       <div className="fixed bottom-10 right-10 w-46 h-15 rounded-full overflow-hidden">
@@ -23,8 +31,12 @@ const Timer = () => {
           }}>
         </div>
         <div className="absolute inset-0 flex justify-center items-center">
-          <button className={`w-full h-full text-lg text-white rounded-full border-3 border-gray-400  ${timer <= 10 ? `animate-pulse` : ``}`}>Your Turn! 
-            <span className="text-gray-400 ml-2">0:{timer < 10 ? `0${timer}` : timer}</span>
+          <button className={`w-full h-full text-lg text-white rounded-full border-3 border-gray-400  ${timer <= 10 && timer > 0 ? `animate-pulse` : ``}`}> {folded ? "You folded." : turn ? "Your Turn!" : "Comp's Turn"}
+            {(!folded && turn) && (
+              <span className="text-gray-400 ml-2">
+                0:{timer < 10 ? `0${timer}` : timer}
+              </span>
+            )}
           </button>
         </div>
       </div>
