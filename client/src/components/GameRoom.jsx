@@ -6,6 +6,7 @@ import '../App.css';
 import Popup from 'reactjs-popup';
 
 import User from './User';
+import AddUser from './AddUser';
 import Help from './Help';
 import Timer from './Timer';
 import Settings from './Settings';
@@ -180,13 +181,20 @@ const GameRoom = () => {
                 </div>
             </div>
             
-            {/* <User flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"16.5rem"} avatarLeft={"2.5rem"} cardsTop={"20.25rem"} cardsLeft={"6.75rem"} /> */}
-            <User flip3={flip3} flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"12.5rem"} avatarLeft={"15.5rem"} cardsTop={"16.25rem"} cardsLeft={"19.75rem"} />
-            {/* <User flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"8.5rem"} avatarLeft={"28.5rem"} cardsTop={"12.25rem"} cardsLeft={"32.75rem"} /> */}
+            <AddUser avatarTop={"16.5rem"} avatarLeft={"2.5rem"} />
+            {/* <User flip3={flip3} flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"16.5rem"} avatarLeft={"2.5rem"} cardsTop={"20.25rem"} cardsLeft={"6.75rem"} /> */}
 
-            {/* <User flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"8.5rem"} avatarLeft={"51.5rem"} cardsTop={"12.25rem"} cardsLeft={"55.75rem"} />
-            <User flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"12.5rem"} avatarLeft={"64.5rem"} cardsTop={"16.25rem"} cardsLeft={"68.75rem"} />
-            <User flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"16.5rem"} avatarLeft={"77.5rem"} cardsTop={"20.25rem"} cardsLeft={"81.75rem"} /> */}
+            <AddUser avatarTop={"12rem"} avatarLeft={"15.5rem"} />
+            <User flip3={flip3} flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"12.5rem"} avatarLeft={"15.5rem"} cardsTop={"16.25rem"} cardsLeft={"19.75rem"} />
+
+            <AddUser avatarTop={"9.5rem"} avatarLeft={"28.5rem"} />
+            {/* <User flip3={flip3} flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"9.5rem"} avatarLeft={"28.5rem"} cardsTop={"13.25rem"} cardsLeft={"32.75rem"} /> */}
+            <AddUser avatarTop={"9.5rem"} avatarLeft={"51.5rem"} />
+            {/* <User flip3={flip3} flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"9.5rem"} avatarLeft={"51.5rem"} cardsTop={"13.25rem"} cardsLeft={"55.75rem"} /> */}
+            <AddUser avatarTop={"11.5rem"} avatarLeft={"65rem"} />
+            {/* <User flip3={flip3} flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"11.5rem"} avatarLeft={"65rem"} cardsTop={"15.25rem"} cardsLeft={"69.75rem"} /> */}
+            <AddUser avatarTop={"15.5rem"} avatarLeft={"77.5rem"} />
+            {/* <User flip3={flip3} flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"15.5rem"} avatarLeft={"77.5rem"} cardsTop={"19.25rem"} cardsLeft={"81.75rem"} /> */}
 
             <div className="flex justify-center mt-20 items-end gap-5 fixed top-75 w-full">
                 <ReactCardFlip isFlipped={flip1} flipDirection="horizontal">
