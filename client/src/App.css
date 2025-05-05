@@ -15,6 +15,14 @@ body {
     background-attachment: fixed;
 }
 
+.blue-gameroom-bg {
+    background-image: url('blue-gameroom-bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
 .card {
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.9);
 }
