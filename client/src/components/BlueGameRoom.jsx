@@ -2,34 +2,20 @@ import ReactCardFlip from "react-card-flip";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoins, faCircleDollarToSlot, faWallet, faGear, faRightFromBracket, faQuestion, faClockRotateLeft, faAngleDown, faClose } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import '../App.css';
 import Popup from 'reactjs-popup';
 
+import Navbar from './Navbar';
 import User from './User';
 import AddUser from './AddUser';
 import Help from './Help';
 import Timer from './Timer';
-// import Settings from './Settings';
 
-const PurpleGameRoom = () => {
-    const cards = [
-        "ace_of_hearts.png", "2_of_hearts.png", "3_of_hearts.png", "4_of_hearts.png", "5_of_hearts.png", "6_of_hearts.png", "7_of_hearts.png", "8_of_hearts.png", "9_of_hearts.png", "10_of_hearts.png", "queen_of_hearts.png", "jack_of_hearts.png", "king_of_hearts.png",
-        "ace_of_spades.png", "2_of_spades.png", "3_of_spades.png", "4_of_spades.png", "5_of_spades.png", "6_of_spades.png", "7_of_spades.png", "8_of_spades.png", "9_of_spades.png", "10_of_spades.png", "queen_of_spades.png", "jack_of_spades.png", "king_of_spades.png",
-        "ace_of_diamonds.png", "2_of_diamonds.png", "3_of_diamonds.png", "4_of_diamonds.png", "5_of_diamonds.png", "6_of_diamonds.png", "7_of_diamonds.png", "8_of_diamonds.png", "9_of_diamonds.png", "10_of_diamonds.png", "queen_of_diamonds.png", "jack_of_diamonds.png", "king_of_diamonds.png",
-        "ace_of_clubs.png", "2_of_clubs.png", "3_of_clubs.png", "4_of_clubs.png", "5_of_clubs.png", "6_of_clubs.png", "7_of_clubs.png", "8_of_clubs.png", "9_of_clubs.png", "10_of_clubs.png", "queen_of_clubs.png", "jack_of_clubs.png", "king_of_clubs.png"
-    ];
-
-    const navigate = useNavigate();
-
+const BlueGameRoom = ({ userCards, flopCards, compCards }) => {
     const [flip1, setFlip1] = useState(false);
     const [flip2, setFlip2] = useState(false);
     const [flip3, setFlip3] = useState(false);
     const [flip4, setFlip4] = useState(false);
-
-    const [userCards, setUserCards] = useState(["ace_of_spades", "ace_of_spades"]);
-    const [flopCards, setFlopCards] = useState(["ace_of_spades", "ace_of_spades", "ace_of_spades", "ace_of_spades", "ace_of_spades"]);
-    const [compCards, setCompCards] = useState(["ace_of_spades", "ace_of_spades"]);
 
     const [userMoney, setUserMoney] = useState(250);
     const [bet, setBet] = useState(10);
@@ -41,78 +27,10 @@ const PurpleGameRoom = () => {
     const [disabling, setDisabling] = useState(false);
     const [called, setCalled] = useState(false);
 
-    const [userObj, setUserObj] = useState([]);
-    const [compObj, setCompObj] = useState([]);
-    const [flopObj, setFlopObj] = useState([]);
-
     const [help, setHelp] = useState(false);
-    const [profile, setProfile] = useState(false);
     const [log, setLog] = useState(false);
     const [settings, setSettings] = useState(false);
-    const [avatar, setAvatar] = useState("avatar5.jpeg");
-    const avatars = ["avatar1.jpeg", "avatar2.jpeg", "avatar3.jpeg", "avatar4.jpeg", "avatar5.jpeg", "avatar6.jpeg"];
-
-    //shuffling cards
-    const shuffleArray = (cards) => {
-        const shuffled = [...cards];
-        for (let i = 0; i < shuffled.length - 1; i++) {
-          const j = Math.floor(Math.random() * (i+1));
-          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-        }
-        return shuffled;
-    };
-    useEffect(() => {
-        const shuffled = shuffleArray(cards);
-        setUserCards(shuffled.splice(0,2));
-        setFlopCards(shuffled.splice(2,7));
-        setCompCards(shuffled.splice(7,9));
-    }, []);
-
-    //getting rank of card
-    const getRank = (card) => {
-        if(card[0] == "a") return "A";
-        if(card[0] == "j") return "J";
-        if(card[0] == "q") return "Q";
-        if(card[0] == "k") return "K";
-        if(card[0] == "1" && card[1] == "0") return "10";
-        return card[0];
-    }
-
-    //getting suit of card
-    const getSuit = (card) => {
-        return card.split('_')[2].split('.')[0];
-    }
-
-    //creating object for user cards
-    useEffect(() => {
-        const user = [
-            {"rank": getRank(userCards[0]), "suit": getSuit(userCards[0])},
-            {"rank": getRank(userCards[1]), "suit": getSuit(userCards[1])}
-        ];
-        setUserObj(user);
-    }, [userCards, flopCards]);
-
-    //creating object for computer cards
-    useEffect(() => {
-        const comp = [
-            {"rank": getRank(compCards[0]), "suit": getSuit(compCards[0])},
-            {"rank": getRank(compCards[1]), "suit": getSuit(compCards[1])}
-        ];
-        setCompObj(comp);
-    }, [compCards, flopCards]);
-
-    //creating object for flop cards
-    useEffect(() => {
-        const flop = [
-            {"rank": getRank(flopCards[0]), "suit": getSuit(flopCards[0])},
-            {"rank": getRank(flopCards[1]), "suit": getSuit(flopCards[1])},
-            {"rank": getRank(flopCards[2]), "suit": getSuit(flopCards[2])},
-            {"rank": getRank(flopCards[3]), "suit": getSuit(flopCards[3])},
-            {"rank": getRank(flopCards[4]), "suit": getSuit(flopCards[4])}
-        ];
-        setFlopObj(flop);
-    }, [flopCards])
-
+    
     //handling help popup
     const closeHelp = () => {
         setHelp(false);
@@ -126,23 +44,6 @@ const PurpleGameRoom = () => {
 
         {(help || log || settings) && (
             <div className="fixed inset-0 backdrop-blur z-10"></div>
-        )}
-
-        {profile && (
-            <div className="fixed top-14 right-3 mt-2 w-90 bg-black/40 text-white shadow-lg p-4 z-50">
-                <p className="p-5">Choose Avatar:</p>
-                <div className="overflow-x-auto whitespace-nowrap bg-white/10 p-4 rounded-[9999px]">
-                    {avatars.map((src, index) => (
-                        <label key={index} className=" cursor-pointer inline-block">
-                            <input type="radio" name="avatar" value={src} className="peer hidden" onChange={(e) => setAvatar(e.target.value)}/>
-                            <img src={src} className="bg-black w-10 h-10 rounded-full shrink-0 peer-checked:ring-4 peer-checked:ring-blue-300 mr-4" draggable="false"/>
-                        </label>
-                    ))}
-                </div>
-
-                <p className="cursor-pointer hover:bg-white/10 p-2">...</p>
-                <p className="cursor-pointer hover:bg-white/10 p-2">...</p>
-            </div>
         )}
 
         {/* log */}
@@ -159,28 +60,8 @@ const PurpleGameRoom = () => {
         </div>
 
         <div className="blue-gameroom-bg h-screen">
-            <div className="fixed top-0 p-2 px-5 h-13 w-full flex border-b border-gray-800 text-white">
-                <div className="w-[33.34%] flex justify-start items-center">
-                    <img src="chipinn-text-2.png" className="h-8" draggable="false" />
-                </div>
-                <div className="w-[33.34%] flex justify-center items-center">table name</div>
-                <div className="w-[33.34%] flex justify-end items-center gap-5">
-                    <button className="border border-white/30 rounded-full px-4 py-1 hover:bg-white/20 hover:scale-105 cursor-pointer">Get $</button>
-                    {/* <div>money</div> */}
-                    <button className="flex justify-center items-center gap-2 cursor-pointer hover:scale-105" onClick={() => setProfile(prev => !prev)}>
-                        <img src={avatar} className="w-9 h-9 rounded-full"/>
-                        <FontAwesomeIcon icon={faAngleDown} className="text-gray-300" />
-                    </button>
-                </div>
-            </div>
-            {/* <div className="fixed top-15 left-5 flex gap-5 z-1">
-                <div className="text-gray-300 cursor-pointer hover:scale-120 hover:text-white transition-transform duration-300" onClick={() => setSettings(true)}>
-                    <FontAwesomeIcon icon={faGear} />
-                </div>
-                <div className="text-gray-300 cursor-pointer hover:scale-120 hover:text-white transition-transform duration-300" onClick={() => navigate('/lobby')}>
-                    <FontAwesomeIcon icon={faRightFromBracket} />
-                </div>
-            </div> */}
+            <Navbar />
+            
             <div className="relative">
                 <div className="fixed top-15 w-full flex gap-2 justify-center items-center">
                     <FontAwesomeIcon icon={faCoins} className="text-gray-300 text-xl" />
@@ -275,6 +156,7 @@ const PurpleGameRoom = () => {
                         <span className="relative z-10">Fold</span>
                     </button>
                 </div>
+                
                 <Timer timer={timer} setTimer={setTimer} folded={folded} setFolded={setFolded} turn={turn} setTurn={setTurn} color={`bg-gradient-to-r from-[#03045e] from-[#3c096c] via-[#023e8a] to-[#0077b6]`} />
             </div>
         </div>
@@ -282,4 +164,4 @@ const PurpleGameRoom = () => {
     );
 }
 
-export default PurpleGameRoom;
+export default BlueGameRoom;

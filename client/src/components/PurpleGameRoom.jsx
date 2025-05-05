@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import '../App.css';
 import Popup from 'reactjs-popup';
 
+import Navbar from './Navbar';
 import User from './User';
 import AddUser from './AddUser';
 import Help from './Help';
@@ -28,11 +29,8 @@ const PurpleGameRoom = ({ userCards, flopCards, compCards }) => {
     const [called, setCalled] = useState(false);
 
     const [help, setHelp] = useState(false);
-    const [profile, setProfile] = useState(false);
     const [log, setLog] = useState(false);
     const [settings, setSettings] = useState(false);
-    const [avatar, setAvatar] = useState("avatar5.jpeg");
-    const avatars = ["avatar1.jpeg", "avatar2.jpeg", "avatar3.jpeg", "avatar4.jpeg", "avatar5.jpeg", "avatar6.jpeg"];
     
     //handling help popup
     const closeHelp = () => {
@@ -49,23 +47,6 @@ const PurpleGameRoom = ({ userCards, flopCards, compCards }) => {
             <div className="fixed inset-0 backdrop-blur z-10"></div>
         )}
 
-        {profile && (
-            <div className="fixed top-14 right-3 mt-2 w-90 bg-black/40 text-white shadow-lg p-4 z-50">
-                <p className="p-5">Choose Avatar:</p>
-                <div className="overflow-x-auto whitespace-nowrap bg-white/10 p-4 rounded-[9999px]">
-                    {avatars.map((src, index) => (
-                        <label key={index} className=" cursor-pointer inline-block">
-                            <input type="radio" name="avatar" value={src} className="peer hidden" onChange={(e) => setAvatar(e.target.value)}/>
-                            <img src={src} className="bg-black w-10 h-10 rounded-full shrink-0 peer-checked:ring-4 peer-checked:ring-blue-300 mr-4" draggable="false"/>
-                        </label>
-                    ))}
-                </div>
-
-                <p className="cursor-pointer hover:bg-white/10 p-2">...</p>
-                <p className="cursor-pointer hover:bg-white/10 p-2">...</p>
-            </div>
-        )}
-
         {/* log */}
         <div className={`fixed bottom-15 w-100 bg-black/20 text-gray-300 shadow-lg z-50 transform transition-transform duration-300 ${log ? "translate-x-5" : "-translate-x-full"}`}>
             <div className="flex justify-between items-center p-4 border-b">
@@ -79,31 +60,9 @@ const PurpleGameRoom = ({ userCards, flopCards, compCards }) => {
             </div>
         </div>
 
-        {/* {settings && <Settings setSettings={setSettings} setAvatar={setAvatar} setTheme={setTheme} color={`bg-[#10002b]/80`} />} */}
+        <div className="purple-gameroom-bg h-screen">
+            <Navbar />
 
-        <div className="gameroom-bg h-screen">
-            <div className="fixed top-0 p-2 px-5 h-13 w-full flex border-b border-gray-800 text-white">
-                <div className="w-[33.34%] flex justify-start items-center">
-                    <img src="chipinn-text-2.png" className="h-8" draggable="false" />
-                </div>
-                <div className="w-[33.34%] flex justify-center items-center">table name</div>
-                <div className="w-[33.34%] flex justify-end items-center gap-5">
-                    <button className="border border-white/30 rounded-full px-4 py-1 hover:bg-white/20 hover:scale-105 cursor-pointer">Get $</button>
-                    {/* <div>money</div> */}
-                    <button className="flex justify-center items-center gap-2 cursor-pointer hover:scale-105" onClick={() => setProfile(prev => !prev)}>
-                        <img src={avatar} className="w-9 h-9 rounded-full"/>
-                        <FontAwesomeIcon icon={faAngleDown} className="text-gray-300" />
-                    </button>
-                </div>
-            </div>
-            {/* <div className="fixed top-15 left-5 flex gap-5 z-1">
-                <div className="text-gray-300 cursor-pointer hover:scale-120 hover:text-white transition-transform duration-300" onClick={() => setSettings(true)}>
-                    <FontAwesomeIcon icon={faGear} />
-                </div>
-                <div className="text-gray-300 cursor-pointer hover:scale-120 hover:text-white transition-transform duration-300" onClick={() => navigate('/lobby')}>
-                    <FontAwesomeIcon icon={faRightFromBracket} />
-                </div>
-            </div> */}
             <div className="relative">
                 <div className="fixed top-15 w-full flex gap-2 justify-center items-center">
                     <FontAwesomeIcon icon={faCoins} className="text-gray-300 text-xl" />

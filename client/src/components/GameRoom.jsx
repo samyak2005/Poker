@@ -5,8 +5,11 @@ import BlueGameRoom from "./BlueGameRoom";
 import Settings from './Settings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoins, faCircleDollarToSlot, faWallet, faGear, faRightFromBracket, faQuestion, faClockRotateLeft, faAngleDown, faClose } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
 
 const GameRoom = () => {
+    const navigate = useNavigate();
+
     const cards = [
         "ace_of_hearts.png", "2_of_hearts.png", "3_of_hearts.png", "4_of_hearts.png", "5_of_hearts.png", "6_of_hearts.png", "7_of_hearts.png", "8_of_hearts.png", "9_of_hearts.png", "10_of_hearts.png", "queen_of_hearts.png", "jack_of_hearts.png", "king_of_hearts.png",
         "ace_of_spades.png", "2_of_spades.png", "3_of_spades.png", "4_of_spades.png", "5_of_spades.png", "6_of_spades.png", "7_of_spades.png", "8_of_spades.png", "9_of_spades.png", "10_of_spades.png", "queen_of_spades.png", "jack_of_spades.png", "king_of_spades.png",
@@ -161,7 +164,7 @@ const GameRoom = () => {
                 </div>
             </div>
 
-            <BlueGameRoom />
+            <BlueGameRoom userCards={userCards} flopCards={flopCards} compCards={compCards} />
         </>
     )
 }

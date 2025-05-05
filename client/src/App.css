@@ -7,8 +7,8 @@ body {
     user-select: none;
 }
 
-.gameroom-bg {
-    background-image: url('gameroom-bg.png');
+.purple-gameroom-bg {
+    background-image: url('purple-gameroom-bg.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
