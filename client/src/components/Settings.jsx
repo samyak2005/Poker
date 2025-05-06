@@ -1,17 +1,23 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-const Settings = ({ setSettings, setAvatar, setTheme, color }) => {
-    const [selectedAvatar, setSelectedAvatar] = useState("avatar5.jpeg");
-    const avatars = ["avatar1.jpeg", "avatar2.jpeg", "avatar3.jpeg", "avatar4.jpeg", "avatar5.jpeg", "avatar6.jpeg"];
+const Settings = ({ setSettings, setTheme, color }) => {
 
     const [selectedTheme, setSelectedTheme] = useState("purple-theme.png");
-    const themes = ["purple-theme.png", "blue-theme.png"];
+    const themes = ["purple-theme.png", "blue-theme.png", "green-theme.png", "pink-theme.png"];
 
     const handleApply = () => {
-        setAvatar(selectedAvatar);
+        localStorage.setItem("theme", selectedTheme);
         setTheme(selectedTheme);
         setSettings(false);
     };
+
+    useEffect(() => {
+        const theme = localStorage.getItem("theme");
+        if (theme) {
+            setSelectedTheme(theme);
+            setTheme(theme);
+        }
+    }, []);
 
     return (
         <>
@@ -34,7 +40,7 @@ const Settings = ({ setSettings, setAvatar, setTheme, color }) => {
                 </div>
                 <div className="w-full flex items-end justify-center gap-5 mt-auto border-t border-white/40 pt-3">
                     <button className="hover:bg-white/20 px-4 py-2 rounded-full h-10 cursor-pointer" onClick={() => setSettings(false)}>Cancel</button>
-                    <button className={`bg-black px-4 py-2 rounded-full h-10 ${(selectedAvatar || selectedTheme) ? "hover:bg-white/20 cursor-pointer" : "opacity-50 cursor-not-allowed"}`} onClick={handleApply}>Apply</button>
+                    <button className={`bg-black px-4 py-2 rounded-full h-10 ${(selectedTheme) ? "hover:bg-white/20 cursor-pointer" : "opacity-50 cursor-not-allowed"}`} onClick={handleApply}>Apply</button>
                 </div>
             </div>
         </>

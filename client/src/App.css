@@ -23,6 +23,22 @@ body {
     background-attachment: fixed;
 }
 
+.green-gameroom-bg {
+  background-image: url('green-gameroom-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.pink-gameroom-bg {
+  background-image: url('pink-gameroom-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
 .card {
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.9);
 }
@@ -43,3 +59,41 @@ body {
     border-radius: 10px;
     border: 5px solid white;
 }
+
+/* @font-face {
+  font-family: 'MyFont';
+  src: url('font5.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+} */
+
+@keyframes shimmer {
+  0% {
+    background-position: 0% 0;
+  }
+  100% {
+    background-position: 100% 0;
+  }
+}
+
+.chipinn-text {
+  background-image: linear-gradient(
+    90deg,
+    #a2d2ff,
+    #b388eb,
+    #ffc2e2,
+    #a2d2ff,
+    #b388eb, 
+    #ffc2e2,
+    #b388eb
+  );
+  background-size: 200% 100%;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 5s linear infinite;
+}
+  
+  
+  

@@ -11,7 +11,7 @@ import AddUser from './AddUser';
 import Help from './Help';
 import Timer from './Timer';
 
-const BlueGameRoom = ({ userCards, flopCards, compCards }) => {
+const BlueGameRoom = ({ userCards, flopCards, compCards, settings }) => {
     const [flip1, setFlip1] = useState(false);
     const [flip2, setFlip2] = useState(false);
     const [flip3, setFlip3] = useState(false);
@@ -29,7 +29,6 @@ const BlueGameRoom = ({ userCards, flopCards, compCards }) => {
 
     const [help, setHelp] = useState(false);
     const [log, setLog] = useState(false);
-    const [settings, setSettings] = useState(false);
     
     //handling help popup
     const closeHelp = () => {

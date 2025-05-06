@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import '../App.css';
 import PurpleGameRoom from "./PurpleGameRoom";
 import BlueGameRoom from "./BlueGameRoom";
+import GreenGameRoom from "./GreenGameRoom";
+import PinkGameRoom from "./PinkGameRoom";
 import Settings from './Settings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoins, faCircleDollarToSlot, faWallet, faGear, faRightFromBracket, faQuestion, faClockRotateLeft, faAngleDown, faClose } from '@fortawesome/free-solid-svg-icons';
@@ -134,9 +136,17 @@ const GameRoom = () => {
     //     if(!turn || called) setTimer(40);
     // }, []);
 
+    //getting theme from local storage
+    useEffect(() => {
+        const theme = localStorage.getItem("theme");
+        if (theme) {
+            setTheme(theme);
+        }
+    }, []);
+
     if(theme === "purple-theme.png") return (
         <>
-            {settings && <Settings setSettings={setSettings} setAvatar={setAvatar} setTheme={setTheme} color={`bg-[#10002b]/80`} />}
+            {settings && <Settings setSettings={setSettings} setTheme={setTheme} color={`bg-[#10002b]/80`} />}
 
             <div className="fixed top-15 left-5 flex gap-5 z-1">
                 <div className="text-gray-300 cursor-pointer hover:scale-120 hover:text-white transition-transform duration-300" onClick={() => setSettings(true)}>
@@ -147,13 +157,13 @@ const GameRoom = () => {
                 </div>
             </div>
 
-            <PurpleGameRoom userCards={userCards} flopCards={flopCards} compCards={compCards} />
+            <PurpleGameRoom userCards={userCards} flopCards={flopCards} compCards={compCards} settings={settings} />
         </>
     );
 
     else if(theme === "blue-theme.png") return ( 
         <>
-            {settings && <Settings setSettings={setSettings} setAvatar={setAvatar} setTheme={setTheme} color={`bg-[#001845]/80`} />}
+            {settings && <Settings setSettings={setSettings} setTheme={setTheme} color={`bg-[#001845]/80`} />}
 
             <div className="fixed top-15 left-5 flex gap-5 z-1">
                 <div className="text-gray-300 cursor-pointer hover:scale-120 hover:text-white transition-transform duration-300" onClick={() => setSettings(true)}>
@@ -164,7 +174,41 @@ const GameRoom = () => {
                 </div>
             </div>
 
-            <BlueGameRoom userCards={userCards} flopCards={flopCards} compCards={compCards} />
+            <BlueGameRoom userCards={userCards} flopCards={flopCards} compCards={compCards} settings={settings} />
+        </>
+    )
+
+    else if(theme === "green-theme.png") return ( 
+        <>
+            {settings && <Settings setSettings={setSettings} setTheme={setTheme} color={`bg-[#081c15]/80`} />}
+
+            <div className="fixed top-15 left-5 flex gap-5 z-1">
+                <div className="text-gray-300 cursor-pointer hover:scale-120 hover:text-white transition-transform duration-300" onClick={() => setSettings(true)}>
+                    <FontAwesomeIcon icon={faGear} />
+                </div>
+                <div className="text-gray-300 cursor-pointer hover:scale-120 hover:text-white transition-transform duration-300" onClick={() => navigate('/lobby')}>
+                    <FontAwesomeIcon icon={faRightFromBracket} />
+                </div>
+            </div>
+
+            <GreenGameRoom userCards={userCards} flopCards={flopCards} compCards={compCards} settings={settings} />
+        </>
+    )
+
+    else if(theme === "pink-theme.png") return ( 
+        <>
+            {settings && <Settings setSettings={setSettings} setTheme={setTheme} color={`bg-[#590d22]/80`} />}
+
+            <div className="fixed top-15 left-5 flex gap-5 z-1">
+                <div className="text-gray-300 cursor-pointer hover:scale-120 hover:text-white transition-transform duration-300" onClick={() => setSettings(true)}>
+                    <FontAwesomeIcon icon={faGear} />
+                </div>
+                <div className="text-gray-300 cursor-pointer hover:scale-120 hover:text-white transition-transform duration-300" onClick={() => navigate('/lobby')}>
+                    <FontAwesomeIcon icon={faRightFromBracket} />
+                </div>
+            </div>
+
+            <PinkGameRoom userCards={userCards} flopCards={flopCards} compCards={compCards} settings={settings}  />
         </>
     )
 }

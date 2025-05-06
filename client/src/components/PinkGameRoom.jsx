@@ -2,7 +2,6 @@ import ReactCardFlip from "react-card-flip";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoins, faCircleDollarToSlot, faWallet, faGear, faRightFromBracket, faQuestion, faClockRotateLeft, faAngleDown, faClose } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import '../App.css';
 import Popup from 'reactjs-popup';
 
@@ -12,7 +11,7 @@ import AddUser from './AddUser';
 import Help from './Help';
 import Timer from './Timer';
 
-const PurpleGameRoom = ({ userCards, flopCards, compCards, settings }) => {
+const PinkGameRoom = ({ userCards, flopCards, compCards, settings }) => {
     const [flip1, setFlip1] = useState(false);
     const [flip2, setFlip2] = useState(false);
     const [flip3, setFlip3] = useState(false);
@@ -59,9 +58,9 @@ const PurpleGameRoom = ({ userCards, flopCards, compCards, settings }) => {
             </div>
         </div>
 
-        <div className="purple-gameroom-bg h-screen">
+        <div className="pink-gameroom-bg h-screen">
             <Navbar />
-
+            
             <div className="relative">
                 <div className="fixed top-15 w-full flex gap-2 justify-center items-center">
                     <FontAwesomeIcon icon={faCoins} className="text-gray-300 text-xl" />
@@ -156,11 +155,12 @@ const PurpleGameRoom = ({ userCards, flopCards, compCards, settings }) => {
                         <span className="relative z-10">Fold</span>
                     </button>
                 </div>
-                <Timer timer={timer} setTimer={setTimer} folded={folded} setFolded={setFolded} turn={turn} setTurn={setTurn} color={`bg-gradient-to-r from-[#240046] from-[#3c096c] via-[#5a189a] to-[#7b2cbf]`} />
+                
+                <Timer timer={timer} setTimer={setTimer} folded={folded} setFolded={setFolded} turn={turn} setTurn={setTurn} color={`bg-gradient-to-r from-[#590d22] via-[#800f2f] to-[#a4133c]`} />
             </div>
         </div>
         </>
     );
 }
 
-export default PurpleGameRoom;
+export default PinkGameRoom;
