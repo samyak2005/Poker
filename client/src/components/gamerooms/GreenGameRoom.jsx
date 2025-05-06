@@ -2,14 +2,14 @@ import ReactCardFlip from "react-card-flip";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoins, faCircleDollarToSlot, faWallet, faQuestion, faClockRotateLeft, faClose } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
-import '../App.css';
+import '../../App.css';
 import Popup from 'reactjs-popup';
 
-import Navbar from './Navbar';
-import User from './User';
-import AddUser from './AddUser';
-import Help from './Help';
-import Timer from './Timer';
+import Navbar from '../pageComponents/Navbar';
+import User from '../pageComponents/User';
+import AddUser from '../pageComponents/AddUser';
+import Help from '../pageComponents/Help';
+import Timer from '../pageComponents/Timer';
 
 const GreenGameRoom = ({ userCards, flopCards, compCards, settings }) => {
     const [flip1, setFlip1] = useState(false);

@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import '../App.css';
+import '../../App.css';
 import PurpleGameRoom from "../gamerooms/PurpleGameRoom";
 import BlueGameRoom from "../gamerooms/BlueGameRoom";
 import GreenGameRoom from "../gamerooms/GreenGameRoom";
 import PinkGameRoom from "../gamerooms/PinkGameRoom";
-import Settings from '../Settings';
+import Settings from '../pageComponents/Settings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGear, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
