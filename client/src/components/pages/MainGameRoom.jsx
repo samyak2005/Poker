@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
 import '../App.css';
-import PurpleGameRoom from "./PurpleGameRoom";
-import BlueGameRoom from "./BlueGameRoom";
-import GreenGameRoom from "./GreenGameRoom";
-import PinkGameRoom from "./PinkGameRoom";
-import Settings from './Settings';
+import PurpleGameRoom from "../gamerooms/PurpleGameRoom";
+import BlueGameRoom from "../gamerooms/BlueGameRoom";
+import GreenGameRoom from "../gamerooms/GreenGameRoom";
+import PinkGameRoom from "../gamerooms/PinkGameRoom";
+import Settings from '../Settings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoins, faCircleDollarToSlot, faWallet, faGear, faRightFromBracket, faQuestion, faClockRotateLeft, faAngleDown, faClose } from '@fortawesome/free-solid-svg-icons';
+import { faGear, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 
-const GameRoom = () => {
+const MainGameRoom = () => {
     const navigate = useNavigate();
 
     const cards = [
@@ -213,4 +213,4 @@ const GameRoom = () => {
     )
 }
 
-export default GameRoom;
+export default MainGameRoom;

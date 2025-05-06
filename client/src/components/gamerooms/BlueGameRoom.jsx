@@ -1,7 +1,7 @@
 import ReactCardFlip from "react-card-flip";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoins, faCircleDollarToSlot, faWallet, faGear, faRightFromBracket, faQuestion, faClockRotateLeft, faAngleDown, faClose } from '@fortawesome/free-solid-svg-icons';
-import { useState, useEffect } from 'react';
+import { faCoins, faCircleDollarToSlot, faWallet, faQuestion, faClockRotateLeft, faClose } from '@fortawesome/free-solid-svg-icons';
+import { useState } from 'react';
 import '../App.css';
 import Popup from 'reactjs-popup';
 
