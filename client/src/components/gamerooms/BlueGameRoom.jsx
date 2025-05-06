@@ -156,7 +156,7 @@ const BlueGameRoom = ({ userCards, flopCards, compCards, settings }) => {
                     </button>
                 </div>
                 
-                <Timer timer={timer} setTimer={setTimer} folded={folded} setFolded={setFolded} turn={turn} setTurn={setTurn} color={`bg-gradient-to-r from-[#03045e] from-[#3c096c] via-[#023e8a] to-[#0077b6]`} />
+                <Timer timer={timer} setTimer={setTimer} folded={folded} setFolded={setFolded} turn={turn} setTurn={setTurn} color={`bg-gradient-to-r from-[#03045e] via-[#023e8a] to-[#0077b6]`} />
             </div>
         </div>
         </>

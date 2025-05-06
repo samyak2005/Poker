@@ -23,8 +23,9 @@ const Navbar = () => {
         <>
             {profile && (
                 <div className="fixed top-14 right-3 mt-2 w-90 bg-black/40 text-white shadow-lg p-4 z-50">
+                    {/* avatar */}
                     <p className="p-5">Choose Avatar:</p>
-                    <div className="overflow-x-auto whitespace-nowrap bg-white/10 p-4 rounded-[9999px]">
+                    <div className="overflow-x-auto whitespace-nowrap bg-white/10 p-5 rounded-[9999px]">
                         {avatars.map((src, index) => (
                             <label key={index} className=" cursor-pointer inline-block">
                                 <input type="radio" name="avatar" value={src} className="peer hidden" onChange={handleAvatarChange}/>
@@ -32,6 +33,10 @@ const Navbar = () => {
                             </label>
                         ))}
                     </div>
+
+                    {/* name */}
+                    <p className="p-5">Change Name:</p>
+                    <input type="text" className="bg-white/10 p-5 rounded-[9999px] h-5" style={{fontFamily: "Courier"}} />
     
                     <p className="cursor-pointer hover:bg-white/10 p-2">...</p>
                     <p className="cursor-pointer hover:bg-white/10 p-2">...</p>

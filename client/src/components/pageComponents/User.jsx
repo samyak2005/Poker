@@ -3,6 +3,12 @@ import { faCoins, faCircleDollarToSlot } from '@fortawesome/free-solid-svg-icons
 import ReactCardFlip from "react-card-flip";
 
 const User = ({flip3, flip4, setFlip4, compCards, avatarTop, avatarLeft, cardsTop, cardsLeft, avatar, name}) => {
+    const flipSound = new Audio("flip.mp3");
+
+    const playFlipSound = () => {
+        flipSound.play();
+    };
+
     return (
         <div className="computer flex flex-col relative z-1">
             <div 
@@ -42,7 +48,7 @@ const User = ({flip3, flip4, setFlip4, compCards, avatarTop, avatarLeft, cardsTo
                 <ReactCardFlip isFlipped={flip4} flipDirection="horizontal">
                     <div className="relative transform -rotate-12 translate-y-2 w-14.5 h-28 -ml-4">
                         <img src="card-back.jpeg" className="rounded-lg card comp-card w-full h-full" draggable="false"/>
-                        <div className="rounded-lg absolute top-0 left-0 w-full h-20 bg-black opacity-20" onClick={() => {if(flip3) setFlip4(!flip4)}}></div>
+                        <div className="rounded-lg absolute top-0 left-0 w-full h-20 bg-black opacity-20" onClick={() => {if(flip3) { setFlip4(!flip4); playFlipSound(); }}}></div>
                     </div>
                     <div className="relative transform -rotate-12 translate-y-2 w-14.5 h-28 -ml-4">
                         <img src={"card-fronts/" + compCards[0]} className="card comp-card card-front w-full h-full" draggable="false" />
@@ -51,7 +57,7 @@ const User = ({flip3, flip4, setFlip4, compCards, avatarTop, avatarLeft, cardsTo
 
                     <ReactCardFlip isFlipped={flip4} flipDirection="horizontal">
                     <div className="transform rotate-12 translate-y-2 w-14.5 h-28 -ml-8">
-                        <img src="card-back.jpeg" className="rounded-lg card comp-card w-full h-full" onClick={() => {if(flip3) setFlip4(!flip4)}} draggable="false"/>
+                        <img src="card-back.jpeg" className="rounded-lg card comp-card w-full h-full" onClick={() => {if(flip3) { setFlip4(!flip4); playFlipSound(); }}} draggable="false"/>
                     </div>
                     <div className="transform rotate-12 translate-y-2 w-14.5 h-28 -ml-8">
                         <img src={"card-fronts/" + compCards[1]} className="card comp-card card-front w-full h-full" draggable="false"/>
