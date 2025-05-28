@@ -7,16 +7,16 @@ function App() {
 
   return (
     <BrowserRouter>
-          <div className="h-screen flex flex-col relative">
-              <div className="relative z-10">
-                <Routes>
-                  <Route path="/" element={<LandingPage />} />
-                  <Route path="/lobby" element={<Lobby />} />
-                  <Route path="/game-room" element={<MainGameRoom />} />
-                </Routes>
-              </div>
+      <div className="h-screen flex flex-col relative">
+          <div className="relative z-10">
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/lobby" element={<Lobby />} />
+              <Route path="/game-room" element={<MainGameRoom />} />
+            </Routes>
           </div>
-      </BrowserRouter>
+      </div>
+    </BrowserRouter>
   )
 }
 

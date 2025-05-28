@@ -5,6 +5,7 @@ import BlueGameRoom from "../gamerooms/BlueGameRoom";
 import GreenGameRoom from "../gamerooms/GreenGameRoom";
 import PinkGameRoom from "../gamerooms/PinkGameRoom";
 import Settings from '../pageComponents/Settings';
+import Win from '../pageComponents/Win';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGear, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
@@ -30,6 +31,7 @@ const MainGameRoom = () => {
     const [theme, setTheme] = useState("purple-theme.png");
     const [settings, setSettings] = useState(false);
     const [avatar, setAvatar] = useState("avatar5.jpeg");
+    const [win, setWin] = useState(false);
 
     //shuffling cards
     const shuffleArray = (cards) => {
@@ -148,6 +150,8 @@ const MainGameRoom = () => {
         <>
             {settings && <Settings setSettings={setSettings} setTheme={setTheme} color={`bg-[#10002b]/80`} />}
 
+            {win && <Win win={win} setWin={setWin} />}
+
             <div className="fixed top-15 left-5 flex gap-5 z-1">
                 <div className="text-gray-300 cursor-pointer hover:scale-120 hover:text-white transition-transform duration-300" onClick={() => setSettings(true)}>
                     <FontAwesomeIcon icon={faGear} />
@@ -157,13 +161,15 @@ const MainGameRoom = () => {
                 </div>
             </div>
 
-            <PurpleGameRoom userCards={userCards} flopCards={flopCards} compCards={compCards} settings={settings} />
+            <PurpleGameRoom userCards={userCards} flopCards={flopCards} compCards={compCards} settings={settings} win={win} />
         </>
     );
 
     else if(theme === "blue-theme.png") return ( 
         <>
             {settings && <Settings setSettings={setSettings} setTheme={setTheme} color={`bg-[#001845]/80`} />}
+
+            {win && <Win win={win} setWin={setWin} />}
 
             <div className="fixed top-15 left-5 flex gap-5 z-1">
                 <div className="text-gray-300 cursor-pointer hover:scale-120 hover:text-white transition-transform duration-300" onClick={() => setSettings(true)}>
@@ -182,6 +188,8 @@ const MainGameRoom = () => {
         <>
             {settings && <Settings setSettings={setSettings} setTheme={setTheme} color={`bg-[#081c15]/80`} />}
 
+            {win && <Win win={win} setWin={setWin} />}
+
             <div className="fixed top-15 left-5 flex gap-5 z-1">
                 <div className="text-gray-300 cursor-pointer hover:scale-120 hover:text-white transition-transform duration-300" onClick={() => setSettings(true)}>
                     <FontAwesomeIcon icon={faGear} />
@@ -198,6 +206,8 @@ const MainGameRoom = () => {
     else if(theme === "pink-theme.png") return ( 
         <>
             {settings && <Settings setSettings={setSettings} setTheme={setTheme} color={`bg-[#590d22]/80`} />}
+
+            {win && <Win win={win} setWin={setWin} />}
 
             <div className="fixed top-15 left-5 flex gap-5 z-1">
                 <div className="text-gray-300 cursor-pointer hover:scale-120 hover:text-white transition-transform duration-300" onClick={() => setSettings(true)}>

@@ -48,11 +48,11 @@ body {
 }
 
 .user-card {
-    height: 10rem;
+    height: 9rem;
 }
 
 .flop-card {
-    height: 8rem;
+    height: 7rem;
 }
 
 .card-front {
@@ -88,12 +88,39 @@ body {
     #b388eb
   );
   background-size: 200% 100%;
-  background-repeat: no-repeat;
-  -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   animation: shimmer 5s linear infinite;
 }
-  
-  
-  
+
+@keyframes zoomIn {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.2);
+    transform-origin: center center;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    transform-origin: center center;
+  }
+}
+
+@keyframes zoomOut {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.2);
+  }
+}
+
+.win-in {
+  animation: zoomIn 2s ease-out forwards;
+}
+
+.win-out {
+  animation: zoomOut 2s ease-in forwards;
+}

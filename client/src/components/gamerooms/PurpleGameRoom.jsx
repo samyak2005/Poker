@@ -92,7 +92,7 @@ const PurpleGameRoom = ({ userCards, flopCards, compCards, settings }) => {
             <AddUser avatarTop={"15.5rem"} avatarLeft={"77.5rem"} />
             {/* <User flip3={flip3} flip4={flip4} setFlip4={setFlip4} compCards={compCards} avatarTop={"15.5rem"} avatarLeft={"77.5rem"} cardsTop={"19.25rem"} cardsLeft={"81.75rem"} avatar="avatar6.jpeg" name="Noah" /> */}
 
-            <div className="flex justify-center mt-20 items-end gap-5 fixed top-78 w-full">
+            <div className="flex justify-center mt-20 items-end gap-5 fixed bottom-65 w-full">
                 <ReactCardFlip isFlipped={flip1} flipDirection="horizontal">
                     <img src="card-back.jpeg" className="rounded-lg card flop-card" onClick={() => { setFlip1(!flip1); playFlipSound(); }} draggable="false"/>
                     <img src={"card-fronts/" + flopCards[0]} className="card flop-card card-front" draggable="false"/>
