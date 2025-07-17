@@ -89,30 +89,30 @@ const BlueGameRoom = ({ userCards, flopCards, compCards, settings }) => {
             <div className="flex justify-center mt-20 items-end gap-5 fixed top-78 w-full">
                 <ReactCardFlip isFlipped={flip1} flipDirection="horizontal">
                     <img src="card-back.jpeg" className="rounded-lg card flop-card" onClick={() => setFlip1(!flip1)} draggable="false"/>
-                    <img src={"card-fronts/" + flopCards[0]} className="card flop-card card-front" draggable="false"/>
+                    <img src={"/card-fronts/" + flopCards[0]} className="card flop-card card-front" draggable="false"/>
                 </ReactCardFlip>
                 <ReactCardFlip isFlipped={flip1} flipDirection="horizontal">
                     <img src="card-back.jpeg" className="rounded-lg card flop-card" onClick={() => setFlip1(!flip1)} draggable="false"/>
-                    <img src={"card-fronts/" + flopCards[1]} className="card flop-card card-front" draggable="false"/>
+                    <img src={"/card-fronts/" + flopCards[1]} className="card flop-card card-front" draggable="false"/>
                 </ReactCardFlip>
                 <ReactCardFlip isFlipped={flip1} flipDirection="horizontal">
                     <img src="card-back.jpeg" className="rounded-lg card flop-card" onClick={() => setFlip1(!flip1)} draggable="false"/>
-                    <img src={"card-fronts/" + flopCards[2]} className="card flop-card card-front" draggable="false"/>
+                    <img src={"/card-fronts/" + flopCards[2]} className="card flop-card card-front" draggable="false"/>
                 </ReactCardFlip>
                 <ReactCardFlip isFlipped={flip2} flipDirection="horizontal">
                     <img src="card-back.jpeg" className="rounded-lg card flop-card" onClick={() => {if(flip1) setFlip2(!flip2)}} draggable="false"/>
-                    <img src={"card-fronts/" + flopCards[3]} className="card flop-card card-front" draggable="false"/>
+                    <img src={"/card-fronts/" + flopCards[3]} className="card flop-card card-front" draggable="false"/>
                 </ReactCardFlip>
                 <ReactCardFlip isFlipped={flip3} flipDirection="horizontal">
                     <img src="card-back.jpeg" className="rounded-lg card flop-card" onClick={() => {if(flip2) setFlip3(!flip3)}} draggable="false"/>
-                    <img src={"card-fronts/" + flopCards[4]} className="card flop-card card-front" draggable="false"/>
+                    <img src={"/card-fronts/" + flopCards[4]} className="card flop-card card-front" draggable="false"/>
                 </ReactCardFlip>
             </div>
 
             <div className={`flex justify-center items-center relative ${folded || !turn || disabling ? "opacity-50" : ""}`}>
                 <div className="flex justify-center fixed bottom-20">
-                    <img src={"card-fronts/" + userCards[0]} className="card user-card card-front transform -rotate-12 translate-y-2" draggable="false"/>
-                    <img src={"card-fronts/" + userCards[1]} className="card user-card card-front transform rotate-12 translate-y-2 -ml-8" draggable="false"/>
+                    <img src={"/card-fronts/" + userCards[0]} className="card user-card card-front transform -rotate-12 translate-y-2" draggable="false"/>
+                    <img src={"/card-fronts/" + userCards[1]} className="card user-card card-front transform rotate-12 translate-y-2 -ml-8" draggable="false"/>
                 </div>
             </div>
 

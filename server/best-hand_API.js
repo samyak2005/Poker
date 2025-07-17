@@ -1,9 +1,12 @@
 const { findBestHand } = require("./Main_working/best_hand");
 const { END_WINNING } = require("./END");
+const { shuffleAndDealHandler } = require("./shuffle_and_deal");
 const express = require("express");
+const cors = require('cors');
 const pokerApi = express();
 const PORT = 3000;
 
+pokerApi.use(cors());
 pokerApi.use(express.json());
 
 pokerApi.post("/hand-array", (req, res) => {
@@ -33,6 +36,9 @@ pokerApi.post("/end-game", (req, res) => {
 
   res.json({ result: ans });
 });
+
+// New endpoint for shuffling and dealing cards
+pokerApi.get("/api/shuffle-and-deal", shuffleAndDealHandler);
 
 pokerApi.listen(PORT, () => {
   console.log(`Server is successfully running at http://localhost:${PORT}`);

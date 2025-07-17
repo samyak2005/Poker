@@ -13,12 +13,8 @@ import { useNavigate } from 'react-router-dom';
 const MainGameRoom = () => {
     const navigate = useNavigate();
 
-    const cards = [
-        "ace_of_hearts.png", "2_of_hearts.png", "3_of_hearts.png", "4_of_hearts.png", "5_of_hearts.png", "6_of_hearts.png", "7_of_hearts.png", "8_of_hearts.png", "9_of_hearts.png", "10_of_hearts.png", "queen_of_hearts.png", "jack_of_hearts.png", "king_of_hearts.png",
-        "ace_of_spades.png", "2_of_spades.png", "3_of_spades.png", "4_of_spades.png", "5_of_spades.png", "6_of_spades.png", "7_of_spades.png", "8_of_spades.png", "9_of_spades.png", "10_of_spades.png", "queen_of_spades.png", "jack_of_spades.png", "king_of_spades.png",
-        "ace_of_diamonds.png", "2_of_diamonds.png", "3_of_diamonds.png", "4_of_diamonds.png", "5_of_diamonds.png", "6_of_diamonds.png", "7_of_diamonds.png", "8_of_diamonds.png", "9_of_diamonds.png", "10_of_diamonds.png", "queen_of_diamonds.png", "jack_of_diamonds.png", "king_of_diamonds.png",
-        "ace_of_clubs.png", "2_of_clubs.png", "3_of_clubs.png", "4_of_clubs.png", "5_of_clubs.png", "6_of_clubs.png", "7_of_clubs.png", "8_of_clubs.png", "9_of_clubs.png", "10_of_clubs.png", "queen_of_clubs.png", "jack_of_clubs.png", "king_of_clubs.png"
-    ];
+    // Remove local shuffle logic
+    // const cards = [...];
 
     const [userCards, setUserCards] = useState(["ace_of_spades", "ace_of_spades"]);
     const [flopCards, setFlopCards] = useState(["ace_of_spades", "ace_of_spades", "ace_of_spades", "ace_of_spades", "ace_of_spades"]);
@@ -33,20 +29,26 @@ const MainGameRoom = () => {
     const [avatar, setAvatar] = useState("avatar5.jpeg");
     const [win, setWin] = useState(false);
 
-    //shuffling cards
-    const shuffleArray = (cards) => {
-        const shuffled = [...cards];
-        for (let i = 0; i < shuffled.length - 1; i++) {
-          const j = Math.floor(Math.random() * (i+1));
-          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-        }
-        return shuffled;
-    };
+    // Fetch shuffled and dealt cards from backend
     useEffect(() => {
-        const shuffled = shuffleArray(cards);
-        setUserCards(shuffled.splice(0,2));
-        setFlopCards(shuffled.splice(2,7));
-        setCompCards(shuffled.splice(7,9));
+        fetch('http://localhost:3000/api/shuffle-and-deal')
+            .then(res => res.json())
+            .then(data => {
+                // Debug: log the raw backend data
+                console.log('Backend data:', data);
+
+                // Convert backend card objects to frontend filenames
+                const cardToFilename = (card) => `${card.rank.toLowerCase()}_of_${card.suit}.png`;
+
+                // Debug: log the filenames being generated
+                console.log('User card filenames:', data.userCards.map(cardToFilename));
+                console.log('Flop card filenames:', data.flopCards.map(cardToFilename));
+                console.log('Comp card filenames:', data.compCards.map(cardToFilename));
+
+                setUserCards(data.userCards.map(cardToFilename));
+                setFlopCards(data.flopCards.map(cardToFilename));
+                setCompCards(data.compCards.map(cardToFilename));
+            });
     }, []);
 
     //getting rank of card
