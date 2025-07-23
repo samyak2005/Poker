@@ -1,0 +1,205 @@
+import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { io } from 'socket.io-client';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft, faPlay, faUsers, faGear, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import '../../App.css';
+import MultiplayerPurpleGameRoom from '../gamerooms/MultiplayerPurpleGameRoom';
+import MultiplayerBlueGameRoom from '../gamerooms/MultiplayerBlueGameRoom';
+import MultiplayerGreenGameRoom from '../gamerooms/MultiplayerGreenGameRoom';
+import MultiplayerPinkGameRoom from '../gamerooms/MultiplayerPinkGameRoom';
+import Settings from '../pageComponents/Settings';
+import Win from '../pageComponents/Win';
+
+const MultiplayerGameRoom = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [socket, setSocket] = useState(null);
+    const [connected, setConnected] = useState(false);
+    const [roomId, setRoomId] = useState('');
+    const [playerName, setPlayerName] = useState('');
+    const [avatar, setAvatar] = useState('');
+    const [players, setPlayers] = useState([]);
+    const [gameStarted, setGameStarted] = useState(false);
+    const [currentTurn, setCurrentTurn] = useState(0);
+    const [pot, setPot] = useState(0);
+    const [myCards, setMyCards] = useState([]);
+    const [communityCards, setCommunityCards] = useState([]);
+    const [isMyTurn, setIsMyTurn] = useState(false);
+    const [theme, setTheme] = useState("purple");
+    const [settings, setSettings] = useState(false);
+    const [win, setWin] = useState(false);
+
+    //getting theme from local storage
+    useEffect(() => {
+        const storedTheme = localStorage.getItem("selectedTheme");
+        if (storedTheme) {
+            setTheme(storedTheme);
+        }
+    }, []);
+
+    useEffect(() => {
+        // Get player info from location state or localStorage
+        const { roomId: stateRoomId, playerName: statePlayerName, avatar: stateAvatar } = location.state || {};
+        const storedRoomId = localStorage.getItem('roomId');
+        const storedPlayerName = localStorage.getItem('playerName');
+        const storedAvatar = localStorage.getItem('playerAvatar');
+
+        setRoomId(stateRoomId || storedRoomId);
+        setPlayerName(statePlayerName || storedPlayerName);
+        setAvatar(stateAvatar || storedAvatar);
+
+        // Connect to Socket.IO server
+        const newSocket = io('http://localhost:3001');
+        setSocket(newSocket);
+
+        return () => {
+            if (newSocket) {
+                newSocket.disconnect();
+            }
+        };
+    }, [location.state]);
+
+    useEffect(() => {
+        if (!socket || !roomId || !playerName) return;
+
+        // Join room
+        socket.emit('joinRoom', { roomId, playerName, avatar });
+
+        // Socket event listeners
+        socket.on('connect', () => {
+            console.log('Connected to server');
+            setConnected(true);
+        });
+
+        socket.on('playerJoined', ({ player, players: roomPlayers, roomId: joinedRoomId }) => {
+            console.log('Player joined:', player);
+            setPlayers(roomPlayers);
+        });
+
+        socket.on('playerLeft', ({ playerId, players: roomPlayers }) => {
+            console.log('Player left:', playerId);
+            setPlayers(roomPlayers);
+        });
+
+        socket.on('gameStarted', ({ players: roomPlayers, communityCards: flopCards, currentTurn: turn, pot: roomPot }) => {
+            console.log('Game started!');
+            setGameStarted(true);
+            setPlayers(roomPlayers);
+            setCommunityCards(flopCards);
+            setCurrentTurn(turn);
+            setPot(roomPot);
+            
+            // Find my cards
+            const myPlayer = roomPlayers.find(p => p.name === playerName);
+            if (myPlayer) {
+                setMyCards(myPlayer.cards);
+            }
+        });
+
+        socket.on('playerAction', ({ playerId, action, amount, currentTurn: turn, pot: roomPot, players: roomPlayers }) => {
+            console.log('Player action:', action, amount);
+            setCurrentTurn(turn);
+            setPot(roomPot);
+            setPlayers(roomPlayers);
+            
+            // Check if it's my turn
+            const myPlayer = roomPlayers.find(p => p.name === playerName);
+            if (myPlayer) {
+                setIsMyTurn(myPlayer.id === socket.id && turn === roomPlayers.findIndex(p => p.id === socket.id));
+            }
+        });
+
+        socket.on('roomFull', ({ message }) => {
+            alert(message);
+            navigate('/multiplayer-lobby');
+        });
+
+        socket.on('gameError', ({ message }) => {
+            alert(message);
+        });
+
+        return () => {
+            socket.off('connect');
+            socket.off('playerJoined');
+            socket.off('playerLeft');
+            socket.off('gameStarted');
+            socket.off('playerAction');
+            socket.off('roomFull');
+            socket.off('gameError');
+        };
+    }, [socket, roomId, playerName, avatar, navigate]);
+
+    const handleStartGame = () => {
+        if (socket && roomId) {
+            socket.emit('startGame', { roomId });
+        }
+    };
+
+    const handlePlayerAction = (action, amount = 0) => {
+        if (socket && roomId && isMyTurn) {
+            socket.emit('playerAction', { roomId, action, amount });
+        }
+    };
+
+    const handleLeaveRoom = () => {
+        if (socket) {
+            socket.disconnect();
+        }
+        navigate('/multiplayer-lobby');
+    };
+
+    // Common props for all game room components
+    const gameRoomProps = {
+        players,
+        myCards,
+        communityCards,
+        settings,
+        win,
+        isMyTurn,
+        currentTurn,
+        pot,
+        onPlayerAction: handlePlayerAction,
+        onStartGame: handleStartGame,
+        gameStarted,
+        connected,
+        roomId,
+        playerName
+    };
+
+    // Render the appropriate game room based on theme
+    const renderGameRoom = () => {
+        switch (theme) {
+            case 'blue':
+                return <MultiplayerBlueGameRoom {...gameRoomProps} />;
+            case 'green':
+                return <MultiplayerGreenGameRoom {...gameRoomProps} />;
+            case 'pink':
+                return <MultiplayerPinkGameRoom {...gameRoomProps} />;
+            case 'purple':
+            default:
+                return <MultiplayerPurpleGameRoom {...gameRoomProps} />;
+        }
+    };
+
+    return (
+        <>
+            {settings && <Settings setSettings={setSettings} setTheme={setTheme} color={`bg-[#10002b]/80`} />}
+
+            {win && <Win win={win} setWin={setWin} />}
+
+            <div className="fixed top-15 left-5 flex gap-5 z-1">
+                <div className="text-gray-300 cursor-pointer hover:scale-120 hover:text-white transition-transform duration-300" onClick={() => setSettings(true)}>
+                    <FontAwesomeIcon icon={faGear} />
+                </div>
+                <div className="text-gray-300 cursor-pointer hover:scale-120 hover:text-white transition-transform duration-300" onClick={handleLeaveRoom}>
+                    <FontAwesomeIcon icon={faRightFromBracket} />
+                </div>
+            </div>
+
+            {renderGameRoom()}
+        </>
+    );
+};
+
+export default MultiplayerGameRoom; 

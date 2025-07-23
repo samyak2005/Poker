@@ -8,7 +8,11 @@ const LandingPage = () => {
 
     const handleClick = () => {
         if (mode) {
-          navigate("/lobby");
+          if (mode === "multi") {
+            navigate("/multiplayer-lobby");
+          } else {
+            navigate("/lobby");
+          }
         } else {
           alert("Select a mode before continuing.");
         }
