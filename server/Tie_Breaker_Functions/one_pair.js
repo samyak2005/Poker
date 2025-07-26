@@ -1,5 +1,21 @@
 const rankValues = require("../rankValues");
 
+// const hand1 = [
+//   { rank: "K", suit: "spades" },
+//   { rank: "K", suit: "spades" },
+//   { rank: "7", suit: "spades" },
+//   { rank: "8", suit: "spades" },
+//   { rank: "5", suit: "spades" },
+// ];
+
+// const hand2 = [
+//   { rank: "K", suit: "spades" },
+//   { rank: "K", suit: "spades" },
+//   { rank: "7", suit: "spades" },
+//   { rank: "8", suit: "spades" },
+//   { rank: "9", suit: "spades" },
+// ];
+
 function OnePair(hand1, hand2) {
   const ranks1 = hand1.map((card) => card.rank);
   const ranks2 = hand2.map((card) => card.rank);
@@ -56,4 +72,5 @@ function OnePair(hand1, hand2) {
   return hand1;
 }
 
+// console.log(OnePair(hand1, hand2));
 module.exports = { OnePair };

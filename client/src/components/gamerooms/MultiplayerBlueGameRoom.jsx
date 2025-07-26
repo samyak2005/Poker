@@ -44,43 +44,40 @@ const MultiplayerBlueGameRoom = ({
     const [timer, setTimer] = useState(40);
     const [disabling, setDisabling] = useState(false);
     const [called, setCalled] = useState(false);
-    const [raiseAmount, setRaiseAmount] = useState(0);
-    const [showRaiseSlider, setShowRaiseSlider] = useState(false);
-    const [betAmount, setBetAmount] = useState(20);
 
     const [help, setHelp] = useState(false);
     const [log, setLog] = useState(false);
     
-    
+    // Auto-flip community cards based on betting round
     useEffect(() => {
         if (gameStarted && communityCards.length > 0) {
-            
+            // Auto-flip flop cards (first 3 cards)
             if (communityCards.length >= 3 && bettingRound >= 1) {
                 setTimeout(() => {
                     setFlip1(true);
                     playFlipSound();
-                }, 1000); 
+                }, 1000); // 1 second delay
             }
             
-            
+            // Auto-flip turn card (4th card)
             if (communityCards.length >= 4 && bettingRound >= 2) {
                 setTimeout(() => {
                     setFlip2(true);
                     playFlipSound();
-                }, 2000); 
+                }, 2000); // 2 second delay
             }
             
-            
+            // Auto-flip river card (5th card)
             if (communityCards.length >= 5 && bettingRound >= 3) {
                 setTimeout(() => {
                     setFlip3(true);
                     playFlipSound();
-                }, 3000); 
+                }, 3000); // 3 second delay
             }
         }
     }, [bettingRound, communityCards.length, gameStarted]);
     
-    
+    //handling help popup
     const closeHelp = () => {
         setHelp(false);
     }
@@ -91,78 +88,33 @@ const MultiplayerBlueGameRoom = ({
         flipSound.play();
     };
 
-    
+    // Convert card object to filename
     const cardToFilename = (card) => {
         if (!card) return '';
-        
-        
-        const rankMapping = {
-            'A': 'ace',
-            'J': 'jack', 
-            'Q': 'queen',
-            'K': 'king',
-            '2': '2',
-            '3': '3',
-            '4': '4',
-            '5': '5',
-            '6': '6',
-            '7': '7',
-            '8': '8',
-            '9': '9',
-            '10': '10'
-        };
-        
-        const mappedRank = rankMapping[card.rank] || card.rank.toLowerCase();
-        return `${mappedRank}_of_${card.suit}.png`;
+        return `${card.rank.toLowerCase()}_of_${card.suit}.png`;
     };
 
-    
-    const getMyCurrentBet = () => {
-        const myPlayer = players.find(p => p.name === playerName);
-        return myPlayer ? myPlayer.bet : 0;
-    };
-
-    
-    const getCallAmount = () => {
-        return currentBet - getMyCurrentBet();
-    };
-
-    
-    const handleCheck = () => {
-        onPlayerAction('check', 0);
-    };
-
+    // Handle player actions
     const handleCall = () => {
-        const callAmount = getCallAmount();
-        onPlayerAction('call', callAmount);
+        onPlayerAction('call', 10);
     };
 
     const handleRaise = () => {
-        if (showRaiseSlider) {
-            
-            const finalRaiseAmount = Math.max(minimumRaise, raiseAmount);
-            onPlayerAction('raise', finalRaiseAmount);
-            setShowRaiseSlider(false);
-            setRaiseAmount(0);
-        } else {
-            
-            setShowRaiseSlider(true);
-            setRaiseAmount(minimumRaise);
-        }
+        onPlayerAction('raise', 20);
     };
 
     const handleFold = () => {
         onPlayerAction('fold');
     };
 
-    
+    // Player positions for 6 players in front - improved curve alignment
     const playerPositions = [
-        { avatarTop: "18rem", avatarLeft: "3rem", cardsTop: "21.75rem", cardsLeft: "7.25rem" }, 
-        { avatarTop: "13.5rem", avatarLeft: "16rem", cardsTop: "17.25rem", cardsLeft: "20.25rem" }, 
-        { avatarTop: "10.5rem", avatarLeft: "29rem", cardsTop: "14.25rem", cardsLeft: "33.25rem" }, 
-        { avatarTop: "10.5rem", avatarLeft: "57rem", cardsTop: "14.25rem", cardsLeft: "61.25rem" }, 
-        { avatarTop: "13.5rem", avatarLeft: "70rem", cardsTop: "17.25rem", cardsLeft: "74.25rem" }, 
-        { avatarTop: "18rem", avatarLeft: "83rem", cardsTop: "21.75rem", cardsLeft: "87.25rem" }  
+        { avatarTop: "18rem", avatarLeft: "3rem", cardsTop: "21.75rem", cardsLeft: "7.25rem" }, // Bottom left - moved down and slightly right
+        { avatarTop: "13.5rem", avatarLeft: "16rem", cardsTop: "17.25rem", cardsLeft: "20.25rem" }, // Bottom center - moved down slightly
+        { avatarTop: "10.5rem", avatarLeft: "29rem", cardsTop: "14.25rem", cardsLeft: "33.25rem" }, // Top left - moved down slightly
+        { avatarTop: "10.5rem", avatarLeft: "57rem", cardsTop: "14.25rem", cardsLeft: "61.25rem" }, // Top center - adjusted cardsLeft
+        { avatarTop: "13.5rem", avatarLeft: "70rem", cardsTop: "17.25rem", cardsLeft: "74.25rem" }, // Top right - adjusted cardsTop and cardsLeft
+        { avatarTop: "18rem", avatarLeft: "83rem", cardsTop: "21.75rem", cardsLeft: "87.25rem" }  // Bottom right - adjusted cardsTop and cardsLeft
     ];
 
     return (
@@ -171,52 +123,8 @@ const MultiplayerBlueGameRoom = ({
             {(close) => <Help close={close} />}
         </Popup>
 
-        {(help || log || settings || gameEnd) && (
+        {(help || log || settings) && (
             <div className="fixed inset-0 backdrop-blur z-10"></div>
-        )}
-
-        {/* Game End Display */}
-        {gameEnd && (
-            <div className="fixed inset-0 flex items-center justify-center z-50">
-                <div className="bg-blue-900/95 rounded-lg p-8 max-w-md mx-4">
-                    <h2 className="text-2xl font-bold text-white mb-4 text-center">
-                        {gameEnd.winner ? 'Winner!' : 'Showdown!'}
-                    </h2>
-                    
-                    {gameEnd.winner ? (
-                        <div className="text-center">
-                            <p className="text-white text-lg mb-2">
-                                {gameEnd.winner.player.name} wins ${gameEnd.pot}!
-                            </p>
-                            <p className="text-gray-300 text-sm">
-                                Hand: {gameEnd.winner.handName || 'Unknown'}
-                            </p>
-                        </div>
-                    ) : (
-                        <div className="text-center">
-                            <p className="text-white text-lg mb-4">
-                                Winners:
-                            </p>
-                            {gameEnd.winners?.map((winner, index) => (
-                                <div key={index} className="mb-2">
-                                    <p className="text-white">
-                                        {winner.player.name} - {winner.handName || 'Unknown'}
-                                    </p>
-                                </div>
-                            ))}
-                            <p className="text-gray-300 text-sm mt-4">
-                                Pot split among {gameEnd.winners?.length || 0} players
-                            </p>
-                        </div>
-                    )}
-                    
-                    <div className="mt-6 text-center">
-                        <p className="text-gray-300 text-sm">
-                            New hand starting in 3 seconds...
-                        </p>
-                    </div>
-                </div>
-            </div>
         )}
 
         {/* log */}
@@ -379,36 +287,26 @@ const MultiplayerBlueGameRoom = ({
                 {/* Game Action Buttons */}
                 {gameStarted && isMyTurn ? (
                     <div className={`flex justify-center gap-7 fixed bottom-4`}>
-                        {currentBet === getMyCurrentBet() ? (
-                            <button 
-                                onClick={handleCheck}
-                                className="relative overflow-hidden group px-5 py-1 text-white text-lg rounded-full hover:scale-105 transition-transform duration-300 cursor-pointer"
-                            >
-                                <span className="absolute inset-0 bg-gray-600/50 scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
-                                <span>Check</span>
-                            </button>
-                        ) : (
-                            <button 
-                                onClick={handleCall}
-                                className="relative overflow-hidden group px-5 py-1 text-white text-lg rounded-full hover:scale-105 transition-transform duration-300 cursor-pointer"
-                            >
-                                <span className="absolute inset-0 bg-gray-600/50 scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
-                                <span>Call ${getCallAmount()}</span>
-                            </button>
-                        )}
+                        <button 
+                            onClick={handleCall}
+                            className="relative overflow-hidden group px-5 py-1 text-white text-lg rounded-full hover:scale-105 transition-transform duration-300 cursor-pointer"
+                        >
+                            <span className="absolute inset-0 bg-gray-600/50 scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
+                            <span className="relative z-10">Call</span>
+                        </button>
                         <button 
                             onClick={handleRaise}
                             className="relative overflow-hidden group px-5 py-1 text-green-400 text-lg rounded-full hover:scale-105 transition-transform duration-300 cursor-pointer"
                         >
                             <span className="absolute inset-0 bg-green-400/30 scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
-                            <span>Raise</span>
+                            <span className="relative z-10">Raise</span>
                         </button>
                         <button 
                             onClick={handleFold}
                             className="relative overflow-hidden group px-5 py-1 text-red-400 text-lg rounded-full hover:scale-105 transition-transform duration-300 cursor-pointer"
                         >
                             <span className="absolute inset-0 bg-red-400/30 scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
-                            <span>Fold</span>
+                            <span className="relative z-10">Fold</span>
                         </button>
                     </div>
                 ) : !gameStarted && players.length >= 2 ? (
@@ -418,55 +316,10 @@ const MultiplayerBlueGameRoom = ({
                             className="relative overflow-hidden group px-5 py-1 text-green-400 text-lg rounded-full hover:scale-105 transition-transform duration-300 cursor-pointer"
                         >
                             <span className="absolute inset-0 bg-green-400/30 scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
-                            <span>Start Game</span>
+                            <span className="relative z-10">Start Game</span>
                         </button>
                     </div>
                 ) : null}
-
-                {/* Raise Slider */}
-                {showRaiseSlider && (
-                    <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 bg-blue-800/90 rounded-lg p-4 border border-blue-400">
-                        <div className="text-center mb-3">
-                            <p className="text-white text-lg font-semibold">Raise Amount: ${raiseAmount}</p>
-                        </div>
-                        <input
-                            type="range"
-                            min={minimumRaise}
-                            max={bank}
-                            value={raiseAmount}
-                            onChange={(e) => setRaiseAmount(Math.max(minimumRaise, parseInt(e.target.value)))}
-                            className="w-64 h-2 bg-blue-600 rounded-lg appearance-none cursor-pointer"
-                            style={{
-                                background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${Math.max(0, (raiseAmount - minimumRaise) / (bank - minimumRaise) * 100)}%, #1e40af ${Math.max(0, (raiseAmount - minimumRaise) / (bank - minimumRaise) * 100)}%, #1e40af 100%)`
-                            }}
-                        />
-                        <div className="flex justify-between text-xs text-white mt-1">
-                            <span>${minimumRaise}</span>
-                            <span>${bank}</span>
-                        </div>
-                        <div className="flex gap-2 mt-3">
-                            <button
-                                onClick={() => {
-                                    onPlayerAction('raise', raiseAmount);
-                                    setShowRaiseSlider(false);
-                                    setRaiseAmount(0);
-                                }}
-                                className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-                            >
-                                Confirm
-                            </button>
-                            <button
-                                onClick={() => {
-                                    setShowRaiseSlider(false);
-                                    setRaiseAmount(0);
-                                }}
-                                className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-                            >
-                                Cancel
-                            </button>
-                        </div>
-                    </div>
-                )}
                 
                 <Timer timer={timer} setTimer={setTimer} folded={folded} setFolded={setFolded} turn={isMyTurn} setTurn={setTurn} color={`bg-gradient-to-r from-[#001845] via-[#002855] to-[#003d7a]`} />
             </div>

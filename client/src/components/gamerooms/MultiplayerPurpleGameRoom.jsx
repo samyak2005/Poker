@@ -51,31 +51,36 @@ const MultiplayerPurpleGameRoom = ({
     const [help, setHelp] = useState(false);
     const [log, setLog] = useState(false);
     
+    // Auto-flip community cards based on betting round
     useEffect(() => {
         if (gameStarted && communityCards.length > 0) {
+            // Auto-flip flop cards (first 3 cards)
             if (communityCards.length >= 3 && bettingRound >= 1) {
                 setTimeout(() => {
                     setFlip1(true);
                     playFlipSound();
-                }, 1000);
+                }, 1000); // 1 second delay
             }
             
+            // Auto-flip turn card (4th card)
             if (communityCards.length >= 4 && bettingRound >= 2) {
                 setTimeout(() => {
                     setFlip2(true);
                     playFlipSound();
-                }, 2000);
+                }, 2000); // 2 second delay
             }
             
+            // Auto-flip river card (5th card)
             if (communityCards.length >= 5 && bettingRound >= 3) {
                 setTimeout(() => {
                     setFlip3(true);
                     playFlipSound();
-                }, 3000);
+                }, 3000); // 3 second delay
             }
         }
     }, [bettingRound, communityCards.length, gameStarted]);
     
+    //handling help popup
     const closeHelp = () => {
         setHelp(false);
     }
@@ -86,8 +91,11 @@ const MultiplayerPurpleGameRoom = ({
         flipSound.play();
     };
 
+    // Convert card object to filename
     const cardToFilename = (card) => {
         if (!card) return '';
+        
+        // Map single letter ranks to full word format for image files
         const rankMapping = {
             'A': 'ace',
             'J': 'jack', 
@@ -110,14 +118,18 @@ const MultiplayerPurpleGameRoom = ({
 
 
 
+    // Get current player's bet amount
     const getMyCurrentBet = () => {
         const myPlayer = players.find(p => p.name === playerName);
         return myPlayer ? myPlayer.bet : 0;
     };
 
+    // Get amount needed to call
     const getCallAmount = () => {
         return currentBet - getMyCurrentBet();
     };
+
+    // Handle player actions
     const handleCheck = () => {
         onPlayerAction('check', 0);
     };
@@ -129,11 +141,13 @@ const MultiplayerPurpleGameRoom = ({
 
     const handleRaise = () => {
         if (showRaiseSlider) {
+            // If slider is already shown, execute the raise
             const finalRaiseAmount = Math.max(minimumRaise, raiseAmount);
             onPlayerAction('raise', finalRaiseAmount);
             setShowRaiseSlider(false);
             setRaiseAmount(0);
         } else {
+            // Show the raise slider
             setShowRaiseSlider(true);
             setRaiseAmount(minimumRaise);
         }
@@ -143,13 +157,14 @@ const MultiplayerPurpleGameRoom = ({
         onPlayerAction('fold');
     };
 
+    // Player positions for 6 players in front - improved curve alignment
     const playerPositions = [
-        { avatarTop: "18rem", avatarLeft: "3rem", cardsTop: "21.75rem", cardsLeft: "7.25rem" },
-        { avatarTop: "13.5rem", avatarLeft: "16rem", cardsTop: "17.25rem", cardsLeft: "20.25rem" },
-        { avatarTop: "10.5rem", avatarLeft: "29rem", cardsTop: "14.25rem", cardsLeft: "33.25rem" },
-        { avatarTop: "10.5rem", avatarLeft: "57rem", cardsTop: "14.25rem", cardsLeft: "61.25rem" },
-        { avatarTop: "13.5rem", avatarLeft: "70rem", cardsTop: "17.25rem", cardsLeft: "74.25rem" },
-        { avatarTop: "18rem", avatarLeft: "83rem", cardsTop: "21.75rem", cardsLeft: "87.25rem" }
+        { avatarTop: "18rem", avatarLeft: "3rem", cardsTop: "21.75rem", cardsLeft: "7.25rem" }, // Bottom left - moved down and slightly right
+        { avatarTop: "13.5rem", avatarLeft: "16rem", cardsTop: "17.25rem", cardsLeft: "20.25rem" }, // Bottom center - moved down slightly
+        { avatarTop: "10.5rem", avatarLeft: "29rem", cardsTop: "14.25rem", cardsLeft: "33.25rem" }, // Top left - moved down slightly
+        { avatarTop: "10.5rem", avatarLeft: "57rem", cardsTop: "14.25rem", cardsLeft: "61.25rem" }, // Top center - adjusted cardsLeft
+        { avatarTop: "13.5rem", avatarLeft: "70rem", cardsTop: "17.25rem", cardsLeft: "74.25rem" }, // Top right - adjusted cardsTop and cardsLeft
+        { avatarTop: "18rem", avatarLeft: "83rem", cardsTop: "21.75rem", cardsLeft: "87.25rem" }  // Bottom right - adjusted cardsTop and cardsLeft
     ];
 
     return (
@@ -418,7 +433,7 @@ const MultiplayerPurpleGameRoom = ({
                                 className={`relative overflow-hidden group px-5 py-1 text-lg rounded-full hover:scale-105 transition-transform duration-300 cursor-pointer ${isMyTurn ? 'text-white' : 'text-gray-400'}`}
                             >
                                 <span className="absolute inset-0 bg-gray-600/50 scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
-                                <span>Check</span>
+                                <span className="relative z-10">Check</span>
                             </button>
                         ) : (
                             <button 
@@ -426,7 +441,7 @@ const MultiplayerPurpleGameRoom = ({
                                 className={`relative overflow-hidden group px-5 py-1 text-lg rounded-full hover:scale-105 transition-transform duration-300 cursor-pointer ${isMyTurn ? 'text-white' : 'text-gray-400'}`}
                             >
                                 <span className="absolute inset-0 bg-gray-600/50 scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
-                                <span>Call</span>
+                                <span className="relative z-10">Call</span>
                             </button>
                         )}
                         <button 
@@ -434,14 +449,14 @@ const MultiplayerPurpleGameRoom = ({
                             className={`relative overflow-hidden group px-5 py-1 text-lg rounded-full hover:scale-105 transition-transform duration-300 cursor-pointer ${showRaiseSlider ? 'bg-green-400 text-white' : isMyTurn ? 'text-green-400' : 'text-gray-400'}`}
                         >
                             <span className="absolute inset-0 bg-green-400/30 scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
-                            <span>{showRaiseSlider ? 'Confirm' : 'Raise'}</span>
+                            <span className="relative z-10">{showRaiseSlider ? 'Confirm' : 'Raise'}</span>
                         </button>
                         <button 
                             onClick={handleFold}
                             className={`relative overflow-hidden group px-5 py-1 text-lg rounded-full hover:scale-105 transition-transform duration-300 cursor-pointer ${isMyTurn ? 'text-red-400' : 'text-gray-400'}`}
                         >
                             <span className="absolute inset-0 bg-red-400/30 scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
-                            <span>Fold</span>
+                            <span className="relative z-10">Fold</span>
                         </button>
                     </div>
                 ) : !gameStarted && players.length >= 2 ? (
@@ -451,7 +466,7 @@ const MultiplayerPurpleGameRoom = ({
                             className="relative overflow-hidden group px-5 py-1 text-green-400 text-lg rounded-full hover:scale-105 transition-transform duration-300 cursor-pointer"
                         >
                             <span className="absolute inset-0 bg-green-400/30 scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
-                            <span>Start Game</span>
+                            <span className="relative z-10">Start Game</span>
                         </button>
                     </div>
                 ) : (

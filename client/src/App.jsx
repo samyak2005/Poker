@@ -7,7 +7,7 @@ function App() {
   return (
     <BrowserRouter>
       <div className="h-screen flex flex-col relative">
-          <div>
+          <div className="relative z-10">
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="/multiplayer-lobby" element={<MultiplayerLobby />} />

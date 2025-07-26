@@ -108,7 +108,7 @@ const LandingPage = () => {
             </div>
 
             {/* Main Content */}
-            <div className="flex flex-col items-center justify-center min-h-screen px-6 py-4">
+            <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 py-4">
                 {/* Header */}
                 <div className="text-center mb-6">
                     <div className="mb-4">
@@ -137,7 +137,7 @@ const LandingPage = () => {
                 </div>
 
                 {/* Stats */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 text-center max-w-4xl">
+                <div className="flex gap-6 mb-8 text-center">
                     <div className="bg-gradient-to-br from-purple-500/40 to-pink-500/40 backdrop-blur-md rounded-2xl px-6 py-4 border border-white/40 hover:scale-110 transition-transform duration-300 shadow-xl">
                         <div className="text-3xl font-black text-white mb-1">7</div>
                         <div className="text-white/90 font-bold text-sm">Players Max</div>

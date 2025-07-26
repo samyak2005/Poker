@@ -4,9 +4,11 @@ const { getDeck } = require('./deck');
 const pokerApi = express();
 const PORT = 3000;
 
+
 pokerApi.use(cors());
 pokerApi.use(express.json());
 
+// Fisher-Yates shuffle
 function shuffle(deck) {
     const arr = [...deck];
     for (let i = arr.length - 1; i > 0; i--) {
@@ -16,6 +18,7 @@ function shuffle(deck) {
     return arr;
 }
 
+// Deal cards: 2 to user, 5 to flop, 2 to computer
 function deal() {
     const deck = shuffle(getDeck());
     const userCards = deck.splice(0, 2);
@@ -24,8 +27,10 @@ function deal() {
     return { userCards, flopCards, compCards };
 }
 
+// Express handler
 function shuffleAndDealHandler(req, res) {
     const { userCards, flopCards, compCards } = deal();
+    // console.log({ userCards, flopCards, compCards });
     res.json({ userCards, flopCards, compCards });
 }
 

@@ -12,7 +12,7 @@ const User = ({flip3, flip4, setFlip4, compCards, avatarTop, avatarLeft, cardsTo
     console.log('User component rendering:', { name, avatar, avatarTop, avatarLeft, compCards });
 
     return (
-        <div className="computer flex flex-col">
+        <div className="computer flex flex-col relative z-10">
             <div 
             className="flex flex-col items-center gap-1"
             style={{
@@ -28,7 +28,7 @@ const User = ({flip3, flip4, setFlip4, compCards, avatarTop, avatarLeft, cardsTo
                         draggable="false"
                         onError={(e) => {
                             console.log('Avatar failed to load:', avatar);
-                            e.target.src = 'avatar1.jpeg'; 
+                            e.target.src = 'avatar1.jpeg'; // fallback
                         }}
                     />
                 </div>
