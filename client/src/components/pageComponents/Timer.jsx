@@ -7,7 +7,7 @@ const Timer = ({ timer, setTimer, folded, setFolded, turn, setTurn, color }) => 
     const intervalId = setInterval(() => {
         setTimer(prev => {
             if (prev === 0) {
-              // setFolded(true);
+              
               return 0;
             }
             return prev - 1;

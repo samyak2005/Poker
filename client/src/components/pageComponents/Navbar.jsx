@@ -47,7 +47,7 @@ const Navbar = () => {
                 <div
                     className="w-[33.34%] flex justify-start items-center text-2xl chipinn-text font-bold"
                     style={{
-                        // fontFamily: 'MyFont',
+                        
                         letterSpacing: 5,
                     }}
                     >

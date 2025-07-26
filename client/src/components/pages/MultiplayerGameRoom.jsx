@@ -4,6 +4,7 @@ import { io } from 'socket.io-client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faPlay, faUsers, faGear, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import '../../App.css';
+import { SOCKET_URL } from '../../config';
 import MultiplayerPurpleGameRoom from '../gamerooms/MultiplayerPurpleGameRoom';
 import MultiplayerBlueGameRoom from '../gamerooms/MultiplayerBlueGameRoom';
 import MultiplayerGreenGameRoom from '../gamerooms/MultiplayerGreenGameRoom';
@@ -23,14 +24,17 @@ const MultiplayerGameRoom = () => {
     const [gameStarted, setGameStarted] = useState(false);
     const [currentTurn, setCurrentTurn] = useState(0);
     const [pot, setPot] = useState(0);
+    const [currentBet, setCurrentBet] = useState(0);
+    const [minimumRaise, setMinimumRaise] = useState(20);
+    const [bettingRound, setBettingRound] = useState(0);
     const [myCards, setMyCards] = useState([]);
     const [communityCards, setCommunityCards] = useState([]);
     const [isMyTurn, setIsMyTurn] = useState(false);
     const [theme, setTheme] = useState("purple");
     const [settings, setSettings] = useState(false);
     const [win, setWin] = useState(false);
+    const [gameEnd, setGameEnd] = useState(null);
 
-    //getting theme from local storage
     useEffect(() => {
         const storedTheme = localStorage.getItem("selectedTheme");
         if (storedTheme) {
@@ -39,7 +43,6 @@ const MultiplayerGameRoom = () => {
     }, []);
 
     useEffect(() => {
-        // Get player info from location state or localStorage
         const { roomId: stateRoomId, playerName: statePlayerName, avatar: stateAvatar } = location.state || {};
         const storedRoomId = localStorage.getItem('roomId');
         const storedPlayerName = localStorage.getItem('playerName');
@@ -49,8 +52,7 @@ const MultiplayerGameRoom = () => {
         setPlayerName(statePlayerName || storedPlayerName);
         setAvatar(stateAvatar || storedAvatar);
 
-        // Connect to Socket.IO server
-        const newSocket = io('http://localhost:3001');
+        const newSocket = io(SOCKET_URL);
         setSocket(newSocket);
 
         return () => {
@@ -63,10 +65,7 @@ const MultiplayerGameRoom = () => {
     useEffect(() => {
         if (!socket || !roomId || !playerName) return;
 
-        // Join room
         socket.emit('joinRoom', { roomId, playerName, avatar });
-
-        // Socket event listeners
         socket.on('connect', () => {
             console.log('Connected to server');
             setConnected(true);
@@ -82,28 +81,32 @@ const MultiplayerGameRoom = () => {
             setPlayers(roomPlayers);
         });
 
-        socket.on('gameStarted', ({ players: roomPlayers, communityCards: flopCards, currentTurn: turn, pot: roomPot }) => {
+        socket.on('gameStarted', ({ players: roomPlayers, communityCards: flopCards, currentTurn: turn, pot: roomPot, currentBet: bet, minimumRaise: minRaise, bettingRound: round, dealerIndex }) => {
             console.log('Game started!');
             setGameStarted(true);
             setPlayers(roomPlayers);
             setCommunityCards(flopCards);
             setCurrentTurn(turn);
             setPot(roomPot);
+            setCurrentBet(bet);
+            setMinimumRaise(minRaise);
+            setBettingRound(round);
             
-            // Find my cards
             const myPlayer = roomPlayers.find(p => p.name === playerName);
             if (myPlayer) {
                 setMyCards(myPlayer.cards);
             }
         });
 
-        socket.on('playerAction', ({ playerId, action, amount, currentTurn: turn, pot: roomPot, players: roomPlayers }) => {
+        socket.on('playerAction', ({ playerId, action, amount, currentTurn: turn, pot: roomPot, currentBet: bet, minimumRaise: minRaise, bettingRound: round, players: roomPlayers, communityCards: flopCards }) => {
             console.log('Player action:', action, amount);
             setCurrentTurn(turn);
             setPot(roomPot);
+            setCurrentBet(bet);
+            setMinimumRaise(minRaise);
+            setBettingRound(round);
             setPlayers(roomPlayers);
-            
-            // Check if it's my turn
+            setCommunityCards(flopCards);
             const myPlayer = roomPlayers.find(p => p.name === playerName);
             if (myPlayer) {
                 setIsMyTurn(myPlayer.id === socket.id && turn === roomPlayers.findIndex(p => p.id === socket.id));
@@ -119,6 +122,31 @@ const MultiplayerGameRoom = () => {
             alert(message);
         });
 
+        socket.on('gameEnd', ({ winner, winners, pot: roomPot, players: roomPlayers }) => {
+            console.log('Game ended!');
+            setGameEnd({ winner, winners });
+            setPot(roomPot);
+            setPlayers(roomPlayers);
+        });
+
+        socket.on('newHand', ({ players: roomPlayers, communityCards: flopCards, currentTurn: turn, pot: roomPot, currentBet: bet, minimumRaise: minRaise, bettingRound: round }) => {
+            console.log('New hand started!');
+            setGameEnd(null);
+            setGameStarted(true);
+            setPlayers(roomPlayers);
+            setCommunityCards(flopCards);
+            setCurrentTurn(turn);
+            setPot(roomPot);
+            setCurrentBet(bet);
+            setMinimumRaise(minRaise);
+            setBettingRound(round);
+            
+            const myPlayer = roomPlayers.find(p => p.name === playerName);
+            if (myPlayer) {
+                setMyCards(myPlayer.cards);
+            }
+        });
+
         return () => {
             socket.off('connect');
             socket.off('playerJoined');
@@ -127,6 +155,8 @@ const MultiplayerGameRoom = () => {
             socket.off('playerAction');
             socket.off('roomFull');
             socket.off('gameError');
+            socket.off('gameEnd');
+            socket.off('newHand');
         };
     }, [socket, roomId, playerName, avatar, navigate]);
 
@@ -137,7 +167,7 @@ const MultiplayerGameRoom = () => {
     };
 
     const handlePlayerAction = (action, amount = 0) => {
-        if (socket && roomId && isMyTurn) {
+        if (socket && roomId) {
             socket.emit('playerAction', { roomId, action, amount });
         }
     };
@@ -149,7 +179,6 @@ const MultiplayerGameRoom = () => {
         navigate('/multiplayer-lobby');
     };
 
-    // Common props for all game room components
     const gameRoomProps = {
         players,
         myCards,
@@ -159,6 +188,10 @@ const MultiplayerGameRoom = () => {
         isMyTurn,
         currentTurn,
         pot,
+        currentBet,
+        minimumRaise,
+        bettingRound,
+        gameEnd,
         onPlayerAction: handlePlayerAction,
         onStartGame: handleStartGame,
         gameStarted,
@@ -167,7 +200,7 @@ const MultiplayerGameRoom = () => {
         playerName
     };
 
-    // Render the appropriate game room based on theme
+
     const renderGameRoom = () => {
         switch (theme) {
             case 'blue':
@@ -188,7 +221,7 @@ const MultiplayerGameRoom = () => {
 
             {win && <Win win={win} setWin={setWin} />}
 
-            <div className="fixed top-15 left-5 flex gap-5 z-1">
+            <div className="fixed top-15 left-5 flex gap-5">
                 <div className="text-gray-300 cursor-pointer hover:scale-120 hover:text-white transition-transform duration-300" onClick={() => setSettings(true)}>
                     <FontAwesomeIcon icon={faGear} />
                 </div>

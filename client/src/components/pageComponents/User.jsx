@@ -9,8 +9,10 @@ const User = ({flip3, flip4, setFlip4, compCards, avatarTop, avatarLeft, cardsTo
         flipSound.play();
     };
 
+    console.log('User component rendering:', { name, avatar, avatarTop, avatarLeft, compCards });
+
     return (
-        <div className="computer flex flex-col relative z-1">
+        <div className="computer flex flex-col">
             <div 
             className="flex flex-col items-center gap-1"
             style={{
@@ -20,7 +22,15 @@ const User = ({flip3, flip4, setFlip4, compCards, avatarTop, avatarLeft, cardsTo
             }}
             >
                 <div className="h-30 w-30">
-                    <img src={avatar} className="rounded-full" draggable="false"/>
+                    <img 
+                        src={avatar} 
+                        className="rounded-full" 
+                        draggable="false"
+                        onError={(e) => {
+                            console.log('Avatar failed to load:', avatar);
+                            e.target.src = 'avatar1.jpeg'; 
+                        }}
+                    />
                 </div>
                 <div>
                     <p className="text-white text-2xl mt-7 -mb-1">{name}</p>
@@ -57,7 +67,15 @@ const User = ({flip3, flip4, setFlip4, compCards, avatarTop, avatarLeft, cardsTo
                         <div className="rounded-lg absolute top-0 left-0 w-full h-20 bg-black opacity-20" onClick={() => {if(flip3) { setFlip4(!flip4); playFlipSound(); }}}></div>
                     </div>
                     <div className="relative transform -rotate-12 translate-y-2 w-14.5 h-28 -ml-4">
-                        <img src={"card-fronts/" + compCards[0]} className="card comp-card card-front w-full h-full" draggable="false" />
+                        <img 
+                            src={"card-fronts/" + compCards[0]} 
+                            className="card comp-card card-front w-full h-full" 
+                            draggable="false"
+                            onError={(e) => {
+                                console.log('Card failed to load:', compCards[0]);
+                                e.target.src = 'card-back.jpeg';
+                            }}
+                        />
                     </div>
                 </ReactCardFlip>
 
@@ -66,7 +84,15 @@ const User = ({flip3, flip4, setFlip4, compCards, avatarTop, avatarLeft, cardsTo
                         <img src="card-back.jpeg" className="rounded-lg card comp-card w-full h-full" onClick={() => {if(flip3) { setFlip4(!flip4); playFlipSound(); }}} draggable="false"/>
                     </div>
                     <div className="transform rotate-12 translate-y-2 w-14.5 h-28 -ml-8">
-                        <img src={"card-fronts/" + compCards[1]} className="card comp-card card-front w-full h-full" draggable="false"/>
+                        <img 
+                            src={"card-fronts/" + compCards[1]} 
+                            className="card comp-card card-front w-full h-full" 
+                            draggable="false"
+                            onError={(e) => {
+                                console.log('Card failed to load:', compCards[1]);
+                                e.target.src = 'card-back.jpeg';
+                            }}
+                        />
                     </div>
                 </ReactCardFlip>
             </div>

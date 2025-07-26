@@ -20,6 +20,10 @@ const MultiplayerPurpleGameRoom = ({
     isMyTurn, 
     currentTurn, 
     pot, 
+    currentBet,
+    minimumRaise,
+    bettingRound,
+    gameEnd,
     onPlayerAction,
     onStartGame,
     gameStarted,
@@ -40,11 +44,38 @@ const MultiplayerPurpleGameRoom = ({
     const [timer, setTimer] = useState(40);
     const [disabling, setDisabling] = useState(false);
     const [called, setCalled] = useState(false);
+    const [raiseAmount, setRaiseAmount] = useState(0);
+    const [showRaiseSlider, setShowRaiseSlider] = useState(false);
+    const [betAmount, setBetAmount] = useState(20);
 
     const [help, setHelp] = useState(false);
     const [log, setLog] = useState(false);
     
-    //handling help popup
+    useEffect(() => {
+        if (gameStarted && communityCards.length > 0) {
+            if (communityCards.length >= 3 && bettingRound >= 1) {
+                setTimeout(() => {
+                    setFlip1(true);
+                    playFlipSound();
+                }, 1000);
+            }
+            
+            if (communityCards.length >= 4 && bettingRound >= 2) {
+                setTimeout(() => {
+                    setFlip2(true);
+                    playFlipSound();
+                }, 2000);
+            }
+            
+            if (communityCards.length >= 5 && bettingRound >= 3) {
+                setTimeout(() => {
+                    setFlip3(true);
+                    playFlipSound();
+                }, 3000);
+            }
+        }
+    }, [bettingRound, communityCards.length, gameStarted]);
+    
     const closeHelp = () => {
         setHelp(false);
     }
@@ -55,33 +86,70 @@ const MultiplayerPurpleGameRoom = ({
         flipSound.play();
     };
 
-    // Convert card object to filename
     const cardToFilename = (card) => {
         if (!card) return '';
-        return `${card.rank.toLowerCase()}_of_${card.suit}.png`;
+        const rankMapping = {
+            'A': 'ace',
+            'J': 'jack', 
+            'Q': 'queen',
+            'K': 'king',
+            '2': '2',
+            '3': '3',
+            '4': '4',
+            '5': '5',
+            '6': '6',
+            '7': '7',
+            '8': '8',
+            '9': '9',
+            '10': '10'
+        };
+        
+        const mappedRank = rankMapping[card.rank] || card.rank.toLowerCase();
+        return `${mappedRank}_of_${card.suit}.png`;
     };
 
-    // Handle player actions
+
+
+    const getMyCurrentBet = () => {
+        const myPlayer = players.find(p => p.name === playerName);
+        return myPlayer ? myPlayer.bet : 0;
+    };
+
+    const getCallAmount = () => {
+        return currentBet - getMyCurrentBet();
+    };
+    const handleCheck = () => {
+        onPlayerAction('check', 0);
+    };
+
     const handleCall = () => {
-        onPlayerAction('call', 10);
+        const callAmount = getCallAmount();
+        onPlayerAction('call', callAmount);
     };
 
     const handleRaise = () => {
-        onPlayerAction('raise', 20);
+        if (showRaiseSlider) {
+            const finalRaiseAmount = Math.max(minimumRaise, raiseAmount);
+            onPlayerAction('raise', finalRaiseAmount);
+            setShowRaiseSlider(false);
+            setRaiseAmount(0);
+        } else {
+            setShowRaiseSlider(true);
+            setRaiseAmount(minimumRaise);
+        }
     };
 
     const handleFold = () => {
         onPlayerAction('fold');
     };
 
-    // Player positions for 6 players in front (exact copy from original PurpleGameRoom)
     const playerPositions = [
-        { avatarTop: "16.5rem", avatarLeft: "2.5rem", cardsTop: "20.25rem", cardsLeft: "6.75rem" }, // Bottom left
-        { avatarTop: "12rem", avatarLeft: "15.5rem", cardsTop: "15.75rem", cardsLeft: "19.75rem" }, // Bottom center
-        { avatarTop: "9.5rem", avatarLeft: "28.5rem", cardsTop: "13.25rem", cardsLeft: "32.75rem" }, // Top left
-        { avatarTop: "9.5rem", avatarLeft: "51.5rem", cardsTop: "13.25rem", cardsLeft: "55.75rem" }, // Top center
-        { avatarTop: "11.5rem", avatarLeft: "65rem", cardsTop: "15.25rem", cardsLeft: "69.75rem" }, // Top right
-        { avatarTop: "15.5rem", avatarLeft: "77.5rem", cardsTop: "19.25rem", cardsLeft: "81.75rem" }  // Bottom right
+        { avatarTop: "18rem", avatarLeft: "3rem", cardsTop: "21.75rem", cardsLeft: "7.25rem" },
+        { avatarTop: "13.5rem", avatarLeft: "16rem", cardsTop: "17.25rem", cardsLeft: "20.25rem" },
+        { avatarTop: "10.5rem", avatarLeft: "29rem", cardsTop: "14.25rem", cardsLeft: "33.25rem" },
+        { avatarTop: "10.5rem", avatarLeft: "57rem", cardsTop: "14.25rem", cardsLeft: "61.25rem" },
+        { avatarTop: "13.5rem", avatarLeft: "70rem", cardsTop: "17.25rem", cardsLeft: "74.25rem" },
+        { avatarTop: "18rem", avatarLeft: "83rem", cardsTop: "21.75rem", cardsLeft: "87.25rem" }
     ];
 
     return (
@@ -90,8 +158,52 @@ const MultiplayerPurpleGameRoom = ({
             {(close) => <Help close={close} />}
         </Popup>
 
-        {(help || log || settings) && (
+        {(help || log || settings || gameEnd) && (
             <div className="fixed inset-0 backdrop-blur z-10"></div>
+        )}
+
+        {/* Game End Display */}
+        {gameEnd && (
+            <div className="fixed inset-0 flex items-center justify-center z-50">
+                <div className="bg-purple-900/95 rounded-lg p-8 max-w-md mx-4">
+                    <h2 className="text-2xl font-bold text-white mb-4 text-center">
+                        {gameEnd.winner ? 'Winner!' : 'Showdown!'}
+                    </h2>
+                    
+                    {gameEnd.winner ? (
+                        <div className="text-center">
+                            <p className="text-white text-lg mb-2">
+                                {gameEnd.winner.player.name} wins ${gameEnd.pot}!
+                            </p>
+                            <p className="text-gray-300 text-sm">
+                                Hand: {gameEnd.winner.handName || 'Unknown'}
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="text-center">
+                            <p className="text-white text-lg mb-4">
+                                Winners:
+                            </p>
+                            {gameEnd.winners?.map((winner, index) => (
+                                <div key={index} className="mb-2">
+                                    <p className="text-white">
+                                        {winner.player.name} - {winner.handName || 'Unknown'}
+                                    </p>
+                                </div>
+                            ))}
+                            <p className="text-gray-300 text-sm mt-4">
+                                Pot split among {gameEnd.winners?.length || 0} players
+                            </p>
+                        </div>
+                    )}
+                    
+                    <div className="mt-6 text-center">
+                        <p className="text-gray-300 text-sm">
+                            New hand starting in 3 seconds...
+                        </p>
+                    </div>
+                </div>
+            </div>
         )}
 
         {/* log */}
@@ -121,11 +233,16 @@ const MultiplayerPurpleGameRoom = ({
                 <div className="fixed top-25 w-full flex justify-center">
                     <p className="text-white text-7xl font-semibold">{pot}</p>
                 </div>
+                
+
+                
+
             </div>
             
             {/* Render 6 players in front (excluding current player) */}
             {players.filter(player => player.name !== playerName).map((player, index) => {
                 const position = playerPositions[index];
+                console.log('Rendering player:', player.name, 'at position:', position);
                 
                 return (
                     <User 
@@ -133,7 +250,7 @@ const MultiplayerPurpleGameRoom = ({
                         flip3={flip3} 
                         flip4={flip4} 
                         setFlip4={setFlip4} 
-                        compCards={player.cards.map(cardToFilename)} 
+                        compCards={player.cards ? player.cards.map(cardToFilename) : []} 
                         avatarTop={position.avatarTop} 
                         avatarLeft={position.avatarLeft} 
                         cardsTop={position.cardsTop} 
@@ -166,7 +283,6 @@ const MultiplayerPurpleGameRoom = ({
                             <img 
                                 src="card-back.jpeg" 
                                 className="rounded-lg card flop-card" 
-                                onClick={() => { setFlip1(!flip1); playFlipSound(); }} 
                                 draggable="false"
                             />
                             <img 
@@ -181,7 +297,6 @@ const MultiplayerPurpleGameRoom = ({
                             <img 
                                 src="card-back.jpeg" 
                                 className="rounded-lg card flop-card" 
-                                onClick={() => {if(flip1) { setFlip2(!flip2); playFlipSound(); }}} 
                                 draggable="false"
                             />
                             <img 
@@ -196,7 +311,6 @@ const MultiplayerPurpleGameRoom = ({
                             <img 
                                 src="card-back.jpeg" 
                                 className="rounded-lg card flop-card" 
-                                onClick={() => {if(flip2) { setFlip3(!flip3); playFlipSound(); }}} 
                                 draggable="false"
                             />
                             <img 
@@ -254,29 +368,80 @@ const MultiplayerPurpleGameRoom = ({
                     </div>
                 </div>
                 
+                {/* Raise Slider */}
+                {showRaiseSlider && gameStarted && (
+                    <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 bg-purple-900/95 rounded-lg p-4 border border-purple-400">
+                        <div className="text-center mb-3">
+                            <p className="text-white text-lg font-semibold">Raise Amount</p>
+                            <p className="text-white text-2xl font-bold">${raiseAmount}</p>
+                        </div>
+                        <div className="mb-4">
+                            <input
+                                type="range"
+                                min={minimumRaise}
+                                max={1000}
+                                value={raiseAmount}
+                                onChange={(e) => setRaiseAmount(Math.max(minimumRaise, parseInt(e.target.value)))}
+                                className="w-full h-2 bg-purple-600 rounded-lg appearance-none cursor-pointer slider"
+                                style={{
+                                    background: `linear-gradient(to right, #9333ea 0%, #9333ea ${Math.max(0, (raiseAmount - minimumRaise) / (1000 - minimumRaise) * 100)}%, #4c1d95 ${Math.max(0, (raiseAmount - minimumRaise) / (1000 - minimumRaise) * 100)}%, #4c1d95 100%)`
+                                }}
+                            />
+                        </div>
+                        <div className="flex gap-2">
+                            <button
+                                onClick={() => {
+                                    setShowRaiseSlider(false);
+                                    setRaiseAmount(0);
+                                }}
+                                className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleRaise}
+                                className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                            >
+                                Confirm Raise
+                            </button>
+                        </div>
+                    </div>
+                )}
+
                 {/* Game Action Buttons */}
-                {gameStarted && isMyTurn ? (
-                    <div className={`flex justify-center gap-7 fixed bottom-4`}>
-                        <button 
-                            onClick={handleCall}
-                            className="relative overflow-hidden group px-5 py-1 text-white text-lg rounded-full hover:scale-105 transition-transform duration-300 cursor-pointer"
-                        >
-                            <span className="absolute inset-0 bg-gray-600/50 scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
-                            <span className="relative z-10">Call</span>
-                        </button>
+                {gameStarted ? (
+                    <div className={`flex justify-center gap-7 fixed bottom-4 ${folded ? "opacity-50 pointer-events-none" : ""} ${isMyTurn ? "ring-4 ring-green-400 rounded-lg p-2" : ""}`}>
+                        
+                        {getCallAmount() === 0 ? (
+                            <button 
+                                onClick={handleCheck}
+                                className={`relative overflow-hidden group px-5 py-1 text-lg rounded-full hover:scale-105 transition-transform duration-300 cursor-pointer ${isMyTurn ? 'text-white' : 'text-gray-400'}`}
+                            >
+                                <span className="absolute inset-0 bg-gray-600/50 scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
+                                <span>Check</span>
+                            </button>
+                        ) : (
+                            <button 
+                                onClick={handleCall}
+                                className={`relative overflow-hidden group px-5 py-1 text-lg rounded-full hover:scale-105 transition-transform duration-300 cursor-pointer ${isMyTurn ? 'text-white' : 'text-gray-400'}`}
+                            >
+                                <span className="absolute inset-0 bg-gray-600/50 scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
+                                <span>Call</span>
+                            </button>
+                        )}
                         <button 
                             onClick={handleRaise}
-                            className="relative overflow-hidden group px-5 py-1 text-green-400 text-lg rounded-full hover:scale-105 transition-transform duration-300 cursor-pointer"
+                            className={`relative overflow-hidden group px-5 py-1 text-lg rounded-full hover:scale-105 transition-transform duration-300 cursor-pointer ${showRaiseSlider ? 'bg-green-400 text-white' : isMyTurn ? 'text-green-400' : 'text-gray-400'}`}
                         >
                             <span className="absolute inset-0 bg-green-400/30 scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
-                            <span className="relative z-10">Raise</span>
+                            <span>{showRaiseSlider ? 'Confirm' : 'Raise'}</span>
                         </button>
                         <button 
                             onClick={handleFold}
-                            className="relative overflow-hidden group px-5 py-1 text-red-400 text-lg rounded-full hover:scale-105 transition-transform duration-300 cursor-pointer"
+                            className={`relative overflow-hidden group px-5 py-1 text-lg rounded-full hover:scale-105 transition-transform duration-300 cursor-pointer ${isMyTurn ? 'text-red-400' : 'text-gray-400'}`}
                         >
                             <span className="absolute inset-0 bg-red-400/30 scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
-                            <span className="relative z-10">Fold</span>
+                            <span>Fold</span>
                         </button>
                     </div>
                 ) : !gameStarted && players.length >= 2 ? (
@@ -286,10 +451,14 @@ const MultiplayerPurpleGameRoom = ({
                             className="relative overflow-hidden group px-5 py-1 text-green-400 text-lg rounded-full hover:scale-105 transition-transform duration-300 cursor-pointer"
                         >
                             <span className="absolute inset-0 bg-green-400/30 scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
-                            <span className="relative z-10">Start Game</span>
+                            <span>Start Game</span>
                         </button>
                     </div>
-                ) : null}
+                ) : (
+                    <div className="flex justify-center gap-7 fixed bottom-4">
+                        <div className="text-white text-lg">Waiting for players...</div>
+                    </div>
+                )}
                 
                 <Timer timer={timer} setTimer={setTimer} folded={folded} setFolded={setFolded} turn={isMyTurn} setTurn={setTurn} color={`bg-gradient-to-r from-[#240046] via-[#5a189a] to-[#7b2cbf]`} />
             </div>

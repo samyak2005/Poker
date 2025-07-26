@@ -2,11 +2,11 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "best_hand.js",
+  "main": "merged_server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node best-hand_API.js",
-    "multiplayer": "node multiplayer_server.js"
+    "start": "node merged_server.js",
+    "dev": "node merged_server.js"
   },
   "keywords": [],
   "author": "",
@@ -16,5 +16,8 @@
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "socket.io": "^4.8.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
