@@ -1,12 +1,4 @@
-const express = require("express");
-const cors = require("cors");
 const { getDeck } = require('./deck');
-const pokerApi = express();
-const PORT = 3000;
-
-
-pokerApi.use(cors());
-pokerApi.use(express.json());
 
 // Fisher-Yates shuffle
 function shuffle(deck) {
