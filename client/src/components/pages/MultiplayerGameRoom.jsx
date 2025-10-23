@@ -45,14 +45,18 @@ const MultiplayerGameRoom = () => {
 
     useEffect(() => {
         // Get player info from location state or localStorage
-        const { roomId: stateRoomId, playerName: statePlayerName, avatar: stateAvatar } = location.state || {};
+        const { roomId: stateRoomId, playerName: statePlayerName, avatar: stateAvatar, startingChips: stateStartingChips } = location.state || {};
         const storedRoomId = localStorage.getItem('roomId');
         const storedPlayerName = localStorage.getItem('playerName');
         const storedAvatar = localStorage.getItem('playerAvatar');
+        const storedStartingChips = localStorage.getItem('startingChips');
 
         setRoomId(stateRoomId || storedRoomId);
         setPlayerName(statePlayerName || storedPlayerName);
         setAvatar(stateAvatar || storedAvatar);
+
+        // Store startingChips in a ref or state to use when joining
+        window.playerStartingChips = parseInt(stateStartingChips || storedStartingChips || 1000);
 
         // Connect to Socket.IO server
         const newSocket = io(API_URL);
@@ -68,8 +72,9 @@ const MultiplayerGameRoom = () => {
     useEffect(() => {
         if (!socket || !roomId || !playerName) return;
 
-        // Join room
-        socket.emit('joinRoom', { roomId, playerName, avatar });
+        // Join room with starting chips
+        const startingChips = window.playerStartingChips || 1000;
+        socket.emit('joinRoom', { roomId, playerName, avatar, startingChips });
 
         // Socket event listeners
         socket.on('connect', () => {

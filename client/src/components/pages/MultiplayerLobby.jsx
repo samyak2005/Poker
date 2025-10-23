@@ -11,6 +11,7 @@ const MultiplayerLobby = () => {
     const [playerName, setPlayerName] = useState('');
     const [selectedAvatar, setSelectedAvatar] = useState('avatar5.jpeg');
     const [selectedTheme, setSelectedTheme] = useState('purple');
+    const [startingChips, setStartingChips] = useState(1000);
     const [showCreateRoom, setShowCreateRoom] = useState(false);
     const [newRoomId, setNewRoomId] = useState('');
 
@@ -46,14 +47,15 @@ const MultiplayerLobby = () => {
             alert('Please enter your name first!');
             return;
         }
-        
+
         // Store player info in localStorage for the game room
         localStorage.setItem('playerName', playerName);
         localStorage.setItem('playerAvatar', selectedAvatar);
         localStorage.setItem('roomId', roomId);
         localStorage.setItem('selectedTheme', selectedTheme);
-        
-        navigate('/multiplayer-game', { state: { roomId, playerName, avatar: selectedAvatar, theme: selectedTheme } });
+        localStorage.setItem('startingChips', startingChips);
+
+        navigate('/multiplayer-game', { state: { roomId, playerName, avatar: selectedAvatar, theme: selectedTheme, startingChips } });
     };
 
     const handleCreateRoom = () => {
@@ -61,16 +63,17 @@ const MultiplayerLobby = () => {
             alert('Please enter your name first!');
             return;
         }
-        
+
         const roomId = newRoomId.trim() || `room-${Date.now()}`;
-        
+
         // Store player info in localStorage for the game room
         localStorage.setItem('playerName', playerName);
         localStorage.setItem('playerAvatar', selectedAvatar);
         localStorage.setItem('roomId', roomId);
         localStorage.setItem('selectedTheme', selectedTheme);
-        
-        navigate('/multiplayer-game', { state: { roomId, playerName, avatar: selectedAvatar, theme: selectedTheme } });
+        localStorage.setItem('startingChips', startingChips);
+
+        navigate('/multiplayer-game', { state: { roomId, playerName, avatar: selectedAvatar, theme: selectedTheme, startingChips } });
     };
 
     return (
@@ -141,8 +144,8 @@ const MultiplayerLobby = () => {
                                         className="hidden"
                                     />
                                     <div className={`relative rounded-lg border-2 transition-all ${
-                                        selectedTheme === theme.id 
-                                            ? 'border-blue-400 scale-105' 
+                                        selectedTheme === theme.id
+                                            ? 'border-blue-400 scale-105'
                                             : 'border-white/30 hover:border-white/60'
                                     }`}>
                                         <img
@@ -157,6 +160,35 @@ const MultiplayerLobby = () => {
                                 </label>
                             ))}
                         </div>
+                    </div>
+
+                    {/* Starting Chips Selection */}
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium mb-2">Starting Chips</label>
+                        <div className="flex gap-2 mb-2">
+                            {[500, 1000, 2000, 5000].map((amount) => (
+                                <button
+                                    key={amount}
+                                    onClick={() => setStartingChips(amount)}
+                                    className={`flex-1 px-4 py-2 rounded-lg transition-all ${
+                                        startingChips === amount
+                                            ? 'bg-blue-600 text-white scale-105'
+                                            : 'bg-white/20 text-white hover:bg-white/30'
+                                    }`}
+                                >
+                                    {amount}
+                                </button>
+                            ))}
+                        </div>
+                        <input
+                            type="number"
+                            value={startingChips}
+                            onChange={(e) => setStartingChips(Math.max(100, parseInt(e.target.value) || 1000))}
+                            className="w-full px-4 py-2 bg-white/20 rounded-lg border border-white/30 focus:outline-none focus:border-white/60 text-white"
+                            placeholder="Custom amount (min: 100)"
+                            min="100"
+                            step="100"
+                        />
                     </div>
                 </div>
 

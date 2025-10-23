@@ -311,9 +311,12 @@ io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
 
   // Join a room
-  socket.on("joinRoom", ({ roomId, playerName, avatar }) => {
-    console.log(`Player ${playerName} joining room ${roomId}`);
-    
+  socket.on("joinRoom", ({ roomId, playerName, avatar, startingChips }) => {
+    console.log(`Player ${playerName} joining room ${roomId} with ${startingChips || STARTING_CHIPS} chips`);
+
+    // Use provided startingChips or default to STARTING_CHIPS constant
+    const playerChips = parseInt(startingChips) || STARTING_CHIPS;
+
     // Create room if it doesn't exist
     if (!rooms.has(roomId)) {
       rooms.set(roomId, {
@@ -331,41 +334,41 @@ io.on("connection", (socket) => {
         maxPlayers: 7
       });
     }
-    
+
     const room = rooms.get(roomId);
-    
+
     // Check if room is full
     if (room.players.length >= room.maxPlayers) {
       socket.emit("roomFull", { message: "Room is full" });
       return;
     }
-    
+
     // Add player to room
     const player = {
       id: socket.id,
       name: playerName,
       avatar: avatar,
       cards: [],
-      chips: STARTING_CHIPS,
+      chips: playerChips,
       bet: 0,
       folded: false,
       hasActed: false,
       isDealer: room.players.length === 0
     };
-    
+
     room.players.push(player);
     players.set(socket.id, { roomId, playerIndex: room.players.length - 1 });
-    
+
     // Join socket room
     socket.join(roomId);
-    
+
     // Notify all players in room
     io.to(roomId).emit("playerJoined", {
       player,
       players: room.players,
       roomId
     });
-    
+
     console.log(`Player ${playerName} joined room ${roomId}. Total players: ${room.players.length}`);
   });
 

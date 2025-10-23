@@ -85,6 +85,16 @@ const MultiplayerBlueGameRoom = ({
             }
         }
     }, [bettingRound, communityCards.length, gameStarted, flip1, flip2, flip3]);
+
+    // Update bank and bet from actual player data
+    useEffect(() => {
+        const myPlayer = players.find(p => p.name === playerName);
+        if (myPlayer) {
+            setBank(myPlayer.chips);
+            setBet(myPlayer.bet);
+            setFolded(myPlayer.folded);
+        }
+    }, [players, playerName]);
     
     //handling help popup
     const closeHelp = () => {
