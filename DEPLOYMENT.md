@@ -65,8 +65,10 @@ git push origin main
 
 ### 2.2 Configure Backend Service
 1. Railway will auto-detect your Node.js app
-2. Set **Root Directory** to `server`
-3. Set **Start Command** to `npm start` (this runs both servers!)
+2. **IMPORTANT**: Set **Root Directory** to `server` in Railway settings
+3. Railway will automatically use `railway.json` config which sets:
+   - Build Command: `npm install`
+   - Start Command: `npm start` (runs both servers!)
 4. Add environment variables in Railway dashboard:
    - `CLIENT_URL` = (leave empty for now, we'll add it after deploying frontend)
    - `NODE_ENV` = `production`
@@ -94,8 +96,10 @@ git push origin main
 ### 3.2 Configure Frontend
 1. Set **Root Directory** to `client`
 2. Framework Preset: **Vite**
-3. Build Command: `npm run build`
+3. Build Command: Leave as default (Vercel uses `vercel.json` config)
 4. Output Directory: `dist`
+
+> **Note**: The project uses `.npmrc` to handle React 19 compatibility with older packages
 
 ### 3.3 Add Environment Variables
 In Vercel dashboard, add BOTH:

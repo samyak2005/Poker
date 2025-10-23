@@ -24,7 +24,8 @@ Use this checklist to deploy ChipInn Poker step by step.
 ### 2. Backend Deployment (Railway)
 - [ ] Sign up at https://railway.app
 - [ ] Create new project from GitHub
-- [ ] Railway auto-detects Node.js
+- [ ] **Set Root Directory to `server`** (in Settings)
+- [ ] Railway auto-detects Node.js and uses `railway.json`
 - [ ] Wait for initial deploy
 - [ ] Copy Railway URL: `__________________.railway.app`
 

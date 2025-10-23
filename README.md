@@ -113,17 +113,20 @@ Poker/
 
 ## 🌐 Deployment
 
-Ready to deploy? Check out [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed instructions on deploying to:
+Ready to deploy? We have detailed guides for each platform:
 
-- **Railway** (Backend)
-- **Vercel** (Frontend)
-- **Render** (Alternative)
+### 📚 Deployment Guides
+- **[QUICK_START.md](./QUICK_START.md)** - 10-minute deployment guide ⚡
+- **[RAILWAY_DEPLOYMENT_GUIDE.md](./RAILWAY_DEPLOYMENT_GUIDE.md)** - Railway backend setup 🚂
+- **[VERCEL_DEPLOYMENT_GUIDE.md](./VERCEL_DEPLOYMENT_GUIDE.md)** - Vercel frontend setup 🔺
+- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Complete guide with all platforms 📖
+- **[DEPLOYMENT_CHECKLIST.md](./DEPLOYMENT_CHECKLIST.md)** - Step-by-step checklist ✅
 
 ### Quick Deploy
 
 1. Push to GitHub
-2. Deploy backend to Railway
-3. Deploy frontend to Vercel
+2. Deploy backend to Railway (set Root Directory to `server`)
+3. Deploy frontend to Vercel (set Root Directory to `client`)
 4. Set environment variables
 5. Play online! 🎉
 

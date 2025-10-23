@@ -15,10 +15,11 @@ git push origin main
 2. Sign up with GitHub
 3. Click "New Project" → "Deploy from GitHub repo"
 4. Select your Poker repository
-5. Railway will detect Node.js - click "Add variables"
-   - Skip for now, we'll add after frontend is deployed
-6. Click "Deploy"
-7. **Copy your Railway URL** (looks like: `poker-production-abc123.up.railway.app`)
+5. **IMPORTANT**: In settings, set **Root Directory** to `server`
+6. Railway will use `railway.json` config automatically
+7. Skip environment variables for now (we'll add after frontend)
+8. Click "Deploy"
+9. **Copy your Railway URL** (looks like: `poker-production-abc123.up.railway.app`)
 
 ### Step 3: Deploy Frontend to Vercel
 1. Go to https://vercel.com
