@@ -96,10 +96,10 @@ git push origin main
 ### 3.2 Configure Frontend
 1. Set **Root Directory** to `client`
 2. Framework Preset: **Vite**
-3. Build Command: Leave as default (Vercel uses `vercel.json` config)
+3. Build Command: `npm run build` (or leave blank, auto-detected)
 4. Output Directory: `dist`
 
-> **Note**: The project uses `.npmrc` to handle React 19 compatibility with older packages
+> **Note**: The `.npmrc` file automatically handles React 19 compatibility with `legacy-peer-deps` during install
 
 ### 3.3 Add Environment Variables
 In Vercel dashboard, add BOTH:

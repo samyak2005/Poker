@@ -24,8 +24,10 @@
 
 1. **Root Directory**: Set to `client`
 2. **Framework Preset**: Vite (should auto-detect)
-3. **Build Command**: Leave as default (uses `vercel.json`)
+3. **Build Command**: `npm run build` (or leave blank, Vercel auto-detects)
 4. **Output Directory**: `dist`
+
+> **Note**: The `.npmrc` file in the client folder automatically handles React 19 compatibility during `npm install`
 
 ### Step 3: Add Environment Variables
 
@@ -76,12 +78,14 @@ Once deployed:
 ### "ERESOLVE could not resolve" Error
 
 **Already Fixed!** The project includes:
-- ✅ `.npmrc` with `legacy-peer-deps=true`
-- ✅ Custom `vercel-build` script in `package.json`
+- ✅ `.npmrc` with `legacy-peer-deps=true` (auto-applied during install)
+- ✅ Simple build process that Vercel handles
 
 If you still see this:
-1. Make sure you pushed `.npmrc` to GitHub
-2. Redeploy on Vercel
+1. Make sure `.npmrc` exists in `client` folder
+2. Verify it's pushed to GitHub
+3. Check Root Directory is set to `client`
+4. Redeploy on Vercel
 
 ### Build Fails with "npm ERR!"
 
