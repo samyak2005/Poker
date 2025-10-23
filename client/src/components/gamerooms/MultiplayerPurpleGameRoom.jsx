@@ -50,35 +50,44 @@ const MultiplayerPurpleGameRoom = ({
 
     const [help, setHelp] = useState(false);
     const [log, setLog] = useState(false);
-    
+
+    // Reset flip states when new hand starts (communityCards becomes empty)
+    useEffect(() => {
+        if (communityCards.length === 0) {
+            setFlip1(false);
+            setFlip2(false);
+            setFlip3(false);
+        }
+    }, [communityCards.length]);
+
     // Auto-flip community cards based on betting round
     useEffect(() => {
         if (gameStarted && communityCards.length > 0) {
             // Auto-flip flop cards (first 3 cards)
-            if (communityCards.length >= 3 && bettingRound >= 1) {
+            if (communityCards.length >= 3 && bettingRound >= 1 && !flip1) {
                 setTimeout(() => {
                     setFlip1(true);
                     playFlipSound();
                 }, 1000); // 1 second delay
             }
-            
+
             // Auto-flip turn card (4th card)
-            if (communityCards.length >= 4 && bettingRound >= 2) {
+            if (communityCards.length >= 4 && bettingRound >= 2 && !flip2) {
                 setTimeout(() => {
                     setFlip2(true);
                     playFlipSound();
                 }, 2000); // 2 second delay
             }
-            
+
             // Auto-flip river card (5th card)
-            if (communityCards.length >= 5 && bettingRound >= 3) {
+            if (communityCards.length >= 5 && bettingRound >= 3 && !flip3) {
                 setTimeout(() => {
                     setFlip3(true);
                     playFlipSound();
                 }, 3000); // 3 second delay
             }
         }
-    }, [bettingRound, communityCards.length, gameStarted]);
+    }, [bettingRound, communityCards.length, gameStarted, flip1, flip2, flip3]);
     
     //handling help popup
     const closeHelp = () => {
