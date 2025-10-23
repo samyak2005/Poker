@@ -8,7 +8,7 @@ body {
 }
 
 .purple-gameroom-bg {
-    background-image: url('purple-gameroom-bg.png');
+    background-image: url('/purple-gameroom-bg.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -16,7 +16,7 @@ body {
 }
 
 .blue-gameroom-bg {
-    background-image: url('blue-gameroom-bg.png');
+    background-image: url('/blue-gameroom-bg.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -24,7 +24,7 @@ body {
 }
 
 .green-gameroom-bg {
-  background-image: url('green-gameroom-bg.png');
+  background-image: url('/green-gameroom-bg.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -32,7 +32,7 @@ body {
 }
 
 .pink-gameroom-bg {
-  background-image: url('pink-gameroom-bg.png');
+  background-image: url('/pink-gameroom-bg.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
