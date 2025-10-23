@@ -5,16 +5,26 @@ const cors = require("cors");
 const { getDeck } = require('./deck');
 const { findBestHand } = require('./Main_working/best_hand');
 
+// Load environment variables
+require('dotenv').config();
+
 const app = express();
 const server = http.createServer(app);
+
+// Get client URL from environment or use default
+const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5173";
+
 const io = socketIo(server, {
   cors: {
-    origin: "http://localhost:5173", // Vite dev server
+    origin: CLIENT_URL,
     methods: ["GET", "POST"]
   }
 });
 
-app.use(cors());
+app.use(cors({
+  origin: CLIENT_URL,
+  credentials: true
+}));
 app.use(express.json());
 
 // Game state management
@@ -532,7 +542,8 @@ app.get("/api/rooms", (req, res) => {
   res.json({ rooms: roomList });
 });
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
   console.log(`Multiplayer server running on port ${PORT}`);
+  console.log(`Accepting connections from: ${CLIENT_URL}`);
 }); 

@@ -4,6 +4,7 @@ import { io } from 'socket.io-client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faPlay, faUsers, faGear, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import '../../App.css';
+import { API_URL } from '../../config';
 import MultiplayerPurpleGameRoom from '../gamerooms/MultiplayerPurpleGameRoom';
 import MultiplayerBlueGameRoom from '../gamerooms/MultiplayerBlueGameRoom';
 import MultiplayerGreenGameRoom from '../gamerooms/MultiplayerGreenGameRoom';
@@ -54,7 +55,7 @@ const MultiplayerGameRoom = () => {
         setAvatar(stateAvatar || storedAvatar);
 
         // Connect to Socket.IO server
-        const newSocket = io('http://localhost:3001');
+        const newSocket = io(API_URL);
         setSocket(newSocket);
 
         return () => {

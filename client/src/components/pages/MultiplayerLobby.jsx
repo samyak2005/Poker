@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faPlay, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { API_URL } from '../../config';
 
 const MultiplayerLobby = () => {
     const navigate = useNavigate();
@@ -30,7 +31,7 @@ const MultiplayerLobby = () => {
 
     const fetchRooms = async () => {
         try {
-            const response = await fetch('http://localhost:3001/api/rooms');
+            const response = await fetch(`${API_URL}/api/rooms`);
             const data = await response.json();
             setRooms(data.rooms);
             setLoading(false);
