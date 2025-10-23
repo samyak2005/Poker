@@ -5,7 +5,11 @@
       "mcp__ide__getDiagnostics",
       "Bash(npm install:*)",
       "Bash(lsof:*)",
-      "Bash(xargs kill:*)"
+      "Bash(xargs kill:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(jobs:*)"
     ],
     "deny": [],
     "ask": []
