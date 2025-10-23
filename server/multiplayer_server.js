@@ -50,7 +50,7 @@ function shuffle(deck) {
 function dealCards(roomId) {
   const deck = shuffle(getDeck());
   const room = rooms.get(roomId);
-  
+
   // Deal 2 cards to each player
   room.players.forEach((player, index) => {
     player.cards = deck.splice(0, 2);
@@ -58,11 +58,11 @@ function dealCards(roomId) {
     player.bet = 0;
     player.hasActed = false;
   });
-  
-  // Deal 5 community cards
-  room.communityCards = deck.splice(0, 5);
+
+  // Store deck for later (community cards dealt progressively in nextBettingRound)
+  room.communityCards = [];
   room.deck = deck;
-  
+
   return room;
 }
 
@@ -91,6 +91,19 @@ function postBlinds(room) {
 // Get current bet amount for a player
 function getCurrentBetAmount(room, player) {
   return room.currentBet - player.bet;
+}
+
+// Get first player to act based on game state
+function getFirstPlayerToAct(room, isPreFlop) {
+  const numPlayers = room.players.length;
+
+  if (numPlayers === 2) {
+    // Heads-up: dealer acts first pre-flop, BB acts first post-flop
+    return isPreFlop ? room.dealerIndex : (room.dealerIndex + 1) % numPlayers;
+  } else {
+    // 3+ players: UTG pre-flop (dealer+3), SB post-flop (dealer+1)
+    return isPreFlop ? (room.dealerIndex + 3) % numPlayers : (room.dealerIndex + 1) % numPlayers;
+  }
 }
 
 // Check if betting round is complete
@@ -130,16 +143,14 @@ function nextBettingRound(room) {
       return;
   }
   
-  // Set first player to act (left of dealer for pre-flop, first player for others)
-  if (room.bettingRound === 0) {
-    room.currentTurn = (room.dealerIndex + 3) % room.players.length; // UTG
-  } else {
-    room.currentTurn = (room.dealerIndex + 1) % room.players.length; // Small blind
-  }
-  
-  // Skip folded players
-  while (room.players[room.currentTurn].folded) {
+  // Set first player to act
+  room.currentTurn = getFirstPlayerToAct(room, false); // Post-flop
+
+  // Skip folded players (with safety check for infinite loop)
+  let checkedPlayers = 0;
+  while (room.players[room.currentTurn].folded && checkedPlayers < room.players.length) {
     room.currentTurn = (room.currentTurn + 1) % room.players.length;
+    checkedPlayers++;
   }
 }
 
@@ -276,12 +287,12 @@ function startNewHand(room) {
   
   // Deal new cards
   const gameState = dealCards(room.id);
-  
+
   // Post blinds
   const { smallBlindIndex, bigBlindIndex } = postBlinds(room);
-  
-  // Set first player to act (UTG)
-  room.currentTurn = (room.dealerIndex + 3) % room.players.length;
+
+  // Set first player to act (pre-flop)
+  room.currentTurn = getFirstPlayerToAct(room, true);
   
   io.to(room.id).emit("newHand", {
     players: gameState.players,
@@ -376,12 +387,12 @@ io.on("connection", (socket) => {
     
     // Deal cards
     const gameState = dealCards(roomId);
-    
+
     // Post blinds
     const { smallBlindIndex, bigBlindIndex } = postBlinds(room);
-    
-    // Set first player to act (UTG)
-    room.currentTurn = (room.dealerIndex + 3) % room.players.length;
+
+    // Set first player to act (pre-flop)
+    room.currentTurn = getFirstPlayerToAct(room, true);
     
     // Send game state to all players
     io.to(roomId).emit("gameStarted", {
@@ -451,11 +462,13 @@ io.on("connection", (socket) => {
           socket.emit("gameError", { message: "Not enough chips" });
           return;
         }
+        const previousBet = room.currentBet;
         player.chips -= amount;
         player.bet += amount;
         room.pot += amount;
         room.currentBet = player.bet;
-        room.minimumRaise = amount - room.currentBet + room.minimumRaise;
+        // Minimum raise = size of this raise (new bet - previous bet)
+        room.minimumRaise = player.bet - previousBet;
         break;
         
       case "fold":
@@ -468,12 +481,22 @@ io.on("connection", (socket) => {
     }
     
     player.hasActed = true;
-    
-    // Move to next player
+
+    // Check if only one player left (all others folded)
+    const activePlayers = room.players.filter(p => !p.folded);
+    if (activePlayers.length === 1) {
+      // Everyone else folded, end the hand
+      determineWinner(room);
+      return;
+    }
+
+    // Move to next player (with safety check for infinite loop)
+    let checkedPlayers = 0;
     do {
       room.currentTurn = (room.currentTurn + 1) % room.players.length;
-    } while (room.players[room.currentTurn].folded);
-    
+      checkedPlayers++;
+    } while (room.players[room.currentTurn].folded && checkedPlayers < room.players.length);
+
     // Check if betting round is complete
     if (isBettingRoundComplete(room)) {
       nextBettingRound(room);
@@ -497,34 +520,58 @@ io.on("connection", (socket) => {
   // Disconnect handling
   socket.on("disconnect", () => {
     console.log("User disconnected:", socket.id);
-    
+
     const playerData = players.get(socket.id);
     if (playerData) {
       const room = rooms.get(playerData.roomId);
       if (room) {
-        // Remove player from room
-        room.players.splice(playerData.playerIndex, 1);
-        
-        // Update player indices
-        room.players.forEach((player, index) => {
-          const playerSocketData = players.get(player.id);
-          if (playerSocketData) {
-            playerSocketData.playerIndex = index;
+        const disconnectedPlayer = room.players[playerData.playerIndex];
+
+        if (room.gameStarted) {
+          // Game in progress: auto-fold the player and mark as disconnected
+          disconnectedPlayer.folded = true;
+          disconnectedPlayer.disconnected = true;
+
+          console.log(`Player ${disconnectedPlayer.name} disconnected during game, auto-folded`);
+
+          // Notify remaining players
+          io.to(playerData.roomId).emit("playerDisconnected", {
+            playerId: socket.id,
+            playerName: disconnectedPlayer.name,
+            players: room.players
+          });
+
+          // Check if only one player left
+          const activePlayers = room.players.filter(p => !p.folded);
+          if (activePlayers.length === 1) {
+            // End the hand
+            determineWinner(room);
           }
-        });
-        
-        // Notify remaining players
-        io.to(playerData.roomId).emit("playerLeft", {
-          playerId: socket.id,
-          players: room.players
-        });
-        
+        } else {
+          // Game not started: safe to remove player completely
+          room.players.splice(playerData.playerIndex, 1);
+
+          // Update player indices
+          room.players.forEach((player, index) => {
+            const playerSocketData = players.get(player.id);
+            if (playerSocketData) {
+              playerSocketData.playerIndex = index;
+            }
+          });
+
+          // Notify remaining players
+          io.to(playerData.roomId).emit("playerLeft", {
+            playerId: socket.id,
+            players: room.players
+          });
+        }
+
         // Remove room if empty
         if (room.players.length === 0) {
           rooms.delete(playerData.roomId);
         }
       }
-      
+
       players.delete(socket.id);
     }
   });
