@@ -525,7 +525,16 @@ io.on("connection", (socket) => {
     if (playerData) {
       const room = rooms.get(playerData.roomId);
       if (room) {
-        const disconnectedPlayer = room.players[playerData.playerIndex];
+        // Find the player by socket ID (more reliable than index)
+        const playerIndex = room.players.findIndex(p => p.id === socket.id);
+
+        if (playerIndex === -1) {
+          console.log("Player not found in room, already removed");
+          players.delete(socket.id);
+          return;
+        }
+
+        const disconnectedPlayer = room.players[playerIndex];
 
         if (room.gameStarted) {
           // Game in progress: auto-fold the player and mark as disconnected
@@ -541,17 +550,22 @@ io.on("connection", (socket) => {
             players: room.players
           });
 
-          // Check if only one player left
-          const activePlayers = room.players.filter(p => !p.folded);
+          // Check if only one player left (not folded)
+          const activePlayers = room.players.filter(p => !p.folded && !p.disconnected);
           if (activePlayers.length === 1) {
-            // End the hand
+            // End the hand immediately
             determineWinner(room);
+          } else if (activePlayers.length === 0) {
+            // Everyone disconnected or folded - end game and delete room
+            room.gameStarted = false;
+            console.log(`All players disconnected from room ${room.id}, deleting room`);
+            rooms.delete(playerData.roomId);
           }
         } else {
           // Game not started: safe to remove player completely
-          room.players.splice(playerData.playerIndex, 1);
+          room.players.splice(playerIndex, 1);
 
-          // Update player indices
+          // Update player indices for all remaining players
           room.players.forEach((player, index) => {
             const playerSocketData = players.get(player.id);
             if (playerSocketData) {
@@ -564,11 +578,12 @@ io.on("connection", (socket) => {
             playerId: socket.id,
             players: room.players
           });
-        }
 
-        // Remove room if empty
-        if (room.players.length === 0) {
-          rooms.delete(playerData.roomId);
+          // Remove room if empty
+          if (room.players.length === 0) {
+            console.log(`Room ${playerData.roomId} is empty, deleting`);
+            rooms.delete(playerData.roomId);
+          }
         }
       }
 
@@ -589,12 +604,14 @@ app.get("/", (req, res) => {
 
 // Get available rooms
 app.get("/api/rooms", (req, res) => {
-  const roomList = Array.from(rooms.values()).map(room => ({
-    id: room.id,
-    playerCount: room.players.length,
-    maxPlayers: room.maxPlayers,
-    gameStarted: room.gameStarted
-  }));
+  const roomList = Array.from(rooms.values())
+    .filter(room => room.players.length > 0) // Only show rooms with players
+    .map(room => ({
+      id: room.id,
+      playerCount: room.players.length,
+      maxPlayers: room.maxPlayers,
+      gameStarted: room.gameStarted
+    }));
 
   res.json({ rooms: roomList });
 });
