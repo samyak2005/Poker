@@ -31,6 +31,7 @@ This guide will help you deploy your multiplayer poker game to the cloud.
 **Server** (`/server/.env`):
 ```env
 PORT=3001
+API_PORT=3000
 CLIENT_URL=https://your-frontend-url.vercel.app
 NODE_ENV=production
 ```
@@ -38,7 +39,10 @@ NODE_ENV=production
 **Client** (`/client/.env`):
 ```env
 VITE_API_URL=https://your-backend-url.railway.app
+VITE_POKER_API_URL=https://your-backend-url.railway.app
 ```
+
+> **Note**: Your backend runs TWO servers on different ports (3000 for game API, 3001 for multiplayer Socket.IO). When deployed, Railway will expose both through the same domain.
 
 ### 1.2 Push to GitHub
 
@@ -62,7 +66,8 @@ git push origin main
 ### 2.2 Configure Backend Service
 1. Railway will auto-detect your Node.js app
 2. Set **Root Directory** to `server`
-3. Add environment variables in Railway dashboard:
+3. Set **Start Command** to `npm start` (this runs both servers!)
+4. Add environment variables in Railway dashboard:
    - `CLIENT_URL` = (leave empty for now, we'll add it after deploying frontend)
    - `NODE_ENV` = `production`
 
@@ -70,6 +75,11 @@ git push origin main
 1. Click "Deploy"
 2. Wait for deployment to complete
 3. Copy your backend URL (e.g., `https://your-app.railway.app`)
+
+> **Important**: The backend runs BOTH game servers:
+> - Port 3000: REST API for single-player mode
+> - Port 3001: Socket.IO for multiplayer mode
+> Railway automatically handles both ports!
 
 ---
 
@@ -87,9 +97,10 @@ git push origin main
 3. Build Command: `npm run build`
 4. Output Directory: `dist`
 
-### 3.3 Add Environment Variable
-In Vercel dashboard:
-- `VITE_API_URL` = `https://your-backend-url.railway.app` (from Step 2)
+### 3.3 Add Environment Variables
+In Vercel dashboard, add BOTH:
+- `VITE_API_URL` = `https://your-backend-url.railway.app` (Multiplayer server)
+- `VITE_POKER_API_URL` = `https://your-backend-url.railway.app` (Game API server)
 
 ### 3.4 Deploy
 1. Click "Deploy"
@@ -149,16 +160,18 @@ Make sure your `CLIENT_URL` in backend matches your actual frontend URL (includi
 
 ### Local Development
 ```bash
-# Terminal 1 - Backend
+# Terminal 1 - Backend (runs BOTH servers)
 cd server
 npm install
-npm run multiplayer
+npm start
 
 # Terminal 2 - Frontend
 cd client
 npm install
 npm run dev
 ```
+
+> **Note**: `npm start` in the server folder now runs **both** the game API (port 3000) AND multiplayer server (port 3001)!
 
 ### Update Environment Variables
 ```bash

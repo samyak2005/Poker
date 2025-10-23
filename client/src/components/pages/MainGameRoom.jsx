@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import '../../App.css';
+import { POKER_API_URL } from '../../config';
 import PurpleGameRoom from "../gamerooms/PurpleGameRoom";
 import BlueGameRoom from "../gamerooms/BlueGameRoom";
 import GreenGameRoom from "../gamerooms/GreenGameRoom";
@@ -31,7 +32,7 @@ const MainGameRoom = () => {
 
     // Fetch shuffled and dealt cards from backend
     useEffect(() => {
-        fetch('http://localhost:3000/api/shuffle-and-deal')
+        fetch(`${POKER_API_URL}/api/shuffle-and-deal`)
             .then(res => res.json())
             .then(data => {
                 // Debug: log the raw backend data

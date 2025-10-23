@@ -43,6 +43,8 @@ git push origin main
    - Value: `https://YOUR-VERCEL-URL` (from Step 3)
 4. Railway will auto-redeploy
 
+> **Note**: Your backend runs TWO servers automatically (game API + multiplayer)!
+
 ### Step 5: Play!
 Visit your Vercel URL and start playing! 🎉
 
@@ -84,14 +86,16 @@ Check deployment logs in Railway/Vercel dashboard
 ## 📝 Local Development
 
 ```bash
-# Terminal 1 - Backend
-cd server && npm run multiplayer
+# Terminal 1 - Backend (runs BOTH game API + multiplayer)
+cd server && npm start
 
 # Terminal 2 - Frontend
 cd client && npm run dev
 ```
 
 Visit http://localhost:5173
+
+> **Tip**: `npm start` runs both servers (ports 3000 & 3001) automatically!
 
 ---
 

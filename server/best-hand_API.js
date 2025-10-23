@@ -3,10 +3,20 @@ const { END_WINNING } = require("./END");
 const { shuffleAndDealHandler } = require("./shuffle_and_deal");
 const express = require("express");
 const cors = require('cors');
-const pokerApi = express();
-const PORT = 3000;
 
-pokerApi.use(cors());
+// Load environment variables
+require('dotenv').config();
+
+const pokerApi = express();
+
+// Get configuration from environment or use defaults
+const PORT = process.env.API_PORT || 3000;
+const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5173";
+
+pokerApi.use(cors({
+  origin: CLIENT_URL,
+  credentials: true
+}));
 pokerApi.use(express.json());
 
 pokerApi.post("/hand-array", (req, res) => {
@@ -41,5 +51,6 @@ pokerApi.post("/end-game", (req, res) => {
 pokerApi.get("/api/shuffle-and-deal", shuffleAndDealHandler);
 
 pokerApi.listen(PORT, () => {
-  console.log(`Server is successfully running at http://localhost:${PORT}`);
+  console.log(`Poker API server running on port ${PORT}`);
+  console.log(`Accepting connections from: ${CLIENT_URL}`);
 });

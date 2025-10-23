@@ -56,10 +56,10 @@ A beautiful, real-time multiplayer Texas Hold'em poker game built with React, No
 
 3. **Start the servers**
 
-   **Terminal 1 - Backend:**
+   **Terminal 1 - Backend (runs BOTH game API + multiplayer):**
    ```bash
    cd server
-   npm run multiplayer
+   npm start
    ```
 
    **Terminal 2 - Frontend:**
@@ -67,6 +67,12 @@ A beautiful, real-time multiplayer Texas Hold'em poker game built with React, No
    cd client
    npm run dev
    ```
+
+   > **Note**: The backend runs TWO servers automatically:
+   > - Port 3000: Game API (single-player mode)
+   > - Port 3001: Multiplayer server (Socket.IO)
+   >
+   > See [DUAL_SERVER_SETUP.md](./DUAL_SERVER_SETUP.md) for details
 
 4. **Play!**
    - Open http://localhost:5173

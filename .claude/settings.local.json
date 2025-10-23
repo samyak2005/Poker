@@ -3,7 +3,9 @@
     "allow": [
       "Bash(find:*)",
       "mcp__ide__getDiagnostics",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(lsof:*)",
+      "Bash(xargs kill:*)"
     ],
     "deny": [],
     "ask": []

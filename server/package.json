@@ -5,8 +5,10 @@
   "main": "best_hand.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node best-hand_API.js",
-    "multiplayer": "node multiplayer_server.js"
+    "start": "node combined_server.js",
+    "api": "node best-hand_API.js",
+    "multiplayer": "node multiplayer_server.js",
+    "dev": "node combined_server.js"
   },
   "keywords": [],
   "author": "",
