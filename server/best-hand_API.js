@@ -19,6 +19,16 @@ pokerApi.use(cors({
 }));
 pokerApi.use(express.json());
 
+// Health check endpoint
+pokerApi.get("/", (req, res) => {
+  res.json({
+    status: "ok",
+    message: "ChipInn Poker Game API Server",
+    port: PORT || 3000,
+    endpoints: ["/api/shuffle-and-deal", "/hand-array", "/end-game"]
+  });
+});
+
 pokerApi.post("/hand-array", (req, res) => {
   const { usercards, flopcards } = req.body;
 

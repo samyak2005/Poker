@@ -530,6 +530,16 @@ io.on("connection", (socket) => {
   });
 });
 
+// Health check endpoint
+app.get("/", (req, res) => {
+  res.json({
+    status: "ok",
+    message: "ChipInn Poker Multiplayer Server",
+    port: PORT || 3001,
+    endpoints: ["/api/rooms", "/socket.io"]
+  });
+});
+
 // Get available rooms
 app.get("/api/rooms", (req, res) => {
   const roomList = Array.from(rooms.values()).map(room => ({
@@ -538,7 +548,7 @@ app.get("/api/rooms", (req, res) => {
     maxPlayers: room.maxPlayers,
     gameStarted: room.gameStarted
   }));
-  
+
   res.json({ rooms: roomList });
 });
 
