@@ -212,7 +212,7 @@ const MultiplayerPinkGameRoom = ({
                         {isSmallBlind && (
                             <div
                                 className="fixed bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-xs border-2 border-blue-300 shadow-lg"
-                                style={{ top: `calc(${position.avatarTop} - 1rem)`, left: `calc(${position.avatarLeft} + 3.5rem)` }}
+                                style={{ top: `calc(${position.avatarTop} + 0.5rem)`, left: `calc(${position.avatarLeft} - 1rem)` }}
                             >
                                 SB
                             </div>
@@ -221,7 +221,7 @@ const MultiplayerPinkGameRoom = ({
                         {isBigBlind && (
                             <div
                                 className="fixed bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-xs border-2 border-red-300 shadow-lg"
-                                style={{ top: `calc(${position.avatarTop} - 1rem)`, left: `calc(${position.avatarLeft} + 3.5rem)` }}
+                                style={{ top: `calc(${position.avatarTop} + 0.5rem)`, left: `calc(${position.avatarLeft} - 1rem)` }}
                             >
                                 BB
                             </div>
@@ -317,17 +317,17 @@ const MultiplayerPinkGameRoom = ({
                         return (
                             <>
                                 {isMyDealer && (
-                                    <div className="fixed bottom-32 left-1/2 transform -translate-x-16 bg-white text-black rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm border-2 border-yellow-400 shadow-lg">
+                                    <div className="fixed bottom-24 left-1/2 transform -translate-x-32 bg-white text-black rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm border-2 border-yellow-400 shadow-lg">
                                         D
                                     </div>
                                 )}
                                 {isMySmallBlind && (
-                                    <div className="fixed bottom-32 left-1/2 transform translate-x-8 bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-xs border-2 border-blue-300 shadow-lg">
+                                    <div className="fixed bottom-24 left-1/2 transform translate-x-24 bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-xs border-2 border-blue-300 shadow-lg">
                                         SB
                                     </div>
                                 )}
                                 {isMyBigBlind && (
-                                    <div className="fixed bottom-32 left-1/2 transform translate-x-8 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-xs border-2 border-red-300 shadow-lg">
+                                    <div className="fixed bottom-24 left-1/2 transform translate-x-24 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-xs border-2 border-red-300 shadow-lg">
                                         BB
                                     </div>
                                 )}
