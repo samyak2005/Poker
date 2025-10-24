@@ -11,19 +11,20 @@ import AddUser from '../pageComponents/AddUser';
 import Help from '../pageComponents/Help';
 import Timer from '../pageComponents/Timer';
 
-const MultiplayerBlueGameRoom = ({ 
-    players, 
-    myCards, 
-    communityCards, 
-    settings, 
-    win, 
-    isMyTurn, 
-    currentTurn, 
-    pot, 
+const MultiplayerBlueGameRoom = ({
+    players,
+    myCards,
+    communityCards,
+    settings,
+    win,
+    isMyTurn,
+    currentTurn,
+    pot,
     currentBet,
     minimumRaise,
     bettingRound,
     gameEnd,
+    dealerIndex,
     onPlayerAction,
     onStartGame,
     gameStarted,
@@ -167,34 +168,69 @@ const MultiplayerBlueGameRoom = ({
 
             <div className="relative">
                 <div className="fixed top-15 w-full flex gap-2 justify-center items-center">
-                    <FontAwesomeIcon icon={faCoins} className="text-gray-300 text-xl" />
+                    <FontAwesomeIcon icon={faCoins} className="text-gray-300 text-xl animate-pulse" />
                     <p className="text-gray-300 text-lg">Pot</p>
                 </div>
                 <div className="fixed top-25 w-full flex justify-center">
-                    <p className="text-white text-7xl font-semibold">{pot}</p>
+                    <p className="text-white text-7xl font-semibold transition-all duration-500 ease-in-out transform hover:scale-110">{pot}</p>
                 </div>
             </div>
             
             {/* Render 6 players in front (excluding current player) */}
             {players.filter(player => player.name !== playerName).map((player, index) => {
                 const position = playerPositions[index];
-                
+                const playerIndex = players.findIndex(p => p.id === player.id);
+                const isDealer = playerIndex === dealerIndex;
+                const smallBlindIndex = (dealerIndex + 1) % players.length;
+                const bigBlindIndex = (dealerIndex + 2) % players.length;
+                const isSmallBlind = playerIndex === smallBlindIndex && gameStarted;
+                const isBigBlind = playerIndex === bigBlindIndex && gameStarted;
+
                 return (
-                    <User 
-                        key={player.id}
-                        flip3={flip3} 
-                        flip4={flip4} 
-                        setFlip4={setFlip4} 
-                        compCards={player.cards.map(cardToFilename)} 
-                        avatarTop={position.avatarTop} 
-                        avatarLeft={position.avatarLeft} 
-                        cardsTop={position.cardsTop} 
-                        cardsLeft={position.cardsLeft} 
-                        avatar={player.avatar} 
-                        name={player.name}
-                        isCurrentTurn={currentTurn === players.findIndex(p => p.id === player.id) && gameStarted}
-                        folded={player.folded}
-                    />
+                    <div key={player.id} className="relative">
+                        <User
+                            flip3={flip3}
+                            flip4={flip4}
+                            setFlip4={setFlip4}
+                            compCards={player.cards.map(cardToFilename)}
+                            avatarTop={position.avatarTop}
+                            avatarLeft={position.avatarLeft}
+                            cardsTop={position.cardsTop}
+                            cardsLeft={position.cardsLeft}
+                            avatar={player.avatar}
+                            name={player.name}
+                            isCurrentTurn={currentTurn === playerIndex && gameStarted}
+                            folded={player.folded}
+                            lastAction={player.lastAction}
+                        />
+                        {/* Dealer Button */}
+                        {isDealer && gameStarted && (
+                            <div
+                                className="fixed bg-white text-black rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm border-2 border-yellow-400 shadow-lg"
+                                style={{ top: `calc(${position.avatarTop} - 1rem)`, left: `calc(${position.avatarLeft} - 1rem)` }}
+                            >
+                                D
+                            </div>
+                        )}
+                        {/* Small Blind Indicator */}
+                        {isSmallBlind && (
+                            <div
+                                className="fixed bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-xs border-2 border-blue-300 shadow-lg"
+                                style={{ top: `calc(${position.avatarTop} - 1rem)`, left: `calc(${position.avatarLeft} + 3.5rem)` }}
+                            >
+                                SB
+                            </div>
+                        )}
+                        {/* Big Blind Indicator */}
+                        {isBigBlind && (
+                            <div
+                                className="fixed bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-xs border-2 border-red-300 shadow-lg"
+                                style={{ top: `calc(${position.avatarTop} - 1rem)`, left: `calc(${position.avatarLeft} + 3.5rem)` }}
+                            >
+                                BB
+                            </div>
+                        )}
+                    </div>
                 );
             })}
 
@@ -262,32 +298,61 @@ const MultiplayerBlueGameRoom = ({
             {gameStarted && myCards.length > 0 && (
                 <div className={`flex justify-center items-center relative ${folded ? "opacity-50" : ""}`}>
                     <div className="flex justify-center fixed bottom-20">
-                        <img 
-                            src={`card-fronts/${cardToFilename(myCards[0])}`} 
-                            className="card user-card card-front transform -rotate-12 translate-y-2" 
+                        <img
+                            src={`card-fronts/${cardToFilename(myCards[0])}`}
+                            className="card user-card card-front transform -rotate-12 translate-y-2"
                             draggable="false"
                         />
-                        <img 
-                            src={`card-fronts/${cardToFilename(myCards[1])}`} 
-                            className="card user-card card-front transform rotate-12 translate-y-2 -ml-8" 
+                        <img
+                            src={`card-fronts/${cardToFilename(myCards[1])}`}
+                            className="card user-card card-front transform rotate-12 translate-y-2 -ml-8"
                             draggable="false"
                         />
                     </div>
+                    {/* My Dealer/Blind Indicators */}
+                    {(() => {
+                        const myPlayerIndex = players.findIndex(p => p.name === playerName);
+                        const isMyDealer = myPlayerIndex === dealerIndex;
+                        const smallBlindIndex = (dealerIndex + 1) % players.length;
+                        const bigBlindIndex = (dealerIndex + 2) % players.length;
+                        const isMySmallBlind = myPlayerIndex === smallBlindIndex;
+                        const isMyBigBlind = myPlayerIndex === bigBlindIndex;
+
+                        return (
+                            <>
+                                {isMyDealer && (
+                                    <div className="fixed bottom-32 left-1/2 transform -translate-x-16 bg-white text-black rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm border-2 border-yellow-400 shadow-lg">
+                                        D
+                                    </div>
+                                )}
+                                {isMySmallBlind && (
+                                    <div className="fixed bottom-32 left-1/2 transform translate-x-8 bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-xs border-2 border-blue-300 shadow-lg">
+                                        SB
+                                    </div>
+                                )}
+                                {isMyBigBlind && (
+                                    <div className="fixed bottom-32 left-1/2 transform translate-x-8 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-xs border-2 border-red-300 shadow-lg">
+                                        BB
+                                    </div>
+                                )}
+                            </>
+                        );
+                    })()}
                 </div>
             )}
 
             {/* Game Controls */}
             <div className={`flex items-center fixed bottom-35 right-10 gap-5 ${folded || !isMyTurn || disabling ? "opacity-50" : ""}`}>
-                <div className="flex items-center gap-2 bg-gray-600 rounded-full px-2 py-1 hover:scale-105">
+                <div className="flex items-center gap-2 bg-gray-600 rounded-full px-2 py-1 hover:scale-105 transition-all duration-300">
                     <FontAwesomeIcon icon={faCircleDollarToSlot} className="text-white text-xl" />
-                    <p className="text-white">{bet}</p>
+                    <p className="text-white transition-all duration-300">{bet}</p>
                 </div>
                 <div className="flex flex-col items-center justify-center gap-1">
                     <div className="flex items-center justify-center gap-2">
                         <FontAwesomeIcon icon={faWallet} className="text-gray-600" />
                         <p className="text-gray-600">Your Bank</p>
                     </div>
-                    <p className="text-white text-5xl text-semilbold">{bank}</p>
+                    <p className="text-white text-5xl text-semilbold transition-all duration-500 ease-in-out">{bank}</p>
                 </div>
             </div>
 

@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoins, faCircleDollarToSlot } from '@fortawesome/free-solid-svg-icons';
 import ReactCardFlip from "react-card-flip";
 
-const User = ({flip3, flip4, setFlip4, compCards, avatarTop, avatarLeft, cardsTop, cardsLeft, avatar, name, isCurrentTurn, folded}) => {
+const User = ({flip3, flip4, setFlip4, compCards, avatarTop, avatarLeft, cardsTop, cardsLeft, avatar, name, isCurrentTurn, folded, lastAction}) => {
     const flipSound = new Audio("flip.mp3");
 
     const playFlipSound = () => {
@@ -39,6 +39,9 @@ const User = ({flip3, flip4, setFlip4, compCards, avatarTop, avatarLeft, cardsTo
                     )}
                     {folded && (
                         <p className="text-red-400 text-sm">Folded</p>
+                    )}
+                    {lastAction && !isCurrentTurn && (
+                        <p className="text-gray-300 text-xs italic">{lastAction}</p>
                     )}
                 </div>
                 <div className="flex gap-3">

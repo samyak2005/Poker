@@ -120,11 +120,12 @@ function nextBettingRound(room) {
   room.bettingRound++;
   room.currentBet = 0;
   room.minimumRaise = BIG_BLIND;
-  
+
   // Reset player bets and actions
   room.players.forEach(player => {
     player.bet = 0;
     player.hasActed = false;
+    player.lastAction = null;
   });
   
   // Deal community cards based on round
@@ -353,7 +354,8 @@ io.on("connection", (socket) => {
       bet: 0,
       folded: false,
       hasActed: false,
-      isDealer: room.players.length === 0
+      isDealer: room.players.length === 0,
+      lastAction: null
     };
 
     room.players.push(player);
@@ -444,8 +446,9 @@ io.on("connection", (socket) => {
           socket.emit("gameError", { message: "Cannot check when there's a bet to call" });
           return;
         }
+        player.lastAction = 'Check';
         break;
-        
+
       case "call":
         if (amount > player.chips) {
           socket.emit("gameError", { message: "Not enough chips" });
@@ -454,8 +457,9 @@ io.on("connection", (socket) => {
         player.chips -= amount;
         player.bet += amount;
         room.pot += amount;
+        player.lastAction = `Call $${amount}`;
         break;
-        
+
       case "raise":
         if (amount < room.minimumRaise) {
           socket.emit("gameError", { message: `Minimum raise is ${room.minimumRaise}` });
@@ -472,12 +476,14 @@ io.on("connection", (socket) => {
         room.currentBet = player.bet;
         // Minimum raise = size of this raise (new bet - previous bet)
         room.minimumRaise = player.bet - previousBet;
+        player.lastAction = `Raise $${amount}`;
         break;
-        
+
       case "fold":
         player.folded = true;
+        player.lastAction = 'Fold';
         break;
-        
+
       default:
         socket.emit("gameError", { message: "Invalid action" });
         return;

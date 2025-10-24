@@ -34,6 +34,7 @@ const MultiplayerGameRoom = () => {
     const [settings, setSettings] = useState(false);
     const [win, setWin] = useState(false);
     const [gameEnd, setGameEnd] = useState(null);
+    const [dealerIndex, setDealerIndex] = useState(0);
 
     //getting theme from local storage
     useEffect(() => {
@@ -92,7 +93,7 @@ const MultiplayerGameRoom = () => {
             setPlayers(roomPlayers);
         });
 
-        socket.on('gameStarted', ({ players: roomPlayers, communityCards: flopCards, currentTurn: turn, pot: roomPot, currentBet: bet, minimumRaise: minRaise, bettingRound: round, dealerIndex }) => {
+        socket.on('gameStarted', ({ players: roomPlayers, communityCards: flopCards, currentTurn: turn, pot: roomPot, currentBet: bet, minimumRaise: minRaise, bettingRound: round, dealerIndex: dealer }) => {
             console.log('Game started!');
             setGameStarted(true);
             setPlayers(roomPlayers);
@@ -102,7 +103,8 @@ const MultiplayerGameRoom = () => {
             setCurrentBet(bet);
             setMinimumRaise(minRaise);
             setBettingRound(round);
-            
+            setDealerIndex(dealer);
+
             // Find my cards
             const myPlayer = roomPlayers.find(p => p.name === playerName);
             if (myPlayer) {
@@ -143,7 +145,7 @@ const MultiplayerGameRoom = () => {
             setPlayers(roomPlayers);
         });
 
-        socket.on('newHand', ({ players: roomPlayers, communityCards: flopCards, currentTurn: turn, pot: roomPot, currentBet: bet, minimumRaise: minRaise, bettingRound: round }) => {
+        socket.on('newHand', ({ players: roomPlayers, communityCards: flopCards, currentTurn: turn, pot: roomPot, currentBet: bet, minimumRaise: minRaise, bettingRound: round, dealerIndex: dealer }) => {
             console.log('New hand started!');
             setGameEnd(null);
             setGameStarted(true);
@@ -154,7 +156,8 @@ const MultiplayerGameRoom = () => {
             setCurrentBet(bet);
             setMinimumRaise(minRaise);
             setBettingRound(round);
-            
+            setDealerIndex(dealer);
+
             // Find my cards
             const myPlayer = roomPlayers.find(p => p.name === playerName);
             if (myPlayer) {
@@ -208,6 +211,7 @@ const MultiplayerGameRoom = () => {
         minimumRaise,
         bettingRound,
         gameEnd,
+        dealerIndex,
         onPlayerAction: handlePlayerAction,
         onStartGame: handleStartGame,
         gameStarted,
