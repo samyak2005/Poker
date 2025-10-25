@@ -111,24 +111,6 @@ Poker/
 └── README.md             # This file
 ```
 
-## 🌐 Deployment
-
-Ready to deploy? We have detailed guides for each platform:
-
-### 📚 Deployment Guides
-- **[QUICK_START.md](./QUICK_START.md)** - 10-minute deployment guide ⚡
-- **[RAILWAY_DEPLOYMENT_GUIDE.md](./RAILWAY_DEPLOYMENT_GUIDE.md)** - Railway backend setup 🚂
-- **[VERCEL_DEPLOYMENT_GUIDE.md](./VERCEL_DEPLOYMENT_GUIDE.md)** - Vercel frontend setup 🔺
-- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Complete guide with all platforms 📖
-- **[DEPLOYMENT_CHECKLIST.md](./DEPLOYMENT_CHECKLIST.md)** - Step-by-step checklist ✅
-
-### Quick Deploy
-
-1. Push to GitHub
-2. Deploy backend to Railway (set Root Directory to `server`)
-3. Deploy frontend to Vercel (set Root Directory to `client`)
-4. Set environment variables
-5. Play online! 🎉
 
 ## 🛠️ Tech Stack
 
@@ -160,51 +142,5 @@ Ready to deploy? We have detailed guides for each platform:
    - River: Final community card
    - Showdown: Best hand wins!
 
-## 📝 Environment Variables
-
-### Server (.env)
-```env
-PORT=3001
-CLIENT_URL=http://localhost:5173
-NODE_ENV=development
-```
-
-### Client (.env)
-```env
-VITE_API_URL=http://localhost:3001
-```
-
-## 🐛 Known Issues
-
-- No turn timer (players can take unlimited time)
-- No all-in support
-- No side pots for complex betting
-- Game state resets on server restart (no persistence)
-
-## 🚧 Planned Features
-
-- [ ] Turn timer with auto-fold
-- [ ] All-in support
-- [ ] Side pots
-- [ ] Chat system
-- [ ] Sound effects
-- [ ] Game history
-- [ ] Player statistics
-- [ ] Spectator mode
-- [ ] Tournament mode
-
-## 🤝 Contributing
-
-Feel free to contribute! This is a learning project.
-
-## 📄 License
-
-MIT License - Feel free to use this project for learning!
-
-## 🎉 Credits
-
-Built with ❤️ using React, Node.js, and Socket.IO
-
----
 
 **Enjoy the game! May the best hand win! 🃏**
